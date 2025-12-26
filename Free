@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raj Sir Coaching Centre | Premium JEE Mathematics</title>
+    
+    <!-- MathJax for LaTeX Rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: { enableMenu: false }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Manrope:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #060d17;
+            --bg-card: rgba(17, 34, 64, 0.4);
+            --gold-primary: #c5a059;
+            --gold-light: #f1dca7;
+            --text-white: #e6f1ff;
+            --text-muted: #a8b2d1;
+            --font-heading: 'Cinzel', serif;
+            --font-body: 'Manrope', sans-serif;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(197, 160, 89, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(100, 255, 218, 0.02) 0%, transparent 40%);
+        }
+
+        #math-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0.3; pointer-events: none;
+        }
+
+        .container { width: 92%; max-width: 1300px; margin: 0 auto; }
+
+        h1, h2, h3 { font-family: var(--font-heading); letter-spacing: 2px; }
+        .gold-text {
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 50%, #8e7037 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--bg-dark);
+            background: var(--gold-primary);
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(197, 160, 89, 0.2);
+        }
+
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 25px 0; z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.1);
+            backdrop-filter: blur(15px);
+        }
+        nav.scrolled { padding: 15px 0; background: rgba(6, 13, 23, 0.9); }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--font-heading); font-size: 1.5rem; color: var(--gold-primary); text-decoration: none; font-weight: 700; }
+
+        .hero { height: 100vh; display: flex; align-items: center; position: relative; }
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.2; margin-bottom: 25px; }
+        .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin-bottom: 40px; }
+
+        .tabs-wrapper { overflow-x: auto; white-space: nowrap; padding-bottom: 10px; margin-bottom: 50px; text-align: center; }
+        .tab-btn {
+            background: none; border: 1px solid rgba(197, 160, 89, 0.2);
+            color: var(--text-muted); padding: 12px 30px; border-radius: 30px;
+            margin: 0 8px; cursor: pointer; transition: var(--transition);
+            font-weight: 600; font-size: 0.9rem;
+        }
+        .tab-btn.active { background: var(--gold-primary); color: var(--bg-dark); border-color: var(--gold-primary); }
+
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+        .glass-card {
+            background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05);
+            padding: 30px; border-radius: 12px; transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+        .glass-card:hover { 
+            border-color: var(--gold-primary); 
+            transform: translateY(-8px);
+            background: rgba(17, 34, 64, 0.6);
+        }
+        .test-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
+        .test-btn {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted); padding: 10px 0; border-radius: 4px;
+            cursor: pointer; font-size: 0.7rem; transition: var(--transition);
+        }
+        .test-btn:hover { background: var(--gold-primary); color: var(--bg-dark); border-color: var(--gold-primary); }
+
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 12, 0.98); z-index: 2000; display: none;
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-content {
+            background: #0d192b; border: 1px solid var(--gold-primary);
+            width: 100%; max-width: 1000px; max-height: 90vh; overflow-y: auto;
+            border-radius: 8px; padding: 40px; position: relative;
+        }
+        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 2rem; cursor: pointer; color: var(--gold-primary); }
+
+        .question-box { margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
+        .question-text { font-size: 1.1rem; margin-bottom: 20px; color: var(--text-white); line-height: 1.6; }
+        .option-label {
+            display: flex; align-items: center; padding: 14px; background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 8px;
+            cursor: pointer; transition: var(--transition);
+        }
+        .option-label:hover { background: rgba(197, 160, 89, 0.08); border-color: rgba(197, 160, 89, 0.3); }
+        .option-label input { margin-right: 12px; accent-color: var(--gold-primary); }
+
+        .section-padding { padding: 100px 0; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .test-grid { grid-template-columns: repeat(3, 1fr); }
+            .modal-content { padding: 25px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="math-canvas"></canvas>
+
+    <nav id="navbar">
+        <div class="container nav-inner">
+            <a href="#" class="logo">RAJ SIR <span style="font-weight: 300; font-size: 0.8rem; letter-spacing: 3px; margin-left: 10px;">PREMIUM</span></a>
+            <a href="#mock-tests" class="btn" style="padding: 8px 18px; font-size: 0.7rem;">Tests</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="reveal active">
+                <h4 class="gold-text" style="text-transform: uppercase; letter-spacing: 5px; margin-bottom: 15px; font-weight: 800;">Academic Excellence</h4>
+                <h1>Master <span class="gold-text">Quadratic</span><br>Equations for JEE.</h1>
+                <p>10 Distinct Questions per set. No repetitions. Direct alignment with the latest JEE Advanced patterns.</p>
+                <a href="#mock-tests" class="btn">Start Practicing</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="mock-tests" class="section-padding">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 60px;" class="reveal">
+                <h2 style="font-size: 2.2rem; margin-bottom: 15px;">Elite <span class="gold-text">Test</span> Series</h2>
+                <p style="color: var(--text-muted);">Each set contains 10 non-repeating conceptual problems.</p>
+            </div>
+            <div class="tabs-wrapper reveal" id="tabs-container"></div>
+            <div id="topics-display" class="card-grid reveal"></div>
+        </div>
+    </section>
+
+    <div class="modal" id="test-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <div style="margin-bottom: 25px;">
+                <h4 id="modal-test-category" class="gold-text" style="font-size: 0.75rem; letter-spacing: 3px;">TOPIC</h4>
+                <h2 id="modal-test-title">MOCK TEST 01</h2>
+            </div>
+            <div id="quiz-container"></div>
+            <button class="btn" id="submit-test" style="width: 100%; margin-top: 10px;">Submit Test</button>
+            <div id="result-display" style="margin-top: 25px; display: none; text-align: center; padding: 20px; border: 1px dashed var(--gold-primary);"></div>
+        </div>
+    </div>
+
+    <script>
+        // SYLLABUS DEFINITION
+        const syllabus = {
+            "Algebra": ["Quadratic Equations", "Complex Numbers", "Sequences & Series"],
+            "Calculus": ["Limits & Continuity", "Integration"]
+        };
+
+        // ENHANCED QUADRATIC BANK: 10 Unique Questions per Set
+        const quadraticBank = {
+            1: [
+                { q: "If $\\alpha$ and $\\beta$ are the roots of $ax^2 + bx + c = 0$, find the equation whose roots are $\\alpha^2, \\beta^2$.", a: ["$a^2x^2 - (b^2-2ac)x + c^2 = 0$", "$a^2x^2 + (b^2-2ac)x + c^2 = 0$", "$ax^2 - (b^2-ac)x + c^2 = 0$", "$a^2x^2 - (b^2+2ac)x + c^2 = 0$"], c: 0 },
+                { q: "The number of real roots of $|x|^2 - 3|x| + 2 = 0$ is:", a: ["1", "2", "4", "0"], c: 2 },
+                { q: "If the roots of $x^2 - px + q = 0$ differ by unity, then:", a: ["$p^2 = 4q + 1$", "$p^2 = 4q - 1$", "$q^2 = 4p + 1$", "$p^2 = q + 4$"], c: 0 },
+                { q: "If $\\alpha, \\beta$ are roots of $x^2 - 6x + a = 0$ and satisfy $3\\alpha + 2\\beta = 20$, then $a$ is:", a: ["-16", "8", "-8", "16"], c: 0 },
+                { q: "The range of $y = \\frac{x^2 - 3x + 4}{x^2 + 3x + 4}$ for real $x$ is:", a: ["$[1/7, 7]$", "$[1/7, 1]$", "$[1, 7]$", "$(-\\infty, \\infty)$"], c: 0 },
+                { q: "If $x^2 + 2x + 3 = 0$ and $ax^2 + bx + c = 0$ have a common root, and $a,b,c \\in R$, then $a:b:c$ is:", a: ["1:2:3", "3:2:1", "1:3:2", "1:1:1"], c: 0 },
+                { q: "The value of $k$ for which both roots of $x^2 - kx + 4 = 0$ are real and distinct is:", a: ["$k > 4$ or $k < -4$", "$k = 4$", "$-4 < k < 4$", "$k > 2$"], c: 0 },
+                { q: "If one root of $x^2 - (a+1)x + a^2 + a - 8 = 0$ is greater than 2 and the other is less than 2, then:", a: ["$a \\in (-2, 3)$", "$a \\in (2, \\infty)$", "$a \\in (-\\infty, -2)$", "No such $a$"], c: 0 },
+                { q: "Product of the roots of $\\sqrt{x^2-4x+3} + \\sqrt{x^2-9} = \\sqrt{4x^2-14x+6}$ is:", a: ["3", "0", "9", "2"], c: 0 },
+                { q: "If $a < b < c < d$, then the roots of $(x-a)(x-c) + 2(x-b)(x-d) = 0$ are:", a: ["Real and distinct", "Real and equal", "Imaginary", "None"], c: 0 }
+            ],
+            2: [
+                { q: "If the ratio of roots of $x^2 + bx + c = 0$ is same as $x^2 + qx + r = 0$, then:", a: ["$b^2r = q^2c$", "$br^2 = qc^2$", "$b^2c = q^2r$", "$bc = qr$"], c: 0 },
+                { q: "If $x$ is real, the maximum value of $\\frac{3x^2 + 9x + 17}{3x^2 + 9x + 7}$ is:", a: ["41", "1", "17/7", "5.1"], c: 0 },
+                { q: "If $\\alpha, \\beta$ are roots of $x^2-2x+3=0$, then equation with roots $\\alpha-1, \\beta-1$ is:", a: ["$x^2+2=0$", "$x^2-2=0$", "$x^2-2x+1=0$", "$x^2+x+2=0$"], c: 0 },
+                { q: "Number of real roots of $x^2 - 5|x| + 6 = 0$ is:", a: ["4", "2", "0", "Infinite"], c: 0 },
+                { q: "If $a+b+c=0$, then the roots of $3ax^2 + 2bx + c = 0$ are:", a: ["Real", "Imaginary", "Rational", "Irrational"], c: 0 },
+                { q: "The value of $a$ for which $x^2 - (a-2)x - (a+1) = 0$ has sum of squares of roots minimum is:", a: ["1", "2", "0", "3"], c: 0 },
+                { q: "If $x^2-3x+2=0$ and $x^2-4x+3=0$ have a common root, it is:", a: ["1", "2", "3", "0"], c: 0 },
+                { q: "The number of integer values of $m$ for which $x^2 - 2(1+3m)x + 7(3+2m) = 0$ has equal roots is:", a: ["2", "1", "0", "None"], c: 0 },
+                { q: "If $\\alpha, \\beta$ are roots of $x^2+px+1=0$ and $\\gamma, \\delta$ are roots of $x^2+qx+1=0$, then $(\\alpha-\\gamma)(\\beta-\\gamma)(\\alpha+\\delta)(\\beta+\\delta)$ is:", a: ["$q^2-p^2$", "$p^2-q^2$", "$0$", "$1$"], c: 0 },
+                { q: "If $x^2 + px + 12 = 0$ has 4 as a root while $x^2 + px + q = 0$ has equal roots, then $q$ is:", a: ["49/4", "4", "12", "7"], c: 0 }
+            ]
+            // ... Other sets will follow the same pattern of 10 questions each
+        };
+
+        // UTILITY FUNCTIONS
+        function getUniqueQuestions(topic, testId) {
+            if (topic === "Quadratic Equations" && quadraticBank[testId]) {
+                return quadraticBank[testId];
+            }
+            
+            // Auto-generate 10 distinct placeholder questions for other topics
+            const questions = [];
+            for(let i=1; i<=10; i++) {
+                questions.push({
+                    q: `[${topic} - Set ${testId}] Question ${i}: This is a specialized JEE Advanced level conceptual problem focusing on the intersection of theoretical ${topic} and practical application.`,
+                    a: ["Option Alpha", "Option Beta", "Option Gamma", "Option Delta"],
+                    c: (testId + i) % 4
+                });
+            }
+            return questions;
+        }
+
+        const tabsContainer = document.getElementById('tabs-container');
+        const topicsDisplay = document.getElementById('topics-display');
+        const modal = document.getElementById('test-modal');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultDisplay = document.getElementById('result-display');
+        let currentQuestions = [];
+
+        function init() {
+            Object.keys(syllabus).forEach((cat, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${idx === 0 ? 'active' : ''}`;
+                btn.innerText = cat;
+                btn.onclick = () => renderTopics(cat, btn);
+                tabsContainer.appendChild(btn);
+                if(idx === 0) renderTopics(cat, btn);
+            });
+            window.addEventListener('scroll', reveal);
+        }
+
+        function renderTopics(cat, activeBtn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            activeBtn.classList.add('active');
+            topicsDisplay.innerHTML = '';
+            syllabus[cat].forEach(topic => {
+                const card = document.createElement('div');
+                card.className = 'glass-card';
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3 style="font-size:1rem;">${topic}</h3>
+                        <span style="font-size:0.6rem; color:var(--gold-primary); background:rgba(197,160,89,0.1); padding:2px 6px; border-radius:4px;">PRO</span>
+                    </div>
+                    <div class="test-grid">
+                        ${Array.from({length:10}, (_, i) => `<button class="test-btn" onclick="startTest('${topic}', ${i+1})">${i+1}</button>`).join('')}
+                    </div>
+                `;
+                topicsDisplay.appendChild(card);
+            });
+        }
+
+        window.startTest = (topic, testId) => {
+            document.getElementById('modal-test-category').innerText = topic.toUpperCase();
+            document.getElementById('modal-test-title').innerText = `MOCK TEST ${String(testId).padStart(2, '0')}`;
+            currentQuestions = getUniqueQuestions(topic, testId);
+            
+            quizContainer.innerHTML = currentQuestions.map((q, qIdx) => `
+                <div class="question-box">
+                    <p class="question-text"><strong>Q${qIdx + 1}:</strong> ${q.q}</p>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+                        ${q.a.map((opt, oIdx) => `
+                            <label class="option-label">
+                                <input type="radio" name="q${qIdx}" value="${oIdx}"> ${opt}
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            resultDisplay.style.display = 'none';
+            modal.style.display = 'flex';
+            if (window.MathJax) MathJax.typesetPromise([quizContainer]);
+        };
+
+        document.getElementById('submit-test').onclick = () => {
+            let score = 0;
+            currentQuestions.forEach((q, i) => {
+                const sel = document.querySelector(`input[name="q${i}"]:checked`);
+                if(sel && parseInt(sel.value) === q.c) score++;
+            });
+            resultDisplay.innerHTML = `<h2 class="gold-text">Result: ${score} / ${currentQuestions.length}</h2><p>Conceptual clarity is key. Keep practicing!</p>`;
+            resultDisplay.style.display = 'block';
+            modal.querySelector('.modal-content').scrollTo({top: 0, behavior: 'smooth'});
+        };
+
+        document.getElementById('close-modal').onclick = () => modal.style.display = 'none';
+        
+        function reveal() {
+            document.querySelectorAll('.reveal').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add('active');
+            });
+        }
+
+        // CANVAS BACKGROUND ANIMATION (FIXED SCOPING)
+        (function initCanvas() {
+            const cvs = document.getElementById('math-canvas');
+            const ctx = cvs.getContext('2d');
+            let w, h, pts = [];
+
+            function resize() { 
+                w = cvs.width = window.innerWidth; 
+                h = cvs.height = window.innerHeight; 
+            }
+
+            function initPts() { 
+                pts = Array.from({length: 40}, () => ({
+                    x: Math.random() * w, 
+                    y: Math.random() * h, 
+                    vx: (Math.random() - 0.5) * 0.2, 
+                    vy: (Math.random() - 0.5) * 0.2
+                })); 
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, w, h); 
+                ctx.fillStyle = "rgba(197, 160, 89, 0.15)";
+                pts.forEach(p => {
+                    p.x += p.vx; p.y += p.vy;
+                    if(p.x < 0 || p.x > w) p.vx *= -1; 
+                    if(p.y < 0 || p.y > h) p.vy *= -1;
+                    ctx.beginPath(); 
+                    ctx.arc(p.x, p.y, 1, 0, Math.PI * 2); 
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+
+            window.addEventListener('resize', () => { resize(); initPts(); });
+            resize(); 
+            initPts(); 
+            draw();
+        })();
+
+        init();
+    </script>
+</body>
+</html>
