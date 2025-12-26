@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raj Sir Coaching Centre | Premium JEE Mathematics</title>
+    <title>Raj Sir Coaching Centre | Premium Mathematics for JEE, WBJEE & Competitive Exams</title>
     
     <!-- MathJax for LaTeX Rendering -->
     <script>
@@ -35,6 +35,13 @@
             --font-heading: 'Cinzel', serif;
             --font-body: 'Manrope', sans-serif;
             --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --jee-adv: #c5a059;
+            --jee-main: #3498db;
+            --wbjee: #9b59b6;
+            --cbse: #e74c3c;
+            --tgt-pgt: #16a085;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
@@ -98,21 +105,82 @@
 
         .hero { height: 100vh; display: flex; align-items: center; position: relative; }
         .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.2; margin-bottom: 25px; }
-        .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin-bottom: 40px; }
+        .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin-bottom: 40px; }
 
-        .tabs-wrapper { overflow-x: auto; white-space: nowrap; padding-bottom: 10px; margin-bottom: 50px; text-align: center; }
-        .tab-btn {
-            background: none; border: 1px solid rgba(197, 160, 89, 0.2);
-            color: var(--text-muted); padding: 12px 30px; border-radius: 30px;
-            margin: 0 8px; cursor: pointer; transition: var(--transition);
-            font-weight: 600; font-size: 0.9rem;
+        /* Exam Selector */
+        .exam-selector { 
+            display: flex; 
+            gap: 15px; 
+            margin-bottom: 50px; 
+            flex-wrap: wrap; 
+            justify-content: center;
         }
-        .tab-btn.active { background: var(--gold-primary); color: var(--bg-dark); border-color: var(--gold-primary); }
+        .exam-card {
+            background: var(--bg-card);
+            border: 2px solid rgba(255,255,255,0.05);
+            padding: 25px 35px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            min-width: 180px;
+        }
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .exam-card.active {
+            border-color: var(--gold-primary);
+            background: rgba(197, 160, 89, 0.1);
+        }
+        .exam-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+        .exam-card p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+        /* Unit Tabs */
+        .tabs-wrapper { 
+            overflow-x: auto; 
+            white-space: nowrap; 
+            padding-bottom: 10px; 
+            margin-bottom: 40px; 
+            text-align: center; 
+        }
+        .tab-btn {
+            background: none; 
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            color: var(--text-muted); 
+            padding: 12px 30px; 
+            border-radius: 30px;
+            margin: 0 8px; 
+            cursor: pointer; 
+            transition: var(--transition);
+            font-weight: 600; 
+            font-size: 0.9rem;
+        }
+        .tab-btn.active { 
+            background: var(--gold-primary); 
+            color: var(--bg-dark); 
+            border-color: var(--gold-primary); 
+        }
+
+        .card-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 25px; 
+        }
         .glass-card {
-            background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05);
-            padding: 30px; border-radius: 12px; transition: var(--transition);
+            background: var(--bg-card); 
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 30px; 
+            border-radius: 12px; 
+            transition: var(--transition);
             backdrop-filter: blur(10px);
         }
         .glass-card:hover { 
@@ -120,43 +188,140 @@
             transform: translateY(-8px);
             background: rgba(17, 34, 64, 0.6);
         }
-        .test-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
-        .test-btn {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-muted); padding: 10px 0; border-radius: 4px;
-            cursor: pointer; font-size: 0.7rem; transition: var(--transition);
+        .glass-card h3 {
+            font-size: 1rem;
+            margin-bottom: 15px;
         }
-        .test-btn:hover { background: var(--gold-primary); color: var(--bg-dark); border-color: var(--gold-primary); }
+        .test-grid { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 10px; 
+            margin-top: 20px; 
+        }
+        .test-btn {
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted); 
+            padding: 10px 0; 
+            border-radius: 4px;
+            cursor: pointer; 
+            font-size: 0.7rem; 
+            transition: var(--transition);
+        }
+        .test-btn:hover { 
+            background: var(--gold-primary); 
+            color: var(--bg-dark); 
+            border-color: var(--gold-primary); 
+        }
 
         .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 6, 12, 0.98); z-index: 2000; display: none;
-            justify-content: center; align-items: center; padding: 20px;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(2, 6, 12, 0.98); 
+            z-index: 2000; 
+            display: none;
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px;
         }
         .modal-content {
-            background: #0d192b; border: 1px solid var(--gold-primary);
-            width: 100%; max-width: 1000px; max-height: 90vh; overflow-y: auto;
-            border-radius: 8px; padding: 40px; position: relative;
+            background: #0d192b; 
+            border: 1px solid var(--gold-primary);
+            width: 100%; 
+            max-width: 1000px; 
+            max-height: 90vh; 
+            overflow-y: auto;
+            border-radius: 8px; 
+            padding: 40px; 
+            position: relative;
         }
-        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 2rem; cursor: pointer; color: var(--gold-primary); }
+        .close-modal { 
+            position: absolute; 
+            top: 20px; 
+            right: 25px; 
+            font-size: 2rem; 
+            cursor: pointer; 
+            color: var(--gold-primary); 
+        }
 
-        .question-box { margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
-        .question-text { font-size: 1.1rem; margin-bottom: 20px; color: var(--text-white); line-height: 1.6; }
-        .option-label {
-            display: flex; align-items: center; padding: 14px; background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 8px;
-            cursor: pointer; transition: var(--transition);
+        .question-box { 
+            margin-bottom: 40px; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            padding-bottom: 20px; 
         }
-        .option-label:hover { background: rgba(197, 160, 89, 0.08); border-color: rgba(197, 160, 89, 0.3); }
-        .option-label input { margin-right: 12px; accent-color: var(--gold-primary); }
+        .question-text { 
+            font-size: 1.1rem; 
+            margin-bottom: 20px; 
+            color: var(--text-white); 
+            line-height: 1.6; 
+        }
+        .option-label {
+            display: flex; 
+            align-items: center; 
+            padding: 14px; 
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 6px; 
+            margin-bottom: 8px;
+            cursor: pointer; 
+            transition: var(--transition);
+        }
+        .option-label:hover { 
+            background: rgba(197, 160, 89, 0.08); 
+            border-color: rgba(197, 160, 89, 0.3); 
+        }
+        .option-label input { 
+            margin-right: 12px; 
+            accent-color: var(--gold-primary); 
+        }
+
+        .option-label.correct {
+            background: rgba(46, 204, 113, 0.2) !important;
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+        }
+        .option-label.incorrect {
+            background: rgba(231, 76, 60, 0.2) !important;
+            border-color: var(--error) !important;
+            color: var(--error) !important;
+        }
 
         .section-padding { padding: 100px 0; }
         .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(197, 160, 89, 0.2);
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gold-primary);
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         @media (max-width: 768px) {
             .test-grid { grid-template-columns: repeat(3, 1fr); }
             .modal-content { padding: 25px 15px; }
+            .exam-selector { flex-direction: column; }
         }
     </style>
 </head>
@@ -167,7 +332,7 @@
     <nav id="navbar">
         <div class="container nav-inner">
             <a href="#" class="logo">RAJ SIR <span style="font-weight: 300; font-size: 0.8rem; letter-spacing: 3px; margin-left: 10px;">PREMIUM</span></a>
-            <a href="#mock-tests" class="btn" style="padding: 8px 18px; font-size: 0.7rem;">Tests</a>
+            <a href="#mock-tests" class="btn" style="padding: 8px 18px; font-size: 0.7rem;">Practice Tests</a>
         </div>
     </nav>
 
@@ -175,9 +340,24 @@
         <div class="container">
             <div class="reveal active">
                 <h4 class="gold-text" style="text-transform: uppercase; letter-spacing: 5px; margin-bottom: 15px; font-weight: 800;">Academic Excellence</h4>
-                <h1>Master <span class="gold-text">Quadratic</span><br>Equations for JEE.</h1>
-                <p>10 Distinct Questions per set. No repetitions. Direct alignment with the latest JEE Advanced patterns.</p>
+                <h1>Master <span class="gold-text">Mathematics</span><br>for Competitive Exams.</h1>
+                <p>Comprehensive test series for JEE Advanced, JEE Main, WBJEE, CBSE Board, and TGT/PGT exams. 10 unique questions per test. No repetitions. Direct alignment with latest exam patterns.</p>
                 <a href="#mock-tests" class="btn">Start Practicing</a>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">450+</div>
+                        <div class="stat-label">Practice Tests</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">45+</div>
+                        <div class="stat-label">Topics Covered</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Exam Categories</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -185,10 +365,43 @@
     <section id="mock-tests" class="section-padding">
         <div class="container">
             <div style="text-align: center; margin-bottom: 60px;" class="reveal">
-                <h2 style="font-size: 2.2rem; margin-bottom: 15px;">Elite <span class="gold-text">Test</span> Series</h2>
-                <p style="color: var(--text-muted);">Each set contains 10 non-repeating conceptual problems.</p>
+                <h2 style="font-size: 2.2rem; margin-bottom: 15px;">Select Your <span class="gold-text">Target</span> Exam</h2>
+                <p style="color: var(--text-muted);">Choose from JEE Advanced, JEE Main, WBJEE, CBSE, or TGT/PGT exam series.</p>
             </div>
+
+            <!-- Exam Selector -->
+            <div class="exam-selector reveal" id="exam-selector">
+                <div class="exam-card active" data-exam="jee-advanced">
+                    <h3><i class="fas fa-trophy" style="color: var(--jee-adv);"></i> JEE Advanced</h3>
+                    <p>IIT Entrance</p>
+                </div>
+                <div class="exam-card" data-exam="jee-main">
+                    <h3><i class="fas fa-graduation-cap" style="color: var(--jee-main);"></i> JEE Main</h3>
+                    <p>NIT/IIIT Entrance</p>
+                </div>
+                <div class="exam-card" data-exam="wbjee">
+                    <h3><i class="fas fa-university" style="color: var(--wbjee);"></i> WBJEE</h3>
+                    <p>West Bengal JEE</p>
+                </div>
+                <div class="exam-card" data-exam="cbse">
+                    <h3><i class="fas fa-book" style="color: var(--cbse);"></i> CBSE Board</h3>
+                    <p>Class 11 & 12</p>
+                </div>
+                <div class="exam-card" data-exam="tgt-pgt">
+                    <h3><i class="fas fa-chalkboard-teacher" style="color: var(--tgt-pgt);"></i> TGT/PGT</h3>
+                    <p>Teaching Exam</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 50px 0 30px;" class="reveal">
+                <h2 style="font-size: 1.8rem; margin-bottom: 10px;">Elite <span class="gold-text">Test</span> Series</h2>
+                <p style="color: var(--text-muted);">Each test contains 10 non-repeating conceptual problems.</p>
+            </div>
+
+            <!-- Unit/Category Tabs -->
             <div class="tabs-wrapper reveal" id="tabs-container"></div>
+
+            <!-- Topics Display -->
             <div id="topics-display" class="card-grid reveal"></div>
         </div>
     </section>
@@ -199,117 +412,386 @@
             <div style="margin-bottom: 25px;">
                 <h4 id="modal-test-category" class="gold-text" style="font-size: 0.75rem; letter-spacing: 3px;">TOPIC</h4>
                 <h2 id="modal-test-title">MOCK TEST 01</h2>
+                <p id="modal-test-info" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">10 Questions | Time: 30 minutes</p>
             </div>
+            
+            <div id="result-display" style="margin-bottom: 25px; display: none; text-align: center; padding: 20px; border: 1px dashed var(--gold-primary);"></div>
+
             <div id="quiz-container"></div>
+            
             <button class="btn" id="submit-test" style="width: 100%; margin-top: 10px;">Submit Test</button>
-            <div id="result-display" style="margin-top: 25px; display: none; text-align: center; padding: 20px; border: 1px dashed var(--gold-primary);"></div>
         </div>
     </div>
 
     <script>
-        // SYLLABUS DEFINITION
-        const syllabus = {
-            "Algebra": ["Quadratic Equations", "Complex Numbers", "Sequences & Series"],
-            "Calculus": ["Limits & Continuity", "Integration"]
+        // COMPREHENSIVE SYLLABUS DEFINITION
+        const examSyllabus = {
+            "jee-advanced": {
+                "Algebra": [
+                    "Sets, Relations and Functions",
+                    "Complex Numbers",
+                    "Quadratic Equations",
+                    "Sequences and Series",
+                    "Logarithms",
+                    "Permutations and Combinations",
+                    "Binomial Theorem"
+                ],
+                "Matrices": [
+                    "Matrices and Operations",
+                    "Determinants",
+                    "System of Linear Equations"
+                ],
+                "Probability and Statistics": [
+                    "Probability Theory",
+                    "Conditional Probability",
+                    "Random Variables",
+                    "Statistics and Data Analysis"
+                ],
+                "Trigonometry": [
+                    "Trigonometric Functions",
+                    "Inverse Trigonometric Functions",
+                    "Trigonometric Equations",
+                    "Properties and Identities"
+                ],
+                "Analytical Geometry (2D)": [
+                    "Straight Lines",
+                    "Circles",
+                    "Parabola",
+                    "Ellipse",
+                    "Hyperbola",
+                    "Coordinate Geometry Basics"
+                ],
+                "Analytical Geometry (3D)": [
+                    "3D Coordinates",
+                    "Direction Cosines and Ratios",
+                    "Straight Line in Space",
+                    "Plane",
+                    "Sphere"
+                ],
+                "Differential Calculus": [
+                    "Limits and Continuity",
+                    "Differentiability",
+                    "Derivatives",
+                    "Application of Derivatives",
+                    "Mean Value Theorems"
+                ],
+                "Integral Calculus": [
+                    "Indefinite Integration",
+                    "Definite Integration",
+                    "Area Under Curves",
+                    "Differential Equations"
+                ],
+                "Vectors": [
+                    "Vector Operations",
+                    "Scalar and Vector Products",
+                    "Triple Products"
+                ]
+            },
+            "jee-main": {
+                "Algebra": [
+                    "Sets and Relations",
+                    "Complex Numbers",
+                    "Quadratic Equations",
+                    "Sequences and Series",
+                    "Permutations and Combinations",
+                    "Binomial Theorem",
+                    "Matrices and Determinants",
+                    "Mathematical Induction"
+                ],
+                "Trigonometry": [
+                    "Trigonometric Functions",
+                    "Inverse Trigonometric Functions",
+                    "Trigonometric Identities",
+                    "Heights and Distances"
+                ],
+                "Coordinate Geometry": [
+                    "Straight Lines",
+                    "Circles",
+                    "Conic Sections",
+                    "Parabola, Ellipse, Hyperbola"
+                ],
+                "Calculus": [
+                    "Limits and Continuity",
+                    "Differentiation",
+                    "Application of Derivatives",
+                    "Integration",
+                    "Application of Integrals",
+                    "Differential Equations"
+                ],
+                "Vectors and 3D": [
+                    "Vectors",
+                    "3D Geometry",
+                    "Direction Ratios"
+                ],
+                "Statistics and Probability": [
+                    "Statistics",
+                    "Probability"
+                ]
+            },
+            "wbjee": {
+                "Algebra": [
+                    "Complex Numbers",
+                    "Quadratic Equations",
+                    "Theory of Equations",
+                    "Permutation and Combination",
+                    "Binomial Theorem",
+                    "Matrices",
+                    "Determinants",
+                    "Sets and Relations",
+                    "Logarithms"
+                ],
+                "Trigonometry": [
+                    "Trigonometric Ratios",
+                    "Trigonometric Identities",
+                    "Trigonometric Equations",
+                    "Inverse Trigonometric Functions",
+                    "Properties of Triangles"
+                ],
+                "Coordinate Geometry": [
+                    "Straight Lines",
+                    "Circles",
+                    "Parabola",
+                    "Ellipse",
+                    "Hyperbola"
+                ],
+                "Calculus": [
+                    "Limits and Continuity",
+                    "Differentiation",
+                    "Application of Derivatives",
+                    "Integration",
+                    "Definite Integrals",
+                    "Area Under Curves"
+                ],
+                "Vectors and 3D": [
+                    "Vectors",
+                    "3D Coordinate Geometry"
+                ],
+                "Probability and Statistics": [
+                    "Probability",
+                    "Statistics"
+                ],
+                "Differential Equations": [
+                    "First Order Equations",
+                    "Linear Differential Equations"
+                ]
+            },
+            "cbse": {
+                "Class 11": [
+                    "Sets",
+                    "Relations and Functions",
+                    "Trigonometric Functions",
+                    "Complex Numbers",
+                    "Linear Inequalities",
+                    "Permutations and Combinations",
+                    "Binomial Theorem",
+                    "Sequences and Series",
+                    "Straight Lines",
+                    "Conic Sections",
+                    "Limits and Derivatives",
+                    "Statistics",
+                    "Probability"
+                ],
+                "Class 12": [
+                    "Relations and Functions",
+                    "Inverse Trigonometric Functions",
+                    "Matrices",
+                    "Determinants",
+                    "Continuity and Differentiability",
+                    "Application of Derivatives",
+                    "Integrals",
+                    "Application of Integrals",
+                    "Differential Equations",
+                    "Vectors",
+                    "Three Dimensional Geometry",
+                    "Linear Programming",
+                    "Probability"
+                ]
+            },
+            "tgt-pgt": {
+                "Basic Mathematics": [
+                    "Real Numbers",
+                    "Polynomials",
+                    "Linear Equations",
+                    "Quadratic Equations",
+                    "Arithmetic Progressions",
+                    "Coordinate Geometry Basics",
+                    "Euclid's Geometry"
+                ],
+                "Advanced Algebra": [
+                    "Sets and Relations",
+                    "Complex Numbers",
+                    "Matrices and Determinants",
+                    "Permutations and Combinations",
+                    "Binomial Theorem",
+                    "Sequences and Series"
+                ],
+                "Trigonometry": [
+                    "Trigonometric Functions",
+                    "Trigonometric Identities",
+                    "Heights and Distances",
+                    "Inverse Trigonometric Functions"
+                ],
+                "Calculus": [
+                    "Limits and Continuity",
+                    "Differentiation",
+                    "Integration",
+                    "Differential Equations"
+                ],
+                "Geometry": [
+                    "Straight Lines",
+                    "Circles",
+                    "Conic Sections",
+                    "3D Geometry"
+                ],
+                "Statistics and Probability": [
+                    "Statistics",
+                    "Probability Theory"
+                ]
+            }
         };
 
-        // ENHANCED QUADRATIC BANK: 10 Unique Questions per Set
-        const quadraticBank = {
-            1: [
-                { q: "If $\\alpha$ and $\\beta$ are the roots of $ax^2 + bx + c = 0$, find the equation whose roots are $\\alpha^2, \\beta^2$.", a: ["$a^2x^2 - (b^2-2ac)x + c^2 = 0$", "$a^2x^2 + (b^2-2ac)x + c^2 = 0$", "$ax^2 - (b^2-ac)x + c^2 = 0$", "$a^2x^2 - (b^2+2ac)x + c^2 = 0$"], c: 0 },
-                { q: "The number of real roots of $|x|^2 - 3|x| + 2 = 0$ is:", a: ["1", "2", "4", "0"], c: 2 },
-                { q: "If the roots of $x^2 - px + q = 0$ differ by unity, then:", a: ["$p^2 = 4q + 1$", "$p^2 = 4q - 1$", "$q^2 = 4p + 1$", "$p^2 = q + 4$"], c: 0 },
-                { q: "If $\\alpha, \\beta$ are roots of $x^2 - 6x + a = 0$ and satisfy $3\\alpha + 2\\beta = 20$, then $a$ is:", a: ["-16", "8", "-8", "16"], c: 0 },
-                { q: "The range of $y = \\frac{x^2 - 3x + 4}{x^2 + 3x + 4}$ for real $x$ is:", a: ["$[1/7, 7]$", "$[1/7, 1]$", "$[1, 7]$", "$(-\\infty, \\infty)$"], c: 0 },
-                { q: "If $x^2 + 2x + 3 = 0$ and $ax^2 + bx + c = 0$ have a common root, and $a,b,c \\in R$, then $a:b:c$ is:", a: ["1:2:3", "3:2:1", "1:3:2", "1:1:1"], c: 0 },
-                { q: "The value of $k$ for which both roots of $x^2 - kx + 4 = 0$ are real and distinct is:", a: ["$k > 4$ or $k < -4$", "$k = 4$", "$-4 < k < 4$", "$k > 2$"], c: 0 },
-                { q: "If one root of $x^2 - (a+1)x + a^2 + a - 8 = 0$ is greater than 2 and the other is less than 2, then:", a: ["$a \\in (-2, 3)$", "$a \\in (2, \\infty)$", "$a \\in (-\\infty, -2)$", "No such $a$"], c: 0 },
-                { q: "Product of the roots of $\\sqrt{x^2-4x+3} + \\sqrt{x^2-9} = \\sqrt{4x^2-14x+6}$ is:", a: ["3", "0", "9", "2"], c: 0 },
-                { q: "If $a < b < c < d$, then the roots of $(x-a)(x-c) + 2(x-b)(x-d) = 0$ are:", a: ["Real and distinct", "Real and equal", "Imaginary", "None"], c: 0 }
-            ],
-            2: [
-                { q: "If the ratio of roots of $x^2 + bx + c = 0$ is same as $x^2 + qx + r = 0$, then:", a: ["$b^2r = q^2c$", "$br^2 = qc^2$", "$b^2c = q^2r$", "$bc = qr$"], c: 0 },
-                { q: "If $x$ is real, the maximum value of $\\frac{3x^2 + 9x + 17}{3x^2 + 9x + 7}$ is:", a: ["41", "1", "17/7", "5.1"], c: 0 },
-                { q: "If $\\alpha, \\beta$ are roots of $x^2-2x+3=0$, then equation with roots $\\alpha-1, \\beta-1$ is:", a: ["$x^2+2=0$", "$x^2-2=0$", "$x^2-2x+1=0$", "$x^2+x+2=0$"], c: 0 },
-                { q: "Number of real roots of $x^2 - 5|x| + 6 = 0$ is:", a: ["4", "2", "0", "Infinite"], c: 0 },
-                { q: "If $a+b+c=0$, then the roots of $3ax^2 + 2bx + c = 0$ are:", a: ["Real", "Imaginary", "Rational", "Irrational"], c: 0 },
-                { q: "The value of $a$ for which $x^2 - (a-2)x - (a+1) = 0$ has sum of squares of roots minimum is:", a: ["1", "2", "0", "3"], c: 0 },
-                { q: "If $x^2-3x+2=0$ and $x^2-4x+3=0$ have a common root, it is:", a: ["1", "2", "3", "0"], c: 0 },
-                { q: "The number of integer values of $m$ for which $x^2 - 2(1+3m)x + 7(3+2m) = 0$ has equal roots is:", a: ["2", "1", "0", "None"], c: 0 },
-                { q: "If $\\alpha, \\beta$ are roots of $x^2+px+1=0$ and $\\gamma, \\delta$ are roots of $x^2+qx+1=0$, then $(\\alpha-\\gamma)(\\beta-\\gamma)(\\alpha+\\delta)(\\beta+\\delta)$ is:", a: ["$q^2-p^2$", "$p^2-q^2$", "$0$", "$1$"], c: 0 },
-                { q: "If $x^2 + px + 12 = 0$ has 4 as a root while $x^2 + px + q = 0$ has equal roots, then $q$ is:", a: ["49/4", "4", "12", "7"], c: 0 }
-            ]
-            // ... Other sets will follow the same pattern of 10 questions each
+        // Enhanced Question Bank (Sample - You can expand this)
+        const questionBank = {
+            "Quadratic Equations": {
+                1: [
+                    { q: "If $\\alpha$ and $\\beta$ are the roots of $ax^2 + bx + c = 0$, find the equation whose roots are $\\alpha^2, \\beta^2$.", a: ["$a^2x^2 - (b^2-2ac)x + c^2 = 0$", "$a^2x^2 + (b^2-2ac)x + c^2 = 0$", "$ax^2 - (b^2-ac)x + c^2 = 0$", "$a^2x^2 - (b^2+2ac)x + c^2 = 0$"], c: 0 },
+                    { q: "The number of real roots of $|x|^2 - 3|x| + 2 = 0$ is:", a: ["1", "2", "4", "0"], c: 2 },
+                    { q: "If the roots of $x^2 - px + q = 0$ differ by unity, then:", a: ["$p^2 = 4q + 1$", "$p^2 = 4q - 1$", "$q^2 = 4p + 1$", "$p^2 = q + 4$"], c: 0 },
+                    { q: "If $\\alpha, \\beta$ are roots of $x^2 - 6x + a = 0$ and satisfy $3\\alpha + 2\\beta = 20$, then $a$ is:", a: ["-16", "8", "-8", "16"], c: 0 },
+                    { q: "The range of $y = \\frac{x^2 - 3x + 4}{x^2 + 3x + 4}$ for real $x$ is:", a: ["$[1/7, 7]$", "$[1/7, 1]$", "$[1, 7]$", "$(-\\infty, \\infty)$"], c: 0 },
+                    { q: "If $x^2 + 2x + 3 = 0$ and $ax^2 + bx + c = 0$ have a common root, and $a,b,c \\in \\mathbb{R}$, then $a:b:c$ is:", a: ["1:2:3", "3:2:1", "1:3:2", "1:1:1"], c: 0 },
+                    { q: "The value of $k$ for which both roots of $x^2 - kx + 4 = 0$ are real and distinct is:", a: ["$k > 4$ or $k < -4$", "$k = 4$", "$-4 < k < 4$", "$k > 2$"], c: 0 },
+                    { q: "If one root of $x^2 - (a+1)x + a^2 + a - 8 = 0$ is greater than 2 and the other is less than 2, then:", a: ["$a \\in (-2, 3)$", "$a \\in (2, \\infty)$", "$a \\in (-\\infty, -2)$", "No such $a$"], c: 0 },
+                    { q: "Product of the roots of $\\sqrt{x^2-4x+3} + \\sqrt{x^2-9} = \\sqrt{4x^2-14x+6}$ is:", a: ["3", "0", "9", "2"], c: 0 },
+                    { q: "If $a < b < c < d$, then the roots of $(x-a)(x-c) + 2(x-b)(x-d) = 0$ are:", a: ["Real and distinct", "Real and equal", "Imaginary", "None"], c: 0 }
+                ],
+                2: [
+                    { q: "If the ratio of roots of $x^2 + bx + c = 0$ is same as $x^2 + qx + r = 0$, then:", a: ["$b^2r = q^2c$", "$br^2 = qc^2$", "$b^2c = q^2r$", "$bc = qr$"], c: 0 },
+                    { q: "If $x$ is real, the maximum value of $\\frac{3x^2 + 9x + 17}{3x^2 + 9x + 7}$ is:", a: ["41", "1", "17/7", "5.1"], c: 0 },
+                    { q: "If $\\alpha, \\beta$ are roots of $x^2-2x+3=0$, then equation with roots $\\alpha-1, \\beta-1$ is:", a: ["$x^2+2=0$", "$x^2-2=0$", "$x^2-2x+1=0$", "$x^2+x+2=0$"], c: 0 },
+                    { q: "Number of real roots of $x^2 - 5|x| + 6 = 0$ is:", a: ["4", "2", "0", "Infinite"], c: 0 },
+                    { q: "If $a+b+c=0$, then the roots of $3ax^2 + 2bx + c = 0$ are:", a: ["Real", "Imaginary", "Rational", "Irrational"], c: 0 },
+                    { q: "The value of $a$ for which $x^2 - (a-2)x - (a+1) = 0$ has sum of squares of roots minimum is:", a: ["1", "2", "0", "3"], c: 0 },
+                    { q: "If $x^2-3x+2=0$ and $x^2-4x+3=0$ have a common root, it is:", a: ["1", "2", "3", "0"], c: 0 },
+                    { q: "The number of integer values of $m$ for which $x^2 - 2(1+3m)x + 7(3+2m) = 0$ has equal roots is:", a: ["2", "1", "0", "None"], c: 0 },
+                    { q: "If $\\alpha, \\beta$ are roots of $x^2+px+1=0$ and $\\gamma, \\delta$ are roots of $x^2+qx+1=0$, then $(\\alpha-\\gamma)(\\beta-\\gamma)(\\alpha+\\delta)(\\beta+\\delta)$ is:", a: ["$q^2-p^2$", "$p^2-q^2$", "$0$", "$1$"], c: 0 },
+                    { q: "If $x^2 + px + 12 = 0$ has 4 as a root while $x^2 + px + q = 0$ has equal roots, then $q$ is:", a: ["49/4", "4", "12", "7"], c: 0 }
+                ]
+            }
         };
 
-        // UTILITY FUNCTIONS
-        function getUniqueQuestions(topic, testId) {
-            if (topic === "Quadratic Equations" && quadraticBank[testId]) {
-                return quadraticBank[testId];
+        // Generate questions for topics without explicit bank
+        function getUniqueQuestions(topic, testId, exam) {
+            if (questionBank[topic] && questionBank[topic][testId]) {
+                return questionBank[topic][testId];
             }
             
-            // Auto-generate 10 distinct placeholder questions for other topics
             const questions = [];
+            const examLevel = {
+                "jee-advanced": "JEE Advanced Level",
+                "jee-main": "JEE Main Level",
+                "wbjee": "WBJEE Level",
+                "cbse": "CBSE Board Level",
+                "tgt-pgt": "TGT/PGT Level"
+            };
+            
             for(let i=1; i<=10; i++) {
                 questions.push({
-                    q: `[${topic} - Set ${testId}] Question ${i}: This is a specialized JEE Advanced level conceptual problem focusing on the intersection of theoretical ${topic} and practical application.`,
-                    a: ["Option Alpha", "Option Beta", "Option Gamma", "Option Delta"],
+                    q: `[${topic} - Set ${testId}, Q${i}] ${examLevel[exam]}: Conceptual problem based on ${topic.toLowerCase()}. (Question bank under development)`,
+                    a: ["Option A", "Option B", "Option C", "Option D"],
                     c: (testId + i) % 4
                 });
             }
             return questions;
         }
 
+        // UI Elements
+        const examSelector = document.getElementById('exam-selector');
         const tabsContainer = document.getElementById('tabs-container');
         const topicsDisplay = document.getElementById('topics-display');
         const modal = document.getElementById('test-modal');
         const quizContainer = document.getElementById('quiz-container');
         const resultDisplay = document.getElementById('result-display');
+        const submitBtn = document.getElementById('submit-test');
+        
+        let currentExam = "jee-advanced";
         let currentQuestions = [];
 
+        // Initialize
         function init() {
-            Object.keys(syllabus).forEach((cat, idx) => {
-                const btn = document.createElement('button');
-                btn.className = `tab-btn ${idx === 0 ? 'active' : ''}`;
-                btn.innerText = cat;
-                btn.onclick = () => renderTopics(cat, btn);
-                tabsContainer.appendChild(btn);
-                if(idx === 0) renderTopics(cat, btn);
+            // Exam selector event listeners
+            document.querySelectorAll('.exam-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.exam-card').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    currentExam = this.dataset.exam;
+                    renderTabs();
+                });
             });
+
+            renderTabs();
             window.addEventListener('scroll', reveal);
+            reveal();
         }
 
-        function renderTopics(cat, activeBtn) {
+        // Render unit/category tabs
+        function renderTabs() {
+            tabsContainer.innerHTML = '';
+            const units = Object.keys(examSyllabus[currentExam]);
+            
+            units.forEach((unit, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${idx === 0 ? 'active' : ''}`;
+                btn.innerText = unit;
+                btn.onclick = () => renderTopics(unit, btn);
+                tabsContainer.appendChild(btn);
+                
+                if(idx === 0) renderTopics(unit, btn);
+            });
+        }
+
+        // Render topics for selected unit
+        function renderTopics(unit, activeBtn) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             activeBtn.classList.add('active');
+            
             topicsDisplay.innerHTML = '';
-            syllabus[cat].forEach(topic => {
+            const topics = examSyllabus[currentExam][unit];
+            
+            topics.forEach(topic => {
                 const card = document.createElement('div');
                 card.className = 'glass-card';
                 card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <h3 style="font-size:1rem;">${topic}</h3>
-                        <span style="font-size:0.6rem; color:var(--gold-primary); background:rgba(197,160,89,0.1); padding:2px 6px; border-radius:4px;">PRO</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+                        <h3>${topic}</h3>
+                        <span style="font-size:0.6rem; color:var(--gold-primary); background:rgba(197,160,89,0.1); padding:4px 8px; border-radius:4px;">PRO</span>
                     </div>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">${unit}</p>
                     <div class="test-grid">
-                        ${Array.from({length:10}, (_, i) => `<button class="test-btn" onclick="startTest('${topic}', ${i+1})">${i+1}</button>`).join('')}
+                        ${Array.from({length:10}, (_, i) => 
+                            `<button class="test-btn" onclick="startTest('${topic}', ${i+1}, '${unit}')">T${i+1}</button>`
+                        ).join('')}
                     </div>
                 `;
                 topicsDisplay.appendChild(card);
             });
         }
 
-        window.startTest = (topic, testId) => {
+        // Start test
+        window.startTest = (topic, testId, unit) => {
             document.getElementById('modal-test-category').innerText = topic.toUpperCase();
-            document.getElementById('modal-test-title').innerText = `MOCK TEST ${String(testId).padStart(2, '0')}`;
-            currentQuestions = getUniqueQuestions(topic, testId);
+            document.getElementById('modal-test-title').innerText = `TEST ${String(testId).padStart(2, '0')} - ${unit}`;
+            
+            currentQuestions = getUniqueQuestions(topic, testId, currentExam);
+            submitBtn.style.display = 'block';
+            resultDisplay.style.display = 'none';
             
             quizContainer.innerHTML = currentQuestions.map((q, qIdx) => `
-                <div class="question-box">
+                <div class="question-box" id="qbox-${qIdx}">
                     <p class="question-text"><strong>Q${qIdx + 1}:</strong> ${q.q}</p>
                     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
                         ${q.a.map((opt, oIdx) => `
-                            <label class="option-label">
+                            <label class="option-label" id="label-${qIdx}-${oIdx}">
                                 <input type="radio" name="q${qIdx}" value="${oIdx}"> ${opt}
                             </label>
                         `).join('')}
@@ -317,31 +799,60 @@
                 </div>
             `).join('');
 
-            resultDisplay.style.display = 'none';
             modal.style.display = 'flex';
             if (window.MathJax) MathJax.typesetPromise([quizContainer]);
         };
 
-        document.getElementById('submit-test').onclick = () => {
+        // Submit test
+        submitBtn.onclick = () => {
             let score = 0;
-            currentQuestions.forEach((q, i) => {
-                const sel = document.querySelector(`input[name="q${i}"]:checked`);
-                if(sel && parseInt(sel.value) === q.c) score++;
+            currentQuestions.forEach((q, qIdx) => {
+                const radios = document.getElementsByName(`q${qIdx}`);
+                const selected = Array.from(radios).find(r => r.checked);
+                const correctIdx = q.c;
+
+                radios.forEach(r => r.disabled = true);
+                document.getElementById(`label-${qIdx}-${correctIdx}`).classList.add('correct');
+
+                if (selected) {
+                    const selectedIdx = parseInt(selected.value);
+                    if (selectedIdx === correctIdx) {
+                        score++;
+                    } else {
+                        document.getElementById(`label-${qIdx}-${selectedIdx}`).classList.add('incorrect');
+                    }
+                }
             });
-            resultDisplay.innerHTML = `<h2 class="gold-text">Result: ${score} / ${currentQuestions.length}</h2><p>Conceptual clarity is key. Keep practicing!</p>`;
+
+            const percentage = ((score / currentQuestions.length) * 100).toFixed(1);
+            let feedback = "";
+            if (percentage >= 80) feedback = "Excellent Performance! 🏆";
+            else if (percentage >= 60) feedback = "Good Work! Keep Practicing 📚";
+            else feedback = "Need More Practice 💪";
+
+            resultDisplay.innerHTML = `
+                <h2 class="gold-text" style="margin-bottom: 10px;">Score: ${score} / ${currentQuestions.length} (${percentage}%)</h2>
+                <p style="font-size: 1.1rem; color: var(--text-white); margin-bottom: 10px;">${feedback}</p>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">Scroll down to review <span style="color:var(--success)">Correct</span> and <span style="color:var(--error)">Incorrect</span> answers.</p>
+            `;
             resultDisplay.style.display = 'block';
+            submitBtn.style.display = 'none';
             modal.querySelector('.modal-content').scrollTo({top: 0, behavior: 'smooth'});
         };
 
+        // Close modal
         document.getElementById('close-modal').onclick = () => modal.style.display = 'none';
         
+        // Reveal animation
         function reveal() {
             document.querySelectorAll('.reveal').forEach(el => {
-                if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add('active');
+                if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+                    el.classList.add('active');
+                }
             });
         }
 
-        // CANVAS BACKGROUND ANIMATION (FIXED SCOPING)
+        // Animated canvas background
         (function initCanvas() {
             const cvs = document.getElementById('math-canvas');
             const ctx = cvs.getContext('2d');
@@ -381,7 +892,18 @@
             draw();
         })();
 
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
         init();
     </script>
 </body>
 </html>
+
