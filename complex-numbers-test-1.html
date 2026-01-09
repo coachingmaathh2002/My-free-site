@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complex Numbers - Mock Test 1 | ExamPrime</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .option-label {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .option-input:checked + .option-label {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: #8b5cf6;
+        }
+        /* Review Mode Styles */
+        .correct-answer {
+            background: rgba(34, 197, 94, 0.2) !important;
+            border-color: #22c55e !important;
+            color: #4ade80 !important;
+        }
+        .wrong-answer {
+            background: rgba(239, 68, 68, 0.2) !important;
+            border-color: #ef4444 !important;
+            color: #f87171 !important;
+        }
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        .nav-dot.active { background: #8b5cf6; transform: scale(1.3); }
+        .nav-dot.answered { background: #4f46e5; }
+        
+        #result-screen { display: none; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <div>
+                <a href="index.html" class="text-accent hover:text-white transition flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-arrow-left"></i> Exit Test
+                </a>
+                <h1 class="text-3xl font-bold">Complex Numbers <span class="text-purple-400">#01</span></h1>
+            </div>
+            
+            <div class="glass-panel px-6 py-3 rounded-2xl flex items-center gap-4 border-purple-500/30">
+                <i class="fa-solid fa-clock text-purple-400 text-xl"></i>
+                <div class="text-2xl font-mono font-bold" id="timer">60:00</div>
+            </div>
+        </div>
+
+        <!-- Question Navigation Dots -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8" id="dots-container"></div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="glass-panel p-8 rounded-3xl min-h-[400px] relative">
+            <div id="question-display">
+                <!-- Single question shown here -->
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center mt-10">
+                <button id="prev-btn" onclick="prevQuestion()" class="px-6 py-2 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+                    <i class="fa-solid fa-chevron-left mr-2"></i> Previous
+                </button>
+                
+                <div id="submit-area" class="hidden">
+                    <button onclick="calculateResult()" class="px-10 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold hover:scale-105 transition-transform">
+                        Finish Test
+                    </button>
+                </div>
+
+                <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 transition-all">
+                    Next <i class="fa-solid fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="fixed inset-0 z-[100] bg-slate-950 flex items-center justify-center p-4">
+            <div class="glass-panel max-w-md w-full rounded-3xl p-8 text-center border-purple-500/50">
+                <div class="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                    <i class="fa-solid fa-check-double"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">Results</h2>
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <div class="p-3 bg-white/5 rounded-xl"><div class="text-xs text-gray-400">Score</div><div class="text-xl font-bold" id="res-score">0</div></div>
+                    <div class="p-3 bg-white/5 rounded-xl"><div class="text-xs text-gray-400">Accuracy</div><div class="text-xl font-bold text-purple-400" id="res-acc">0%</div></div>
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="startReview()" class="flex-1 py-3 bg-purple-600 font-bold rounded-xl hover:bg-purple-500 transition">Review Answers</button>
+                    <button onclick="window.location.href='index.html'" class="flex-1 py-3 bg-white/10 font-bold rounded-xl hover:bg-white/20 transition">Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "If \\( z = \\frac{\\sqrt{3} + i}{2} \\), then \\( z^{100} \\) is equal to:", options: ["\\( z \\)", "\\( -z \\)", "\\( \\bar{z} \\)", "None of these"], correct: 1 },
+            { q: "The value of \\( i^{n} + i^{n+1} + i^{n+2} + i^{n+3} \\) is:", options: ["0", "1", "-1", "i"], correct: 0 },
+            { q: "The square root of \\( 3 + 4i \\) is:", options: ["\\( \\pm(2 + i) \\)", "\\( \\pm(1 + 2i) \\)", "\\( \\pm(2 - i) \\)", "None"], correct: 0 },
+            { q: "If \\( |z-i| = |z+i| \\), then the locus of \\( z \\) is:", options: ["Real axis", "Imaginary axis", "Circle", "Parabola"], correct: 0 },
+            { q: "The argument of \\( 1 + i \\) is:", options: ["\\( \\pi/2 \\)", "\\( \\pi/4 \\)", "\\( 3\\pi/4 \\)", "0"], correct: 1 },
+            { q: "If \\( \\omega \\) is an imaginary cube root of unity, then \\( (1+\\omega-\\omega^2)^7 \\) equals:", options: ["\\( 128\\omega \\)", "\\( -128\\omega \\)", "\\( 128\\omega^2 \\)", "\\( -128\\omega^2 \\)"], correct: 3 },
+            { q: "The modulus of \\( \\frac{1+2i}{1-(1-i)^2} \\) is:", options: ["1", "2", "0.5", "None"], correct: 0 },
+            { q: "If \\( z = x + iy \\) and \\( |z|=1 \\), then \\( z \\) lies on:", options: ["X-axis", "Y-axis", "Unit Circle", "Line \\( y=x \\)"], correct: 2 },
+            { q: "The polar form of \\( -1 - i \\) is:", options: ["\\( \\sqrt{2}(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}) \\)", "\\( \\sqrt{2}(\\cos\\frac{3\\pi}{4} + i\\sin\\frac{3\\pi}{4}) \\)", "\\( \\sqrt{2}(\\cos\\frac{-3\\pi}{4} + i\\sin\\frac{-3\\pi}{4}) \\)", "None"], correct: 2 },
+            { q: "The amplitude of \\( \\sin \\frac{\\pi}{5} + i(1 - \\cos \\frac{\\pi}{5}) \\) is:", options: ["\\( \\pi/5 \\)", "\\( \\pi/10 \\)", "\\( \\pi/15 \\)", "\\( \\pi/18 \\)"], correct: 1 },
+            { q: "If \\( |z_1| = |z_2| \\) and \\( arg(z_1) + arg(z_2) = 0 \\), then:", options: ["\\( z_1 = z_2 \\)", "\\( z_1 = \\bar{z}_2 \\)", "\\( z_1 z_2 = 1 \\)", "None"], correct: 1 },
+            { q: "The multiplicative inverse of \\( 3 + 4i \\) is:", options: ["\\( 3/25 - 4i/25 \\)", "\\( 3/25 + 4i/25 \\)", "\\( 3/5 - 4i/5 \\)", "None"], correct: 0 },
+            { q: "The value of \\( (1+i)^8 + (1-i)^8 \\) is:", options: ["16", "32", "64", "0"], correct: 1 },
+            { q: "Locus of \\( z \\) satisfying \\( arg(z) = \\pi/3 \\) is:", options: ["Line", "Ray", "Circle", "Parabola"], correct: 1 },
+            { q: "If \\( |z|=4 \\) and \\( arg(z)=5\\pi/6 \\), then \\( z= \\):", options: ["\\( 2\\sqrt{3} + 2i \\)", "\\( -2\\sqrt{3} + 2i \\)", "\\( 2\\sqrt{3} - 2i \\)", "\\( -2\\sqrt{3} - 2i \\)"], correct: 1 },
+            { q: "The value of \\( \\sum_{n=1}^{13} (i^n + i^{n+1}) \\) is:", options: ["\\( i-1 \\)", "\\( i \\)", "\\( -1 \\)", "0"], correct: 0 },
+            { q: "If \\( z = (1+i\\sqrt{3})^n \\) is real, then least positive integer \\( n \\) is:", options: ["2", "3", "4", "6"], correct: 1 },
+            { q: "The minimum value of \\( |z| + |z-1| \\) is:", options: ["0", "0.5", "1", "2"], correct: 2 },
+            { q: "The conjugate of \\( \\frac{2-i}{(1-2i)^2} \\) is:", options: ["\\( \\frac{2+i}{(1+2i)^2} \\)", "\\( \\frac{-2-i}{(1+2i)^2} \\)", "Both", "None"], correct: 0 },
+            { q: "If \\( arg(z) < 0 \\), then \\( arg(-z) - arg(z) \\) is:", options: ["\\( \\pi \\)", "\\( -\\pi \\)", "\\( \\pi/2 \\)", "None"], correct: 0 },
+            { q: "The points \\( z_1, z_2, z_3, z_4 \\) in the complex plane are vertices of a parallelogram if:", options: ["\\( z_1+z_3 = z_2+z_4 \\)", "\\( z_1+z_2 = z_3+z_4 \\)", "\\( z_1-z_4 = z_2-z_3 \\)", "None"], correct: 0 },
+            { q: "The value of \\( \omega^{10} + \omega^{20} \\) where \\( \omega \\) is cube root of unity is:", options: ["1", "-1", "0", "i"], correct: 1 },
+            { q: "If \\( |z-4| < |z-2| \\), then:", options: ["\\( Re(z) > 3 \\)", "\\( Re(z) < 3 \\)", "\\( Im(z) > 0 \\)", "None"], correct: 0 },
+            { q: "The number of solutions of \\( z^2 + |z|^2 = 0 \\) is:", options: ["1", "2", "3", "Infinite"], correct: 3 },
+            { q: "If \\( z = \cos\theta + i\sin\theta \\), then \\( \frac{1+z}{1-z} \\) equals:", options: ["\\( i\cot(\theta/2) \\)", "\\( i\tan(\theta/2) \\)", "\\( \cot(\theta/2) \\)", "None"], correct: 0 },
+            { q: "The area of triangle with vertices \\( z, iz, z+iz \\) is:", options: ["\\( |z|^2 \\)", "\\( 0.5|z|^2 \\)", "\\( 2|z|^2 \\)", "None"], correct: 1 },
+            { q: "If \\( |z-z_1| + |z-z_2| = k \\) represents an ellipse, then:", options: ["\\( k > |z_1-z_2| \\)", "\\( k = |z_1-z_2| \\)", "\\( k < |z_1-z_2| \\)", "None"], correct: 0 },
+            { q: "The principal argument of \\( z = -1 + i\sqrt{3} \\) is:", options: ["\\( \pi/3 \\)", "\\( 2\pi/3 \\)", "\\( 4\pi/3 \\)", "\\( 5\pi/3 \\)"], correct: 1 },
+            { q: "If \\( z^2 + z + 1 = 0 \\), then \\( z \\) is:", options: ["\\( \omega \\)", "\\( \omega^2 \\)", "Both", "None"], correct: 2 },
+            { q: "The complex number \\( z \\) satisfying \\( |z+1| = z+2(1+i) \\) is:", options: ["\\( \frac{1}{2} - 2i \\)", "\\( -\frac{3}{2} + 2i \\)", "\\( \frac{3}{2} - 2i \\)", "None"], correct: 0 }
+        ];
+
+        let currentIdx = 0;
+        let answers = new Array(questions.length).fill(null);
+        let isReviewMode = false;
+
+        function init() {
+            renderDots();
+            showQuestion(0);
+            startTimer();
+        }
+
+        function renderDots() {
+            const container = document.getElementById('dots-container');
+            container.innerHTML = '';
+            questions.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `nav-dot ${i === currentIdx ? 'active' : ''} ${answers[i] !== null ? 'answered' : ''}`;
+                dot.id = `dot-${i}`;
+                dot.onclick = () => { if(!isReviewMode) goToQuestion(i); else goToQuestion(i); };
+                container.appendChild(dot);
+            });
+        }
+
+        function showQuestion(idx) {
+            currentIdx = idx;
+            const q = questions[idx];
+            const container = document.getElementById('question-display');
+            
+            let optionsHTML = '';
+            q.options.forEach((opt, i) => {
+                let statusClass = '';
+                if(isReviewMode) {
+                    if(i === q.correct) statusClass = 'correct-answer';
+                    else if(answers[idx] == i && i !== q.correct) statusClass = 'wrong-answer';
+                }
+
+                optionsHTML += `
+                    <div class="relative">
+                        <input type="radio" name="option" id="opt${i}" class="hidden option-input" value="${i}" 
+                               ${answers[idx] == i ? 'checked' : ''} ${isReviewMode ? 'disabled' : ''}>
+                        <label for="opt${i}" class="option-label block p-4 rounded-xl text-gray-300 bg-white/5 ${statusClass}">
+                            <span class="inline-block w-6 h-6 rounded-full border border-gray-500 mr-3 text-center text-xs leading-5 font-bold">${String.fromCharCode(65 + i)}</span>
+                            ${opt}
+                        </label>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="mb-6">
+                    <span class="text-purple-400 font-bold mb-2 block">Question ${idx + 1} of ${questions.length}</span>
+                    <h2 class="text-2xl font-semibold leading-relaxed">${q.q}</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    ${optionsHTML}
+                </div>
+            `;
+
+            // Logic for Buttons
+            document.getElementById('prev-btn').disabled = idx === 0;
+            document.getElementById('next-btn').style.display = idx === questions.length - 1 ? 'none' : 'block';
+            document.getElementById('submit-area').style.display = (idx === questions.length - 1 && !isReviewMode) ? 'block' : 'none';
+
+            // Save answer when clicked
+            if(!isReviewMode) {
+                const inputs = document.querySelectorAll('input[name="option"]');
+                inputs.forEach(input => {
+                    input.onchange = () => {
+                        answers[currentIdx] = parseInt(input.value);
+                        renderDots();
+                    };
+                });
+            }
+
+            renderDots();
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function nextQuestion() { if(currentIdx < questions.length - 1) showQuestion(currentIdx + 1); }
+        function prevQuestion() { if(currentIdx > 0) showQuestion(currentIdx - 1); }
+        function goToQuestion(i) { showQuestion(i); }
+
+        function startTimer() {
+            let timeLeft = 3600;
+            const timerEl = document.getElementById('timer');
+            const interval = setInterval(() => {
+                if(isReviewMode) { clearInterval(interval); return; }
+                timeLeft--;
+                const m = Math.floor(timeLeft/60), s = timeLeft%60;
+                timerEl.innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                if(timeLeft <= 0) { clearInterval(interval); calculateResult(); }
+            }, 1000);
+        }
+
+        function calculateResult() {
+            isReviewMode = false;
+            let correct = 0, wrong = 0;
+            questions.forEach((q, i) => {
+                if(answers[i] !== null) {
+                    if(answers[i] === q.correct) correct++;
+                    else wrong++;
+                }
+            });
+            const score = (correct * 4) - (wrong * 1);
+            const acc = Math.round((correct/questions.length)*100);
+            
+            document.getElementById('res-score').innerText = score;
+            document.getElementById('res-acc').innerText = acc + "%";
+            document.getElementById('result-screen').style.display = 'flex';
+        }
+
+        function startReview() {
+            isReviewMode = true;
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('submit-area').style.display = 'none';
+            showQuestion(0);
+        }
+
+        init();
+    </script>
+</body>
+</html>
