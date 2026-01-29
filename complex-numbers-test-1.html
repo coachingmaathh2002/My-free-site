@@ -5,176 +5,1094 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complex Numbers - Mock Test 1 | ExamPrime</title>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: '#0f172a',
+                        darker: '#0a0f1a',
+                        card: '#1e293b',
+                        accent: '#8b5cf6',
+                        secondary: '#ec4899',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
         body {
-            background-color: #0f172a;
+            background-color: #0a0f1a;
             color: #ffffff;
             font-family: 'Outfit', sans-serif;
-            background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,25%,0.8) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,25%,0.6) 0, transparent 50%);
             min-height: 100vh;
+            background-attachment: fixed;
         }
+
+        /* Glassmorphism */
         .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .option-label {
-            cursor: pointer;
-            transition: all 0.2s ease;
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .option-input:checked + .option-label {
-            background: rgba(139, 92, 246, 0.2);
-            border-color: #8b5cf6;
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(135deg, #c084fc, #f472b6, #fb7185);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0f1a; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #8b5cf6, #ec4899);
+            border-radius: 3px;
+        }
+
+        /* Option Styles */
+        .option-label {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .option-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .option-label:hover::before {
+            left: 100%;
+        }
+        
+        .option-label:hover {
+            border-color: rgba(139, 92, 246, 0.5);
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .option-input:checked + .option-label {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.1));
+            border-color: #8b5cf6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .option-input:checked + .option-label .option-circle {
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+            color: white;
+        }
+
         /* Review Mode Styles */
         .correct-answer {
-            background: rgba(34, 197, 94, 0.2) !important;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.1)) !important;
             border-color: #22c55e !important;
-            color: #4ade80 !important;
         }
+        .correct-answer .option-circle {
+            background: #22c55e !important;
+            border-color: #22c55e !important;
+            color: white !important;
+        }
+        
         .wrong-answer {
-            background: rgba(239, 68, 68, 0.2) !important;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1)) !important;
             border-color: #ef4444 !important;
-            color: #f87171 !important;
         }
-        .nav-dot {
+        .wrong-answer .option-circle {
+            background: #ef4444 !important;
+            border-color: #ef4444 !important;
+            color: white !important;
+        }
+
+        /* Navigation Buttons */
+        .nav-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-btn.current {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+            transform: scale(1.1);
+        }
+        
+        .nav-btn.answered {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: #8b5cf6;
+            color: white;
+        }
+        
+        .nav-btn.marked {
+            background: rgba(245, 158, 11, 0.3);
+            border-color: #f59e0b;
+        }
+        .nav-btn.marked::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
             width: 10px;
             height: 10px;
+            background: #f59e0b;
             border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            transition: all 0.3s;
         }
-        .nav-dot.active { background: #8b5cf6; transform: scale(1.3); }
-        .nav-dot.answered { background: #4f46e5; }
         
-        #result-screen { display: none; }
+        .nav-btn.review-correct {
+            background: rgba(34, 197, 94, 0.3);
+            border-color: #22c55e;
+        }
+        .nav-btn.review-wrong {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: #ef4444;
+        }
+        
+        .nav-btn:hover:not(.current) {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        /* Timer Styles */
+        .timer-warning {
+            animation: pulse-warning 1s ease-in-out infinite;
+        }
+        @keyframes pulse-warning {
+            0%, 100% { color: #f59e0b; }
+            50% { color: #ef4444; }
+        }
+        
+        .timer-danger {
+            animation: pulse-danger 0.5s ease-in-out infinite;
+            color: #ef4444 !important;
+        }
+        @keyframes pulse-danger {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Progress Bar */
+        .progress-fill {
+            transition: width 0.5s ease;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-in {
+            animation: slideIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-scale-in {
+            animation: scaleIn 0.3s ease forwards;
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-500px) rotate(720deg); opacity: 0; }
+        }
+
+        /* Modal */
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .modal.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        /* Sidebar Toggle */
+        .sidebar {
+            transition: transform 0.3s ease;
+        }
+        .sidebar.closed {
+            transform: translateX(100%);
+        }
+
+        /* Question Card */
+        .question-card {
+            min-height: 500px;
+        }
+
+        /* Solution Box */
+        .solution-box {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        /* Keyboard Shortcut Hint */
+        .kbd {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-family: monospace;
+        }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="antialiased">
 
-    <div class="max-w-4xl mx-auto">
-        <!-- Header -->
-        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <div>
-                <a href="index.html" class="text-accent hover:text-white transition flex items-center gap-2 mb-2">
-                    <i class="fa-solid fa-arrow-left"></i> Exit Test
-                </a>
-                <h1 class="text-3xl font-bold">Complex Numbers <span class="text-purple-400">#01</span></h1>
+    <!-- Top Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <!-- Left: Back & Title -->
+            <div class="flex items-center gap-4">
+                <button onclick="confirmExit()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all group">
+                    <i class="fa-solid fa-arrow-left text-gray-400 group-hover:text-white"></i>
+                </button>
+                <div class="hidden sm:block">
+                    <h1 class="font-bold text-lg">Complex Numbers</h1>
+                    <p class="text-xs text-gray-400">Mock Test #01 • WBJEE Mathematics</p>
+                </div>
             </div>
-            
-            <div class="glass-panel px-6 py-3 rounded-2xl flex items-center gap-4 border-purple-500/30">
-                <i class="fa-solid fa-clock text-purple-400 text-xl"></i>
-                <div class="text-2xl font-mono font-bold" id="timer">60:00</div>
+
+            <!-- Center: Timer -->
+            <div class="flex items-center gap-3">
+                <div class="glass-panel px-4 py-2 rounded-xl flex items-center gap-3" id="timer-container">
+                    <div class="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center">
+                        <i class="fa-solid fa-clock text-accent" id="timer-icon"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-400">Time Left</div>
+                        <div class="text-xl font-mono font-bold" id="timer">30:00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Actions -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleSidebar()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all lg:hidden">
+                    <i class="fa-solid fa-grip"></i>
+                </button>
+                <button onclick="openShortcutsModal()" class="hidden sm:flex w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 items-center justify-center transition-all" title="Keyboard Shortcuts">
+                    <i class="fa-solid fa-keyboard text-gray-400"></i>
+                </button>
+                <button onclick="confirmSubmit()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-accent to-secondary text-white font-semibold hover:shadow-lg hover:shadow-purple-500/30 transition-all flex items-center gap-2" id="submit-btn">
+                    <span class="hidden sm:inline">Submit</span>
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
             </div>
         </div>
 
-        <!-- Question Navigation Dots -->
-        <div class="flex flex-wrap justify-center gap-2 mb-8" id="dots-container"></div>
+        <!-- Progress Bar -->
+        <div class="h-1 bg-gray-800">
+            <div class="h-full bg-gradient-to-r from-accent to-secondary progress-fill" id="progress-bar" style="width: 0%"></div>
+        </div>
+    </nav>
 
-        <!-- Quiz Container -->
-        <div id="quiz-container" class="glass-panel p-8 rounded-3xl min-h-[400px] relative">
-            <div id="question-display">
-                <!-- Single question shown here -->
-            </div>
+    <!-- Main Content -->
+    <div class="pt-20 pb-8 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 flex gap-6">
+            
+            <!-- Main Question Area -->
+            <div class="flex-1">
+                <!-- Question Card -->
+                <div class="glass-panel rounded-3xl p-6 md:p-8 question-card" id="question-card">
+                    <!-- Question Header -->
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="px-3 py-1 rounded-full bg-accent/20 text-accent text-sm font-semibold">
+                                    Question <span id="current-q-num">1</span>/<span id="total-q-num">30</span>
+                                </span>
+                                <span class="px-3 py-1 rounded-full bg-white/5 text-gray-400 text-xs" id="q-difficulty">
+                                    <i class="fa-solid fa-signal mr-1"></i> Medium
+                                </span>
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                <i class="fa-solid fa-star text-yellow-500 mr-1"></i> +4 for correct • -1 for wrong
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="toggleMark()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-yellow-500/20 flex items-center justify-center transition-all group" id="mark-btn" title="Mark for Review">
+                                <i class="fa-regular fa-bookmark text-gray-400 group-hover:text-yellow-500" id="mark-icon"></i>
+                            </button>
+                            <button onclick="clearResponse()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-red-500/20 flex items-center justify-center transition-all group" title="Clear Response">
+                                <i class="fa-solid fa-eraser text-gray-400 group-hover:text-red-400"></i>
+                            </button>
+                        </div>
+                    </div>
 
-            <!-- Navigation Buttons -->
-            <div class="flex justify-between items-center mt-10">
-                <button id="prev-btn" onclick="prevQuestion()" class="px-6 py-2 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
-                    <i class="fa-solid fa-chevron-left mr-2"></i> Previous
-                </button>
-                
-                <div id="submit-area" class="hidden">
-                    <button onclick="calculateResult()" class="px-10 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold hover:scale-105 transition-transform">
-                        Finish Test
+                    <!-- Question Text -->
+                    <div id="question-display" class="animate-slide-in">
+                        <!-- Question content here -->
+                    </div>
+
+                    <!-- Solution Box (Review Mode Only) -->
+                    <div id="solution-box" class="hidden mt-6 solution-box rounded-2xl p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i class="fa-solid fa-lightbulb text-green-400"></i>
+                            <span class="font-semibold text-green-400">Solution</span>
+                        </div>
+                        <div id="solution-text" class="text-gray-300 leading-relaxed"></div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between items-center mt-6">
+                    <button onclick="prevQuestion()" id="prev-btn" class="px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-chevron-left"></i>
+                        <span class="hidden sm:inline">Previous</span>
+                    </button>
+
+                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                        <span class="kbd">←</span>
+                        <span class="kbd">→</span>
+                        <span class="hidden sm:inline ml-1">to navigate</span>
+                    </div>
+
+                    <button onclick="nextQuestion()" id="next-btn" class="px-6 py-3 rounded-xl bg-accent hover:bg-accent/80 transition-all flex items-center gap-2">
+                        <span class="hidden sm:inline">Next</span>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
 
-                <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 transition-all">
-                    Next <i class="fa-solid fa-chevron-right ml-2"></i>
-                </button>
+                <!-- Question Stats (Mobile) -->
+                <div class="lg:hidden mt-6 glass-panel rounded-2xl p-4">
+                    <div class="flex justify-around text-center">
+                        <div>
+                            <div class="text-2xl font-bold text-green-400" id="mobile-answered">0</div>
+                            <div class="text-xs text-gray-400">Answered</div>
+                        </div>
+                        <div class="w-px bg-white/10"></div>
+                        <div>
+                            <div class="text-2xl font-bold text-yellow-400" id="mobile-marked">0</div>
+                            <div class="text-xs text-gray-400">Marked</div>
+                        </div>
+                        <div class="w-px bg-white/10"></div>
+                        <div>
+                            <div class="text-2xl font-bold text-gray-400" id="mobile-unanswered">30</div>
+                            <div class="text-xs text-gray-400">Remaining</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- Result Screen -->
-        <div id="result-screen" class="fixed inset-0 z-[100] bg-slate-950 flex items-center justify-center p-4">
-            <div class="glass-panel max-w-md w-full rounded-3xl p-8 text-center border-purple-500/50">
-                <div class="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
-                    <i class="fa-solid fa-check-double"></i>
-                </div>
-                <h2 class="text-2xl font-bold mb-2">Results</h2>
-                <div class="grid grid-cols-2 gap-3 mb-6">
-                    <div class="p-3 bg-white/5 rounded-xl"><div class="text-xs text-gray-400">Score</div><div class="text-xl font-bold" id="res-score">0</div></div>
-                    <div class="p-3 bg-white/5 rounded-xl"><div class="text-xs text-gray-400">Accuracy</div><div class="text-xl font-bold text-purple-400" id="res-acc">0%</div></div>
-                </div>
-                <div class="flex gap-4">
-                    <button onclick="startReview()" class="flex-1 py-3 bg-purple-600 font-bold rounded-xl hover:bg-purple-500 transition">Review Answers</button>
-                    <button onclick="window.location.href='index.html'" class="flex-1 py-3 bg-white/10 font-bold rounded-xl hover:bg-white/20 transition">Home</button>
+            <!-- Sidebar: Question Navigator -->
+            <div class="hidden lg:block w-80 sidebar" id="sidebar">
+                <div class="glass-panel rounded-3xl p-6 sticky top-24">
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-3 mb-6">
+                        <div class="text-center p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                            <div class="text-xl font-bold text-green-400" id="stat-answered">0</div>
+                            <div class="text-xs text-gray-400">Answered</div>
+                        </div>
+                        <div class="text-center p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+                            <div class="text-xl font-bold text-yellow-400" id="stat-marked">0</div>
+                            <div class="text-xs text-gray-400">Marked</div>
+                        </div>
+                        <div class="text-center p-3 rounded-xl bg-gray-500/10 border border-gray-500/20">
+                            <div class="text-xl font-bold text-gray-400" id="stat-unanswered">30</div>
+                            <div class="text-xs text-gray-400">Skipped</div>
+                        </div>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="flex flex-wrap gap-4 mb-6 text-xs">
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded bg-accent/30 border border-accent"></div>
+                            <span class="text-gray-400">Answered</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded bg-yellow-500/30 border border-yellow-500 relative">
+                                <div class="absolute -top-1 -right-1 w-2 h-2 bg-yellow-500 rounded-full"></div>
+                            </div>
+                            <span class="text-gray-400">Marked</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded bg-white/5 border border-white/10"></div>
+                            <span class="text-gray-400">Not Visited</span>
+                        </div>
+                    </div>
+
+                    <!-- Question Grid -->
+                    <div class="grid grid-cols-5 gap-2" id="nav-grid">
+                        <!-- Navigation buttons populated by JS -->
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="mt-6 pt-6 border-t border-white/10 space-y-3">
+                        <button onclick="confirmSubmit()" class="w-full py-3 rounded-xl bg-gradient-to-r from-accent to-secondary text-white font-semibold hover:shadow-lg hover:shadow-purple-500/30 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            Submit Test
+                        </button>
+                        <button onclick="jumpToUnanswered()" class="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 font-medium transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-forward"></i>
+                            Go to First Unanswered
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Mobile Sidebar Overlay -->
+    <div class="lg:hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm opacity-0 invisible transition-all" id="sidebar-overlay" onclick="toggleSidebar()">
+        <div class="absolute right-0 top-0 bottom-0 w-80 glass-panel border-l border-white/10 p-6 transform translate-x-full transition-transform" id="mobile-sidebar" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-bold text-lg">Questions</h3>
+                <button onclick="toggleSidebar()" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-3 mb-6">
+                <div class="text-center p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                    <div class="text-xl font-bold text-green-400" id="m-stat-answered">0</div>
+                    <div class="text-xs text-gray-400">Done</div>
+                </div>
+                <div class="text-center p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+                    <div class="text-xl font-bold text-yellow-400" id="m-stat-marked">0</div>
+                    <div class="text-xs text-gray-400">Marked</div>
+                </div>
+                <div class="text-center p-3 rounded-xl bg-gray-500/10 border border-gray-500/20">
+                    <div class="text-xl font-bold text-gray-400" id="m-stat-unanswered">30</div>
+                    <div class="text-xs text-gray-400">Left</div>
+                </div>
+            </div>
+
+            <!-- Question Grid -->
+            <div class="grid grid-cols-5 gap-2 max-h-[50vh] overflow-y-auto" id="m-nav-grid">
+                <!-- Navigation buttons populated by JS -->
+            </div>
+
+            <!-- Submit Button -->
+            <button onclick="confirmSubmit(); toggleSidebar();" class="w-full mt-6 py-3 rounded-xl bg-gradient-to-r from-accent to-secondary text-white font-semibold">
+                Submit Test
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirm Submit Modal -->
+    <div id="submit-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="modal-content glass-panel max-w-md w-full rounded-3xl p-8 border-accent/30">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 mx-auto rounded-full bg-accent/20 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-clipboard-check text-3xl text-accent"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">Submit Test?</h2>
+                <p class="text-gray-400">Are you sure you want to submit? You cannot change your answers after submission.</p>
+            </div>
+
+            <!-- Summary -->
+            <div class="grid grid-cols-3 gap-3 mb-6">
+                <div class="text-center p-4 rounded-xl bg-green-500/10">
+                    <div class="text-2xl font-bold text-green-400" id="modal-answered">0</div>
+                    <div class="text-xs text-gray-400">Answered</div>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-yellow-500/10">
+                    <div class="text-2xl font-bold text-yellow-400" id="modal-marked">0</div>
+                    <div class="text-xs text-gray-400">Marked</div>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-red-500/10">
+                    <div class="text-2xl font-bold text-red-400" id="modal-unanswered">0</div>
+                    <div class="text-xs text-gray-400">Unanswered</div>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button onclick="closeSubmitModal()" class="flex-1 py-3 rounded-xl bg-white/5 hover:bg-white/10 font-semibold transition-all">
+                    Continue Test
+                </button>
+                <button onclick="calculateResult()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-accent to-secondary font-semibold transition-all hover:shadow-lg hover:shadow-purple-500/30">
+                    Submit Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exit Confirm Modal -->
+    <div id="exit-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="modal-content glass-panel max-w-md w-full rounded-3xl p-8 border-red-500/30">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 mx-auto rounded-full bg-red-500/20 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-door-open text-3xl text-red-400"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">Exit Test?</h2>
+                <p class="text-gray-400">Your progress will be lost. Are you sure you want to exit?</p>
+            </div>
+
+            <div class="flex gap-3">
+                <button onclick="closeExitModal()" class="flex-1 py-3 rounded-xl bg-white/5 hover:bg-white/10 font-semibold transition-all">
+                    Cancel
+                </button>
+                <button onclick="window.location.href='index.html'" class="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-600 font-semibold transition-all">
+                    Exit Test
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div id="shortcuts-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="modal-content glass-panel max-w-md w-full rounded-3xl p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-keyboard text-accent"></i>
+                    Keyboard Shortcuts
+                </h2>
+                <button onclick="closeShortcutsModal()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <div class="flex justify-between items-center p-3 rounded-xl bg-white/5">
+                    <span class="text-gray-300">Previous Question</span>
+                    <div class="flex gap-1">
+                        <span class="kbd">←</span>
+                        <span class="text-gray-500">or</span>
+                        <span class="kbd">P</span>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center p-3 rounded-xl bg-white/5">
+                    <span class="text-gray-300">Next Question</span>
+                    <div class="flex gap-1">
+                        <span class="kbd">→</span>
+                        <span class="text-gray-500">or</span>
+                        <span class="kbd">N</span>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center p-3 rounded-xl bg-white/5">
+                    <span class="text-gray-300">Select Option A/B/C/D</span>
+                    <div class="flex gap-1">
+                        <span class="kbd">A</span>
+                        <span class="kbd">B</span>
+                        <span class="kbd">C</span>
+                        <span class="kbd">D</span>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center p-3 rounded-xl bg-white/5">
+                    <span class="text-gray-300">Mark for Review</span>
+                    <span class="kbd">M</span>
+                </div>
+                <div class="flex justify-between items-center p-3 rounded-xl bg-white/5">
+                    <span class="text-gray-300">Clear Response</span>
+                    <span class="kbd">C</span>
+                </div>
+                <div class="flex justify-between items-center p-3 rounded-xl bg-white/5">
+                    <span class="text-gray-300">Submit Test</span>
+                    <div class="flex gap-1">
+                        <span class="kbd">Ctrl</span>
+                        <span class="kbd">Enter</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="result-screen" class="modal fixed inset-0 z-[100] bg-darker flex items-center justify-center p-4 overflow-y-auto">
+        <div class="modal-content w-full max-w-2xl py-8">
+            <!-- Confetti Container -->
+            <div id="confetti-container" class="fixed inset-0 pointer-events-none overflow-hidden"></div>
+
+            <div class="glass-panel rounded-3xl p-8 border-accent/30 animate-scale-in">
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-4xl mb-4" id="result-emoji">
+                        🎉
+                    </div>
+                    <h2 class="text-3xl font-bold mb-2" id="result-title">Great Job!</h2>
+                    <p class="text-gray-400" id="result-subtitle">You've completed the test</p>
+                </div>
+
+                <!-- Score Circle -->
+                <div class="flex justify-center mb-8">
+                    <div class="relative">
+                        <svg class="w-40 h-40 transform -rotate-90">
+                            <circle cx="80" cy="80" r="70" stroke="#1e293b" stroke-width="12" fill="none"/>
+                            <circle id="score-circle" cx="80" cy="80" r="70" stroke="url(#gradient)" stroke-width="12" fill="none" 
+                                stroke-dasharray="439.8" stroke-dashoffset="439.8" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#8b5cf6"/>
+                                    <stop offset="100%" style="stop-color:#ec4899"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-4xl font-bold" id="score-value">0</span>
+                            <span class="text-sm text-gray-400">out of <span id="max-score">120</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="text-center p-4 rounded-2xl bg-green-500/10 border border-green-500/20">
+                        <div class="text-3xl font-bold text-green-400" id="res-correct">0</div>
+                        <div class="text-sm text-gray-400">Correct</div>
+                    </div>
+                    <div class="text-center p-4 rounded-2xl bg-red-500/10 border border-red-500/20">
+                        <div class="text-3xl font-bold text-red-400" id="res-wrong">0</div>
+                        <div class="text-sm text-gray-400">Wrong</div>
+                    </div>
+                    <div class="text-center p-4 rounded-2xl bg-gray-500/10 border border-gray-500/20">
+                        <div class="text-3xl font-bold text-gray-400" id="res-skipped">0</div>
+                        <div class="text-sm text-gray-400">Skipped</div>
+                    </div>
+                    <div class="text-center p-4 rounded-2xl bg-accent/10 border border-accent/20">
+                        <div class="text-3xl font-bold text-accent" id="res-accuracy">0%</div>
+                        <div class="text-sm text-gray-400">Accuracy</div>
+                    </div>
+                </div>
+
+                <!-- Time Taken -->
+                <div class="text-center mb-8 p-4 rounded-2xl bg-white/5">
+                    <div class="text-sm text-gray-400 mb-1">Time Taken</div>
+                    <div class="text-2xl font-bold" id="res-time">00:00</div>
+                </div>
+
+                <!-- Performance Analysis -->
+                <div class="mb-8">
+                    <h3 class="font-semibold mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-accent"></i>
+                        Performance Analysis
+                    </h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-400">Correct Answers</span>
+                                <span class="text-green-400" id="bar-correct-text">0/30</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500 transition-all duration-1000" id="bar-correct" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-400">Wrong Answers</span>
+                                <span class="text-red-400" id="bar-wrong-text">0/30</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-500 transition-all duration-1000" id="bar-wrong" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <button onclick="startReview()" class="py-4 rounded-2xl bg-gradient-to-r from-accent to-secondary font-semibold hover:shadow-lg hover:shadow-purple-500/30 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Review Answers
+                    </button>
+                    <button onclick="retakeTest()" class="py-4 rounded-2xl bg-white/5 hover:bg-white/10 font-semibold transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        Retake Test
+                    </button>
+                    <button onclick="window.location.href='index.html'" class="py-4 rounded-2xl bg-white/5 hover:bg-white/10 font-semibold transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-home"></i>
+                        Back Home
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Mode Header -->
+    <div id="review-header" class="hidden fixed top-0 left-0 right-0 z-50 bg-green-600">
+        <div class="max-w-7xl mx-auto px-4 h-12 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-white">
+                <i class="fa-solid fa-eye"></i>
+                <span class="font-semibold">Review Mode</span>
+                <span class="text-green-200 text-sm">- Check your answers and solutions</span>
+            </div>
+            <button onclick="exitReview()" class="px-4 py-1 rounded-lg bg-white/20 hover:bg-white/30 text-white text-sm font-medium transition-all">
+                Exit Review
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
     <script>
+        // ==================== QUESTION DATA ====================
         const questions = [
-            { q: "If \\( z = \\frac{\\sqrt{3} + i}{2} \\), then \\( z^{100} \\) is equal to:", options: ["\\( z \\)", "\\( -z \\)", "\\( \\bar{z} \\)", "None of these"], correct: 1 },
-            { q: "The value of \\( i^{n} + i^{n+1} + i^{n+2} + i^{n+3} \\) is:", options: ["0", "1", "-1", "i"], correct: 0 },
-            { q: "The square root of \\( 3 + 4i \\) is:", options: ["\\( \\pm(2 + i) \\)", "\\( \\pm(1 + 2i) \\)", "\\( \\pm(2 - i) \\)", "None"], correct: 0 },
-            { q: "If \\( |z-i| = |z+i| \\), then the locus of \\( z \\) is:", options: ["Real axis", "Imaginary axis", "Circle", "Parabola"], correct: 0 },
-            { q: "The argument of \\( 1 + i \\) is:", options: ["\\( \\pi/2 \\)", "\\( \\pi/4 \\)", "\\( 3\\pi/4 \\)", "0"], correct: 1 },
-            { q: "If \\( \\omega \\) is an imaginary cube root of unity, then \\( (1+\\omega-\\omega^2)^7 \\) equals:", options: ["\\( 128\\omega \\)", "\\( -128\\omega \\)", "\\( 128\\omega^2 \\)", "\\( -128\\omega^2 \\)"], correct: 3 },
-            { q: "The modulus of \\( \\frac{1+2i}{1-(1-i)^2} \\) is:", options: ["1", "2", "0.5", "None"], correct: 0 },
-            { q: "If \\( z = x + iy \\) and \\( |z|=1 \\), then \\( z \\) lies on:", options: ["X-axis", "Y-axis", "Unit Circle", "Line \\( y=x \\)"], correct: 2 },
-            { q: "The polar form of \\( -1 - i \\) is:", options: ["\\( \\sqrt{2}(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}) \\)", "\\( \\sqrt{2}(\\cos\\frac{3\\pi}{4} + i\\sin\\frac{3\\pi}{4}) \\)", "\\( \\sqrt{2}(\\cos\\frac{-3\\pi}{4} + i\\sin\\frac{-3\\pi}{4}) \\)", "None"], correct: 2 },
-            { q: "The amplitude of \\( \\sin \\frac{\\pi}{5} + i(1 - \\cos \\frac{\\pi}{5}) \\) is:", options: ["\\( \\pi/5 \\)", "\\( \\pi/10 \\)", "\\( \\pi/15 \\)", "\\( \\pi/18 \\)"], correct: 1 },
-            { q: "If \\( |z_1| = |z_2| \\) and \\( arg(z_1) + arg(z_2) = 0 \\), then:", options: ["\\( z_1 = z_2 \\)", "\\( z_1 = \\bar{z}_2 \\)", "\\( z_1 z_2 = 1 \\)", "None"], correct: 1 },
-            { q: "The multiplicative inverse of \\( 3 + 4i \\) is:", options: ["\\( 3/25 - 4i/25 \\)", "\\( 3/25 + 4i/25 \\)", "\\( 3/5 - 4i/5 \\)", "None"], correct: 0 },
-            { q: "The value of \\( (1+i)^8 + (1-i)^8 \\) is:", options: ["16", "32", "64", "0"], correct: 1 },
-            { q: "Locus of \\( z \\) satisfying \\( arg(z) = \\pi/3 \\) is:", options: ["Line", "Ray", "Circle", "Parabola"], correct: 1 },
-            { q: "If \\( |z|=4 \\) and \\( arg(z)=5\\pi/6 \\), then \\( z= \\):", options: ["\\( 2\\sqrt{3} + 2i \\)", "\\( -2\\sqrt{3} + 2i \\)", "\\( 2\\sqrt{3} - 2i \\)", "\\( -2\\sqrt{3} - 2i \\)"], correct: 1 },
-            { q: "The value of \\( \\sum_{n=1}^{13} (i^n + i^{n+1}) \\) is:", options: ["\\( i-1 \\)", "\\( i \\)", "\\( -1 \\)", "0"], correct: 0 },
-            { q: "If \\( z = (1+i\\sqrt{3})^n \\) is real, then least positive integer \\( n \\) is:", options: ["2", "3", "4", "6"], correct: 1 },
-            { q: "The minimum value of \\( |z| + |z-1| \\) is:", options: ["0", "0.5", "1", "2"], correct: 2 },
-            { q: "The conjugate of \\( \\frac{2-i}{(1-2i)^2} \\) is:", options: ["\\( \\frac{2+i}{(1+2i)^2} \\)", "\\( \\frac{-2-i}{(1+2i)^2} \\)", "Both", "None"], correct: 0 },
-            { q: "If \\( arg(z) < 0 \\), then \\( arg(-z) - arg(z) \\) is:", options: ["\\( \\pi \\)", "\\( -\\pi \\)", "\\( \\pi/2 \\)", "None"], correct: 0 },
-            { q: "The points \\( z_1, z_2, z_3, z_4 \\) in the complex plane are vertices of a parallelogram if:", options: ["\\( z_1+z_3 = z_2+z_4 \\)", "\\( z_1+z_2 = z_3+z_4 \\)", "\\( z_1-z_4 = z_2-z_3 \\)", "None"], correct: 0 },
-            { q: "The value of \\( \omega^{10} + \omega^{20} \\) where \\( \omega \\) is cube root of unity is:", options: ["1", "-1", "0", "i"], correct: 1 },
-            { q: "If \\( |z-4| < |z-2| \\), then:", options: ["\\( Re(z) > 3 \\)", "\\( Re(z) < 3 \\)", "\\( Im(z) > 0 \\)", "None"], correct: 0 },
-            { q: "The number of solutions of \\( z^2 + |z|^2 = 0 \\) is:", options: ["1", "2", "3", "Infinite"], correct: 3 },
-            { q: "If \\( z = \cos\theta + i\sin\theta \\), then \\( \frac{1+z}{1-z} \\) equals:", options: ["\\( i\cot(\theta/2) \\)", "\\( i\tan(\theta/2) \\)", "\\( \cot(\theta/2) \\)", "None"], correct: 0 },
-            { q: "The area of triangle with vertices \\( z, iz, z+iz \\) is:", options: ["\\( |z|^2 \\)", "\\( 0.5|z|^2 \\)", "\\( 2|z|^2 \\)", "None"], correct: 1 },
-            { q: "If \\( |z-z_1| + |z-z_2| = k \\) represents an ellipse, then:", options: ["\\( k > |z_1-z_2| \\)", "\\( k = |z_1-z_2| \\)", "\\( k < |z_1-z_2| \\)", "None"], correct: 0 },
-            { q: "The principal argument of \\( z = -1 + i\sqrt{3} \\) is:", options: ["\\( \pi/3 \\)", "\\( 2\pi/3 \\)", "\\( 4\pi/3 \\)", "\\( 5\pi/3 \\)"], correct: 1 },
-            { q: "If \\( z^2 + z + 1 = 0 \\), then \\( z \\) is:", options: ["\\( \omega \\)", "\\( \omega^2 \\)", "Both", "None"], correct: 2 },
-            { q: "The complex number \\( z \\) satisfying \\( |z+1| = z+2(1+i) \\) is:", options: ["\\( \frac{1}{2} - 2i \\)", "\\( -\frac{3}{2} + 2i \\)", "\\( \frac{3}{2} - 2i \\)", "None"], correct: 0 }
+            { 
+                q: "If \\( z = \\frac{\\sqrt{3} + i}{2} \\), then \\( z^{100} \\) is equal to:", 
+                options: ["\\( z \\)", "\\( -z \\)", "\\( \\bar{z} \\)", "None of these"], 
+                correct: 1,
+                difficulty: "Hard",
+                solution: "\\( z = \\frac{\\sqrt{3}+i}{2} = \\cos\\frac{\\pi}{6} + i\\sin\\frac{\\pi}{6} \\). By De Moivre's theorem, \\( z^{100} = \\cos\\frac{100\\pi}{6} + i\\sin\\frac{100\\pi}{6} = \\cos\\frac{50\\pi}{3} + i\\sin\\frac{50\\pi}{3} \\). Since \\( \\frac{50\\pi}{3} = 16\\pi + \\frac{2\\pi}{3} \\), we get \\( z^{100} = \\cos\\frac{2\\pi}{3} + i\\sin\\frac{2\\pi}{3} = -\\frac{\\sqrt{3}}{2} + i\\frac{1}{2} = -z \\)."
+            },
+            { 
+                q: "The value of \\( i^{n} + i^{n+1} + i^{n+2} + i^{n+3} \\) is:", 
+                options: ["0", "1", "-1", "i"], 
+                correct: 0,
+                difficulty: "Easy",
+                solution: "For any integer n, \\( i^n + i^{n+1} + i^{n+2} + i^{n+3} = i^n(1 + i + i^2 + i^3) = i^n(1 + i - 1 - i) = i^n \\times 0 = 0 \\)."
+            },
+            { 
+                q: "The square root of \\( 3 + 4i \\) is:", 
+                options: ["\\( \\pm(2 + i) \\)", "\\( \\pm(1 + 2i) \\)", "\\( \\pm(2 - i) \\)", "None"], 
+                correct: 0,
+                difficulty: "Medium",
+                solution: "Let \\( \\sqrt{3+4i} = a + bi \\). Then \\( a^2 - b^2 = 3 \\) and \\( 2ab = 4 \\), so \\( ab = 2 \\). From \\( |3+4i| = 5 \\), we get \\( a^2 + b^2 = 5 \\). Solving: \\( a^2 = 4 \\), so \\( a = \\pm 2 \\), and \\( b = 1 \\). Thus \\( \\sqrt{3+4i} = \\pm(2+i) \\)."
+            },
+            { 
+                q: "If \\( |z-i| = |z+i| \\), then the locus of \\( z \\) is:", 
+                options: ["Real axis", "Imaginary axis", "Circle", "Parabola"], 
+                correct: 0,
+                difficulty: "Easy",
+                solution: "The equation \\( |z-i| = |z+i| \\) represents the set of all points equidistant from \\( i \\) and \\( -i \\). This is the perpendicular bisector of the line segment joining \\( (0,1) \\) and \\( (0,-1) \\), which is the real axis (y = 0)."
+            },
+            { 
+                q: "The argument of \\( 1 + i \\) is:", 
+                options: ["\\( \\pi/2 \\)", "\\( \\pi/4 \\)", "\\( 3\\pi/4 \\)", "0"], 
+                correct: 1,
+                difficulty: "Easy",
+                solution: "For \\( z = 1 + i \\), we have \\( \\arg(z) = \\tan^{-1}\\frac{1}{1} = \\tan^{-1}(1) = \\frac{\\pi}{4} \\). Since both real and imaginary parts are positive, the argument is in the first quadrant."
+            },
+            { 
+                q: "If \\( \\omega \\) is an imaginary cube root of unity, then \\( (1+\\omega-\\omega^2)^7 \\) equals:", 
+                options: ["\\( 128\\omega \\)", "\\( -128\\omega \\)", "\\( 128\\omega^2 \\)", "\\( -128\\omega^2 \\)"], 
+                correct: 3,
+                difficulty: "Hard",
+                solution: "Since \\( 1 + \\omega + \\omega^2 = 0 \\), we have \\( 1 + \\omega = -\\omega^2 \\). Thus \\( 1 + \\omega - \\omega^2 = -\\omega^2 - \\omega^2 = -2\\omega^2 \\). Therefore \\( (1+\\omega-\\omega^2)^7 = (-2\\omega^2)^7 = -128\\omega^{14} = -128\\omega^2 \\) (since \\( \\omega^3 = 1 \\))."
+            },
+            { 
+                q: "The modulus of \\( \\frac{1+2i}{1-(1-i)^2} \\) is:", 
+                options: ["1", "2", "0.5", "None"], 
+                correct: 0,
+                difficulty: "Medium",
+                solution: "First, \\( (1-i)^2 = 1 - 2i + i^2 = 1 - 2i - 1 = -2i \\). So the denominator is \\( 1 - (-2i) = 1 + 2i \\). Thus \\( \\frac{1+2i}{1+2i} = 1 \\), and \\( |1| = 1 \\)."
+            },
+            { 
+                q: "If \\( z = x + iy \\) and \\( |z|=1 \\), then \\( z \\) lies on:", 
+                options: ["X-axis", "Y-axis", "Unit Circle", "Line \\( y=x \\)"], 
+                correct: 2,
+                difficulty: "Easy",
+                solution: "\\( |z| = 1 \\) means \\( \\sqrt{x^2 + y^2} = 1 \\), or \\( x^2 + y^2 = 1 \\). This is the equation of a circle with center at origin and radius 1 (unit circle)."
+            },
+            { 
+                q: "The polar form of \\( -1 - i \\) is:", 
+                options: ["\\( \\sqrt{2}(\\cos\\frac{\\pi}{4} + i\\sin\\frac{\\pi}{4}) \\)", "\\( \\sqrt{2}(\\cos\\frac{3\\pi}{4} + i\\sin\\frac{3\\pi}{4}) \\)", "\\( \\sqrt{2}(\\cos\\frac{-3\\pi}{4} + i\\sin\\frac{-3\\pi}{4}) \\)", "None"], 
+                correct: 2,
+                difficulty: "Medium",
+                solution: "For \\( z = -1 - i \\): \\( |z| = \\sqrt{1+1} = \\sqrt{2} \\). The point lies in third quadrant. \\( \\arg(z) = -\\pi + \\tan^{-1}(1) = -\\pi + \\frac{\\pi}{4} = -\\frac{3\\pi}{4} \\). Thus polar form is \\( \\sqrt{2}(\\cos(-\\frac{3\\pi}{4}) + i\\sin(-\\frac{3\\pi}{4})) \\)."
+            },
+            { 
+                q: "The amplitude of \\( \\sin \\frac{\\pi}{5} + i(1 - \\cos \\frac{\\pi}{5}) \\) is:", 
+                options: ["\\( \\pi/5 \\)", "\\( \\pi/10 \\)", "\\( \\pi/15 \\)", "\\( \\pi/18 \\)"], 
+                correct: 1,
+                difficulty: "Hard",
+                solution: "Using half-angle formulas: \\( \\sin\\frac{\\pi}{5} = 2\\sin\\frac{\\pi}{10}\\cos\\frac{\\pi}{10} \\) and \\( 1-\\cos\\frac{\\pi}{5} = 2\\sin^2\\frac{\\pi}{10} \\). So \\( z = 2\\sin\\frac{\\pi}{10}(\\cos\\frac{\\pi}{10} + i\\sin\\frac{\\pi}{10}) \\). The argument is \\( \\frac{\\pi}{10} \\)."
+            },
+            { 
+                q: "If \\( |z_1| = |z_2| \\) and \\( \\arg(z_1) + \\arg(z_2) = 0 \\), then:", 
+                options: ["\\( z_1 = z_2 \\)", "\\( z_1 = \\bar{z}_2 \\)", "\\( z_1 z_2 = 1 \\)", "None"], 
+                correct: 1,
+                difficulty: "Medium",
+                solution: "If \\( |z_1| = |z_2| = r \\) and \\( \\arg(z_1) = \\theta \\), then \\( \\arg(z_2) = -\\theta \\). So \\( z_1 = r(\\cos\\theta + i\\sin\\theta) \\) and \\( z_2 = r(\\cos\\theta - i\\sin\\theta) \\). Thus \\( z_2 = \\bar{z}_1 \\), or equivalently \\( z_1 = \\bar{z}_2 \\)."
+            },
+            { 
+                q: "The multiplicative inverse of \\( 3 + 4i \\) is:", 
+                options: ["\\( 3/25 - 4i/25 \\)", "\\( 3/25 + 4i/25 \\)", "\\( 3/5 - 4i/5 \\)", "None"], 
+                correct: 0,
+                difficulty: "Easy",
+                solution: "\\( \\frac{1}{3+4i} = \\frac{3-4i}{(3+4i)(3-4i)} = \\frac{3-4i}{9+16} = \\frac{3-4i}{25} = \\frac{3}{25} - \\frac{4i}{25} \\)."
+            },
+            { 
+                q: "The value of \\( (1+i)^8 + (1-i)^8 \\) is:", 
+                options: ["16", "32", "64", "0"], 
+                correct: 1,
+                difficulty: "Medium",
+                solution: "\\( (1+i)^2 = 2i \\), so \\( (1+i)^8 = (2i)^4 = 16i^4 = 16 \\). Similarly \\( (1-i)^2 = -2i \\), so \\( (1-i)^8 = (-2i)^4 = 16i^4 = 16 \\). Therefore \\( (1+i)^8 + (1-i)^8 = 16 + 16 = 32 \\)."
+            },
+            { 
+                q: "Locus of \\( z \\) satisfying \\( \\arg(z) = \\pi/3 \\) is:", 
+                options: ["Line", "Ray", "Circle", "Parabola"], 
+                correct: 1,
+                difficulty: "Easy",
+                solution: "The equation \\( \\arg(z) = \\frac{\\pi}{3} \\) represents all points making an angle of \\( \\frac{\\pi}{3} \\) with the positive real axis. This is a ray starting from origin (excluding origin) in the direction \\( \\frac{\\pi}{3} \\)."
+            },
+            { 
+                q: "If \\( |z|=4 \\) and \\( \\arg(z)=5\\pi/6 \\), then \\( z= \\):", 
+                options: ["\\( 2\\sqrt{3} + 2i \\)", "\\( -2\\sqrt{3} + 2i \\)", "\\( 2\\sqrt{3} - 2i \\)", "\\( -2\\sqrt{3} - 2i \\)"], 
+                correct: 1,
+                difficulty: "Medium",
+                solution: "\\( z = 4(\\cos\\frac{5\\pi}{6} + i\\sin\\frac{5\\pi}{6}) = 4(-\\frac{\\sqrt{3}}{2} + i\\frac{1}{2}) = -2\\sqrt{3} + 2i \\)."
+            },
+            { 
+                q: "The value of \\( \\sum_{n=1}^{13} (i^n + i^{n+1}) \\) is:", 
+                options: ["\\( i-1 \\)", "\\( i \\)", "\\( -1 \\)", "0"], 
+                correct: 0,
+                difficulty: "Hard",
+                solution: "\\( \\sum_{n=1}^{13}(i^n + i^{n+1}) = \\sum_{n=1}^{13}i^n(1+i) = (1+i)\\sum_{n=1}^{13}i^n = (1+i) \\cdot \\frac{i(1-i^{13})}{1-i} = (1+i) \\cdot \\frac{i(1-i)}{1-i} = (1+i) \\cdot i = i + i^2 = i - 1 \\)."
+            },
+            { 
+                q: "If \\( z = (1+i\\sqrt{3})^n \\) is real, then least positive integer \\( n \\) is:", 
+                options: ["2", "3", "4", "6"], 
+                correct: 1,
+                difficulty: "Medium",
+                solution: "\\( 1 + i\\sqrt{3} = 2(\\cos\\frac{\\pi}{3} + i\\sin\\frac{\\pi}{3}) \\). By De Moivre's theorem, \\( z = 2^n(\\cos\\frac{n\\pi}{3} + i\\sin\\frac{n\\pi}{3}) \\). For z to be real, \\( \\sin\\frac{n\\pi}{3} = 0 \\), which means \\( \\frac{n\\pi}{3} = k\\pi \\) for some integer k. The smallest positive n is 3."
+            },
+            { 
+                q: "The minimum value of \\( |z| + |z-1| \\) is:", 
+                options: ["0", "0.5", "1", "2"], 
+                correct: 2,
+                difficulty: "Medium",
+                solution: "By triangle inequality, \\( |z| + |z-1| \\geq |z - (z-1)| = |1| = 1 \\). The minimum value 1 is achieved when z lies on the line segment joining 0 and 1, i.e., when \\( z \\in [0, 1] \\) on the real axis."
+            },
+            { 
+                q: "The conjugate of \\( \\frac{2-i}{(1-2i)^2} \\) is:", 
+                options: ["\\( \\frac{2+i}{(1+2i)^2} \\)", "\\( \\frac{-2-i}{(1+2i)^2} \\)", "Both", "None"], 
+                correct: 0,
+                difficulty: "Easy",
+                solution: "The conjugate of a quotient is the quotient of conjugates: \\( \\overline{\\left(\\frac{2-i}{(1-2i)^2}\\right)} = \\frac{\\overline{2-i}}{\\overline{(1-2i)^2}} = \\frac{2+i}{(\\overline{1-2i})^2} = \\frac{2+i}{(1+2i)^2} \\)."
+            },
+            { 
+                q: "If \\( \\arg(z) < 0 \\), then \\( \\arg(-z) - \\arg(z) \\) is:", 
+                options: ["\\( \\pi \\)", "\\( -\\pi \\)", "\\( \\pi/2 \\)", "None"], 
+                correct: 0,
+                difficulty: "Medium",
+                solution: "If \\( \\arg(z) = \\theta < 0 \\) (fourth quadrant), then \\( -z \\) is in the second quadrant with \\( \\arg(-z) = \\theta + \\pi \\). Thus \\( \\arg(-z) - \\arg(z) = (\\theta + \\pi) - \\theta = \\pi \\)."
+            },
+            { 
+                q: "The points \\( z_1, z_2, z_3, z_4 \\) in the complex plane are vertices of a parallelogram if:", 
+                options: ["\\( z_1+z_3 = z_2+z_4 \\)", "\\( z_1+z_2 = z_3+z_4 \\)", "\\( z_1-z_4 = z_2-z_3 \\)", "None"], 
+                correct: 0,
+                difficulty: "Medium",
+                solution: "In a parallelogram, the diagonals bisect each other. If \\( z_1, z_2, z_3, z_4 \\) are vertices in order, the midpoint of diagonal \\( z_1z_3 \\) equals the midpoint of diagonal \\( z_2z_4 \\). Thus \\( \\frac{z_1+z_3}{2} = \\frac{z_2+z_4}{2} \\), giving \\( z_1 + z_3 = z_2 + z_4 \\)."
+            },
+            { 
+                q: "The value of \\( \\omega^{10} + \\omega^{20} \\) where \\( \\omega \\) is cube root of unity is:", 
+                options: ["1", "-1", "0", "i"], 
+                correct: 1,
+                difficulty: "Easy",
+                solution: "Since \\( \\omega^3 = 1 \\), we have \\( \\omega^{10} = \\omega^{9+1} = \\omega \\) and \\( \\omega^{20} = \\omega^{18+2} = \\omega^2 \\). Thus \\( \\omega^{10} + \\omega^{20} = \\omega + \\omega^2 = -1 \\) (using \\( 1 + \\omega + \\omega^2 = 0 \\))."
+            },
+            { 
+                q: "If \\( |z-4| < |z-2| \\), then:", 
+                options: ["\\( Re(z) > 3 \\)", "\\( Re(z) < 3 \\)", "\\( Im(z) > 0 \\)", "None"], 
+                correct: 0,
+                difficulty: "Medium",
+                solution: "\\( |z-4| < |z-2| \\) means z is closer to 4 than to 2. The perpendicular bisector of the segment from 2 to 4 is the line Re(z) = 3. Points closer to 4 lie to the right of this line, so Re(z) > 3."
+            },
+            { 
+                q: "The number of solutions of \\( z^2 + |z|^2 = 0 \\) is:", 
+                options: ["1", "2", "3", "Infinite"], 
+                correct: 3,
+                difficulty: "Hard",
+                solution: "Let \\( z = x + iy \\). Then \\( z^2 = x^2 - y^2 + 2ixy \\) and \\( |z|^2 = x^2 + y^2 \\). The equation gives \\( (2x^2 + 2ixy) = 0 \\), so \\( x^2 = 0 \\) and \\( xy = 0 \\). Thus x = 0, and y can be any real number. There are infinitely many solutions: all purely imaginary numbers."
+            },
+            { 
+                q: "If \\( z = \\cos\\theta + i\\sin\\theta \\), then \\( \\frac{1+z}{1-z} \\) equals:", 
+                options: ["\\( i\\cot(\\theta/2) \\)", "\\( i\\tan(\\theta/2) \\)", "\\( \\cot(\\theta/2) \\)", "None"], 
+                correct: 0,
+                difficulty: "Hard",
+                solution: "Using half-angle substitution: \\( 1 + z = 2\\cos^2(\\theta/2) + 2i\\sin(\\theta/2)\\cos(\\theta/2) = 2\\cos(\\theta/2)(\\cos(\\theta/2) + i\\sin(\\theta/2)) \\). Similarly \\( 1 - z = 2\\sin^2(\\theta/2) - 2i\\sin(\\theta/2)\\cos(\\theta/2) = 2i\\sin(\\theta/2)(-i\\cos(\\theta/2) - \\sin(\\theta/2)) \\). After simplification: \\( \\frac{1+z}{1-z} = i\\cot(\\theta/2) \\)."
+            },
+            { 
+                q: "The area of triangle with vertices \\( z, iz, z+iz \\) is:", 
+                options: ["\\( |z|^2 \\)", "\\( 0.5|z|^2 \\)", "\\( 2|z|^2 \\)", "None"], 
+                correct: 1,
+                difficulty: "Medium",
+                solution: "The vertices are z, iz, and z+iz. Note that z and iz are perpendicular (iz is z rotated by 90°) and both have the same magnitude |z|. The triangle is a right triangle with legs of length |z| each. Area = \\( \\frac{1}{2} \\times |z| \\times |z| = \\frac{1}{2}|z|^2 \\)."
+            },
+            { 
+                q: "If \\( |z-z_1| + |z-z_2| = k \\) represents an ellipse, then:", 
+                options: ["\\( k > |z_1-z_2| \\)", "\\( k = |z_1-z_2| \\)", "\\( k < |z_1-z_2| \\)", "None"], 
+                correct: 0,
+                difficulty: "Medium",
+                solution: "The equation \\( |z-z_1| + |z-z_2| = k \\) represents an ellipse with foci at \\( z_1 \\) and \\( z_2 \\), where k = 2a (sum of distances to foci). For an ellipse to exist, we need 2a > 2c, where 2c = \\( |z_1-z_2| \\). Thus k > \\( |z_1-z_2| \\)."
+            },
+            { 
+                q: "The principal argument of \\( z = -1 + i\\sqrt{3} \\) is:", 
+                options: ["\\( \\pi/3 \\)", "\\( 2\\pi/3 \\)", "\\( 4\\pi/3 \\)", "\\( 5\\pi/3 \\)"], 
+                correct: 1,
+                difficulty: "Easy",
+                solution: "The point \\( (-1, \\sqrt{3}) \\) lies in the second quadrant. \\( \\tan\\theta = \\frac{\\sqrt{3}}{-1} \\). The reference angle is \\( \\frac{\\pi}{3} \\). In the second quadrant, the argument is \\( \\pi - \\frac{\\pi}{3} = \\frac{2\\pi}{3} \\)."
+            },
+            { 
+                q: "If \\( z^2 + z + 1 = 0 \\), then \\( z \\) is:", 
+                options: ["\\( \\omega \\)", "\\( \\omega^2 \\)", "Both", "None"], 
+                correct: 2,
+                difficulty: "Medium",
+                solution: "The equation \\( z^2 + z + 1 = 0 \\) has roots \\( z = \\frac{-1 \\pm \\sqrt{1-4}}{2} = \\frac{-1 \\pm i\\sqrt{3}}{2} \\). These are exactly \\( \\omega = \\frac{-1+i\\sqrt{3}}{2} \\) and \\( \\omega^2 = \\frac{-1-i\\sqrt{3}}{2} \\), the complex cube roots of unity."
+            },
+            { 
+                q: "The complex number \\( z \\) satisfying \\( |z+1| = z+2(1+i) \\) is:", 
+                options: ["\\( \\frac{1}{2} - 2i \\)", "\\( -\\frac{3}{2} + 2i \\)", "\\( \\frac{3}{2} - 2i \\)", "None"], 
+                correct: 0,
+                difficulty: "Hard",
+                solution: "Let z = x + iy. Then \\( |z+1| = \\sqrt{(x+1)^2+y^2} \\) and \\( z + 2(1+i) = (x+2) + (y+2)i \\). For the equation to hold, the RHS must be real, so y = -2. Then \\( \\sqrt{(x+1)^2+4} = x+2 \\). Squaring: \\( (x+1)^2 + 4 = (x+2)^2 \\). Solving: \\( x^2+2x+5 = x^2+4x+4 \\), giving \\( x = \\frac{1}{2} \\). Thus \\( z = \\frac{1}{2} - 2i \\)."
+            }
         ];
 
+        // ==================== STATE VARIABLES ====================
         let currentIdx = 0;
         let answers = new Array(questions.length).fill(null);
+        let markedForReview = new Array(questions.length).fill(false);
         let isReviewMode = false;
+        let timerInterval = null;
+        let totalTime = 30 * 60; // 30 minutes in seconds
+        let timeElapsed = 0;
+        let sidebarOpen = false;
 
+        // ==================== INITIALIZATION ====================
         function init() {
-            renderDots();
+            document.getElementById('total-q-num').textContent = questions.length;
+            document.getElementById('max-score').textContent = questions.length * 4;
+            renderNavigation();
             showQuestion(0);
             startTimer();
+            updateStats();
         }
 
-        function renderDots() {
-            const container = document.getElementById('dots-container');
-            container.innerHTML = '';
+        // ==================== TIMER ====================
+        function startTimer() {
+            const timerEl = document.getElementById('timer');
+            const timerIcon = document.getElementById('timer-icon');
+            const timerContainer = document.getElementById('timer-container');
+
+            timerInterval = setInterval(() => {
+                if (isReviewMode) {
+                    clearInterval(timerInterval);
+                    return;
+                }
+
+                totalTime--;
+                timeElapsed++;
+
+                const minutes = Math.floor(totalTime / 60);
+                const seconds = totalTime % 60;
+                timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                // Warning at 5 minutes
+                if (totalTime <= 300 && totalTime > 60) {
+                    timerEl.classList.add('timer-warning');
+                    timerEl.classList.remove('timer-danger');
+                }
+                // Danger at 1 minute
+                else if (totalTime <= 60) {
+                    timerEl.classList.remove('timer-warning');
+                    timerEl.classList.add('timer-danger');
+                    timerContainer.classList.add('border-red-500');
+                }
+
+                // Time's up
+                if (totalTime <= 0) {
+                    clearInterval(timerInterval);
+                    calculateResult();
+                }
+            }, 1000);
+        }
+
+        // ==================== NAVIGATION ====================
+        function renderNavigation() {
+            const navGrid = document.getElementById('nav-grid');
+            const mNavGrid = document.getElementById('m-nav-grid');
+            
+            let html = '';
             questions.forEach((_, i) => {
-                const dot = document.createElement('div');
-                dot.className = `nav-dot ${i === currentIdx ? 'active' : ''} ${answers[i] !== null ? 'answered' : ''}`;
-                dot.id = `dot-${i}`;
-                dot.onclick = () => { if(!isReviewMode) goToQuestion(i); else goToQuestion(i); };
-                container.appendChild(dot);
+                let classes = 'nav-btn bg-white/5 border border-white/10';
+                
+                if (isReviewMode) {
+                    if (answers[i] !== null) {
+                        classes = answers[i] === questions[i].correct 
+                            ? 'nav-btn review-correct border border-green-500' 
+                            : 'nav-btn review-wrong border border-red-500';
+                    } else {
+                        classes = 'nav-btn bg-gray-500/20 border border-gray-500';
+                    }
+                } else {
+                    if (i === currentIdx) {
+                        classes = 'nav-btn current';
+                    } else if (answers[i] !== null && markedForReview[i]) {
+                        classes = 'nav-btn answered marked border border-yellow-500';
+                    } else if (answers[i] !== null) {
+                        classes = 'nav-btn answered border border-accent';
+                    } else if (markedForReview[i]) {
+                        classes = 'nav-btn marked border border-yellow-500 bg-yellow-500/10';
+                    }
+                }
+
+                html += `<button class="${classes}" onclick="goToQuestion(${i})">${i + 1}</button>`;
             });
+
+            navGrid.innerHTML = html;
+            mNavGrid.innerHTML = html;
         }
 
         function showQuestion(idx) {
@@ -182,96 +1100,487 @@
             const q = questions[idx];
             const container = document.getElementById('question-display');
             
+            // Update header
+            document.getElementById('current-q-num').textContent = idx + 1;
+            document.getElementById('q-difficulty').innerHTML = `<i class="fa-solid fa-signal mr-1"></i> ${q.difficulty}`;
+            
+            // Update mark button
+            updateMarkButton();
+            
+            // Update progress bar
+            const progress = ((idx + 1) / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+
+            // Build options HTML
             let optionsHTML = '';
             q.options.forEach((opt, i) => {
                 let statusClass = '';
-                if(isReviewMode) {
-                    if(i === q.correct) statusClass = 'correct-answer';
-                    else if(answers[idx] == i && i !== q.correct) statusClass = 'wrong-answer';
+                let iconHTML = '';
+                
+                if (isReviewMode) {
+                    if (i === q.correct) {
+                        statusClass = 'correct-answer';
+                        iconHTML = '<i class="fa-solid fa-check ml-auto text-green-400"></i>';
+                    } else if (answers[idx] === i && i !== q.correct) {
+                        statusClass = 'wrong-answer';
+                        iconHTML = '<i class="fa-solid fa-xmark ml-auto text-red-400"></i>';
+                    }
                 }
+
+                const checked = answers[idx] === i ? 'checked' : '';
+                const disabled = isReviewMode ? 'disabled' : '';
 
                 optionsHTML += `
                     <div class="relative">
-                        <input type="radio" name="option" id="opt${i}" class="hidden option-input" value="${i}" 
-                               ${answers[idx] == i ? 'checked' : ''} ${isReviewMode ? 'disabled' : ''}>
-                        <label for="opt${i}" class="option-label block p-4 rounded-xl text-gray-300 bg-white/5 ${statusClass}">
-                            <span class="inline-block w-6 h-6 rounded-full border border-gray-500 mr-3 text-center text-xs leading-5 font-bold">${String.fromCharCode(65 + i)}</span>
-                            ${opt}
+                        <input type="radio" name="option" id="opt${i}" class="hidden option-input" value="${i}" ${checked} ${disabled}>
+                        <label for="opt${i}" class="option-label flex items-center p-5 rounded-2xl bg-white/5 ${statusClass}">
+                            <span class="option-circle w-10 h-10 rounded-xl border-2 border-gray-500 mr-4 flex items-center justify-center text-sm font-bold text-gray-400 flex-shrink-0">
+                                ${String.fromCharCode(65 + i)}
+                            </span>
+                            <span class="flex-1 text-gray-300">${opt}</span>
+                            ${iconHTML}
                         </label>
                     </div>
                 `;
             });
 
             container.innerHTML = `
-                <div class="mb-6">
-                    <span class="text-purple-400 font-bold mb-2 block">Question ${idx + 1} of ${questions.length}</span>
-                    <h2 class="text-2xl font-semibold leading-relaxed">${q.q}</h2>
+                <div class="mb-8">
+                    <h2 class="text-xl md:text-2xl font-medium leading-relaxed text-gray-100">${q.q}</h2>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-4">
                     ${optionsHTML}
                 </div>
             `;
 
-            // Logic for Buttons
-            document.getElementById('prev-btn').disabled = idx === 0;
-            document.getElementById('next-btn').style.display = idx === questions.length - 1 ? 'none' : 'block';
-            document.getElementById('submit-area').style.display = (idx === questions.length - 1 && !isReviewMode) ? 'block' : 'none';
+            // Show/hide solution in review mode
+            const solutionBox = document.getElementById('solution-box');
+            const solutionText = document.getElementById('solution-text');
+            if (isReviewMode && q.solution) {
+                solutionBox.classList.remove('hidden');
+                solutionText.innerHTML = q.solution;
+            } else {
+                solutionBox.classList.add('hidden');
+            }
 
-            // Save answer when clicked
-            if(!isReviewMode) {
+            // Update navigation buttons
+            document.getElementById('prev-btn').disabled = idx === 0;
+            document.getElementById('next-btn').textContent = idx === questions.length - 1 ? 'Finish' : '';
+            document.getElementById('next-btn').innerHTML = idx === questions.length - 1 
+                ? '<span class="hidden sm:inline">Finish</span> <i class="fa-solid fa-flag-checkered"></i>' 
+                : '<span class="hidden sm:inline">Next</span> <i class="fa-solid fa-chevron-right"></i>';
+
+            // Event listeners for options
+            if (!isReviewMode) {
                 const inputs = document.querySelectorAll('input[name="option"]');
                 inputs.forEach(input => {
                     input.onchange = () => {
                         answers[currentIdx] = parseInt(input.value);
-                        renderDots();
+                        updateStats();
+                        renderNavigation();
                     };
                 });
             }
 
-            renderDots();
-            if (window.MathJax) MathJax.typesetPromise();
+            renderNavigation();
+            
+            // Re-render MathJax
+            if (window.MathJax) {
+                MathJax.typesetPromise().catch((err) => console.log('MathJax error:', err));
+            }
         }
 
-        function nextQuestion() { if(currentIdx < questions.length - 1) showQuestion(currentIdx + 1); }
-        function prevQuestion() { if(currentIdx > 0) showQuestion(currentIdx - 1); }
-        function goToQuestion(i) { showQuestion(i); }
-
-        function startTimer() {
-            let timeLeft = 3600;
-            const timerEl = document.getElementById('timer');
-            const interval = setInterval(() => {
-                if(isReviewMode) { clearInterval(interval); return; }
-                timeLeft--;
-                const m = Math.floor(timeLeft/60), s = timeLeft%60;
-                timerEl.innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-                if(timeLeft <= 0) { clearInterval(interval); calculateResult(); }
-            }, 1000);
+        function nextQuestion() {
+            if (currentIdx < questions.length - 1) {
+                showQuestion(currentIdx + 1);
+            } else if (!isReviewMode) {
+                confirmSubmit();
+            }
         }
 
+        function prevQuestion() {
+            if (currentIdx > 0) {
+                showQuestion(currentIdx - 1);
+            }
+        }
+
+        function goToQuestion(idx) {
+            showQuestion(idx);
+            if (sidebarOpen) toggleSidebar();
+        }
+
+        function jumpToUnanswered() {
+            const unansweredIdx = answers.findIndex(a => a === null);
+            if (unansweredIdx !== -1) {
+                goToQuestion(unansweredIdx);
+            }
+        }
+
+        // ==================== MARK FOR REVIEW ====================
+        function toggleMark() {
+            markedForReview[currentIdx] = !markedForReview[currentIdx];
+            updateMarkButton();
+            updateStats();
+            renderNavigation();
+        }
+
+        function updateMarkButton() {
+            const btn = document.getElementById('mark-btn');
+            const icon = document.getElementById('mark-icon');
+            
+            if (markedForReview[currentIdx]) {
+                btn.classList.add('bg-yellow-500/20');
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid', 'text-yellow-500');
+            } else {
+                btn.classList.remove('bg-yellow-500/20');
+                icon.classList.add('fa-regular');
+                icon.classList.remove('fa-solid', 'text-yellow-500');
+            }
+        }
+
+        // ==================== CLEAR RESPONSE ====================
+        function clearResponse() {
+            answers[currentIdx] = null;
+            showQuestion(currentIdx);
+            updateStats();
+        }
+
+        // ==================== STATISTICS ====================
+        function updateStats() {
+            const answered = answers.filter(a => a !== null).length;
+            const marked = markedForReview.filter(m => m).length;
+            const unanswered = questions.length - answered;
+
+            // Desktop stats
+            document.getElementById('stat-answered').textContent = answered;
+            document.getElementById('stat-marked').textContent = marked;
+            document.getElementById('stat-unanswered').textContent = unanswered;
+
+            // Mobile stats
+            document.getElementById('m-stat-answered').textContent = answered;
+            document.getElementById('m-stat-marked').textContent = marked;
+            document.getElementById('m-stat-unanswered').textContent = unanswered;
+
+            // Mobile bottom stats
+            document.getElementById('mobile-answered').textContent = answered;
+            document.getElementById('mobile-marked').textContent = marked;
+            document.getElementById('mobile-unanswered').textContent = unanswered;
+        }
+
+        // ==================== SIDEBAR ====================
+        function toggleSidebar() {
+            sidebarOpen = !sidebarOpen;
+            const overlay = document.getElementById('sidebar-overlay');
+            const sidebar = document.getElementById('mobile-sidebar');
+
+            if (sidebarOpen) {
+                overlay.classList.remove('opacity-0', 'invisible');
+                overlay.classList.add('opacity-100', 'visible');
+                sidebar.classList.remove('translate-x-full');
+            } else {
+                overlay.classList.add('opacity-0', 'invisible');
+                overlay.classList.remove('opacity-100', 'visible');
+                sidebar.classList.add('translate-x-full');
+            }
+        }
+
+        // ==================== MODALS ====================
+        function confirmSubmit() {
+            const answered = answers.filter(a => a !== null).length;
+            const marked = markedForReview.filter(m => m).length;
+            const unanswered = questions.length - answered;
+
+            document.getElementById('modal-answered').textContent = answered;
+            document.getElementById('modal-marked').textContent = marked;
+            document.getElementById('modal-unanswered').textContent = unanswered;
+
+            document.getElementById('submit-modal').classList.add('active');
+        }
+
+        function closeSubmitModal() {
+            document.getElementById('submit-modal').classList.remove('active');
+        }
+
+        function confirmExit() {
+            document.getElementById('exit-modal').classList.add('active');
+        }
+
+        function closeExitModal() {
+            document.getElementById('exit-modal').classList.remove('active');
+        }
+
+        function openShortcutsModal() {
+            document.getElementById('shortcuts-modal').classList.add('active');
+        }
+
+        function closeShortcutsModal() {
+            document.getElementById('shortcuts-modal').classList.remove('active');
+        }
+
+        // ==================== RESULTS ====================
         function calculateResult() {
-            isReviewMode = false;
-            let correct = 0, wrong = 0;
+            clearInterval(timerInterval);
+            closeSubmitModal();
+
+            let correct = 0, wrong = 0, skipped = 0;
+            
             questions.forEach((q, i) => {
-                if(answers[i] !== null) {
-                    if(answers[i] === q.correct) correct++;
-                    else wrong++;
+                if (answers[i] === null) {
+                    skipped++;
+                } else if (answers[i] === q.correct) {
+                    correct++;
+                } else {
+                    wrong++;
                 }
             });
+
             const score = (correct * 4) - (wrong * 1);
-            const acc = Math.round((correct/questions.length)*100);
+            const maxScore = questions.length * 4;
+            const accuracy = answers.filter(a => a !== null).length > 0 
+                ? Math.round((correct / answers.filter(a => a !== null).length) * 100) 
+                : 0;
+
+            // Update result display
+            document.getElementById('res-correct').textContent = correct;
+            document.getElementById('res-wrong').textContent = wrong;
+            document.getElementById('res-skipped').textContent = skipped;
+            document.getElementById('res-accuracy').textContent = accuracy + '%';
             
-            document.getElementById('res-score').innerText = score;
-            document.getElementById('res-acc').innerText = acc + "%";
-            document.getElementById('result-screen').style.display = 'flex';
+            // Format time taken
+            const minutes = Math.floor(timeElapsed / 60);
+            const seconds = timeElapsed % 60;
+            document.getElementById('res-time').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            // Animate score circle
+            const scorePercent = (score / maxScore) * 100;
+            const circumference = 2 * Math.PI * 70;
+            const offset = circumference - (scorePercent / 100) * circumference;
+            
+            setTimeout(() => {
+                document.getElementById('score-circle').style.strokeDashoffset = offset;
+            }, 300);
+
+            // Animate score value
+            animateValue('score-value', 0, score, 1500);
+
+            // Performance bars
+            setTimeout(() => {
+                document.getElementById('bar-correct').style.width = (correct / questions.length * 100) + '%';
+                document.getElementById('bar-wrong').style.width = (wrong / questions.length * 100) + '%';
+                document.getElementById('bar-correct-text').textContent = `${correct}/${questions.length}`;
+                document.getElementById('bar-wrong-text').textContent = `${wrong}/${questions.length}`;
+            }, 500);
+
+            // Update title and emoji based on performance
+            const resultScreen = document.getElementById('result-screen');
+            const resultEmoji = document.getElementById('result-emoji');
+            const resultTitle = document.getElementById('result-title');
+            const resultSubtitle = document.getElementById('result-subtitle');
+
+            if (accuracy >= 80) {
+                resultEmoji.textContent = '🎉';
+                resultTitle.textContent = 'Excellent!';
+                resultSubtitle.textContent = 'Outstanding performance! Keep it up!';
+                createConfetti();
+            } else if (accuracy >= 60) {
+                resultEmoji.textContent = '👏';
+                resultTitle.textContent = 'Good Job!';
+                resultSubtitle.textContent = 'Well done! Room for improvement.';
+            } else if (accuracy >= 40) {
+                resultEmoji.textContent = '💪';
+                resultTitle.textContent = 'Keep Trying!';
+                resultSubtitle.textContent = 'Practice more to improve your score.';
+            } else {
+                resultEmoji.textContent = '📚';
+                resultTitle.textContent = 'Needs Work';
+                resultSubtitle.textContent = 'Review the concepts and try again.';
+            }
+
+            // Save to localStorage
+            const testData = {
+                topic: 'complex-numbers',
+                test: 1,
+                score: score,
+                accuracy: accuracy,
+                correct: correct,
+                wrong: wrong,
+                skipped: skipped,
+                time: timeElapsed,
+                date: new Date().toISOString()
+            };
+            saveTestResult(testData);
+
+            resultScreen.classList.add('active');
         }
 
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            const range = end - start;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const value = Math.floor(start + range * easeOutCubic(progress));
+                obj.textContent = value;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        function easeOutCubic(x) {
+            return 1 - Math.pow(1 - x, 3);
+        }
+
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#8b5cf6', '#ec4899', '#22c55e', '#f59e0b', '#3b82f6'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.cssText = `
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    left: ${Math.random() * 100}%;
+                    bottom: -10px;
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                    animation: confetti ${2 + Math.random() * 2}s ease-out forwards;
+                    animation-delay: ${Math.random() * 0.5}s;
+                `;
+                container.appendChild(confetti);
+            }
+            
+            setTimeout(() => container.innerHTML = '', 4000);
+        }
+
+        function saveTestResult(data) {
+            let results = JSON.parse(localStorage.getItem('testResults') || '[]');
+            results.push(data);
+            localStorage.setItem('testResults', JSON.stringify(results));
+            
+            // Update completed tests count
+            let completed = parseInt(localStorage.getItem('completedTests') || '0');
+            localStorage.setItem('completedTests', completed + 1);
+        }
+
+        // ==================== REVIEW MODE ====================
         function startReview() {
             isReviewMode = true;
-            document.getElementById('result-screen').style.display = 'none';
-            document.getElementById('submit-area').style.display = 'none';
+            document.getElementById('result-screen').classList.remove('active');
+            document.getElementById('review-header').classList.remove('hidden');
+            document.getElementById('submit-btn').classList.add('hidden');
+            document.body.style.paddingTop = '5rem';
+            
             showQuestion(0);
         }
 
+        function exitReview() {
+            window.location.href = 'index.html';
+        }
+
+        function retakeTest() {
+            // Reset everything
+            answers = new Array(questions.length).fill(null);
+            markedForReview = new Array(questions.length).fill(false);
+            isReviewMode = false;
+            currentIdx = 0;
+            totalTime = 30 * 60;
+            timeElapsed = 0;
+            
+            document.getElementById('result-screen').classList.remove('active');
+            document.getElementById('timer').textContent = '30:00';
+            document.getElementById('timer').classList.remove('timer-warning', 'timer-danger');
+            document.getElementById('timer-container').classList.remove('border-red-500');
+            
+            init();
+        }
+
+        // ==================== KEYBOARD SHORTCUTS ====================
+        document.addEventListener('keydown', (e) => {
+            if (isReviewMode && e.key === 'Escape') {
+                exitReview();
+                return;
+            }
+
+            // Don't trigger if modal is open
+            if (document.querySelector('.modal.active')) {
+                if (e.key === 'Escape') {
+                    closeSubmitModal();
+                    closeExitModal();
+                    closeShortcutsModal();
+                }
+                return;
+            }
+
+            switch (e.key.toLowerCase()) {
+                case 'arrowleft':
+                case 'p':
+                    prevQuestion();
+                    break;
+                case 'arrowright':
+                case 'n':
+                    nextQuestion();
+                    break;
+                case 'a':
+                    selectOption(0);
+                    break;
+                case 'b':
+                    selectOption(1);
+                    break;
+                case 'c':
+                    if (!e.ctrlKey) selectOption(2);
+                    break;
+                case 'd':
+                    selectOption(3);
+                    break;
+                case 'm':
+                    toggleMark();
+                    break;
+                case 'enter':
+                    if (e.ctrlKey) confirmSubmit();
+                    break;
+            }
+        });
+
+        function selectOption(idx) {
+            if (isReviewMode) return;
+            const input = document.getElementById(`opt${idx}`);
+            if (input) {
+                input.checked = true;
+                answers[currentIdx] = idx;
+                updateStats();
+                renderNavigation();
+            }
+        }
+
+        // ==================== WINDOW EVENTS ====================
+        window.onclick = function(event) {
+            const modals = ['submit-modal', 'exit-modal', 'shortcuts-modal'];
+            modals.forEach(id => {
+                const modal = document.getElementById(id);
+                if (event.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        };
+
+        // Warn before leaving
+        window.onbeforeunload = function(e) {
+            if (!isReviewMode && answers.some(a => a !== null)) {
+                e.preventDefault();
+                e.returnValue = '';
+                return '';
+            }
+        };
+
+        // ==================== INITIALIZE ====================
         init();
     </script>
 </body>
