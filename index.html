@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,9 +23,12 @@
                     },
                     colors: {
                         dark: '#0f172a',
+                        darker: '#0a0f1a',
                         card: '#1e293b',
-                        accent: '#8b5cf6', // Violet
-                        secondary: '#ec4899', // Pink
+                        accent: '#8b5cf6',
+                        secondary: '#ec4899',
+                        success: '#10b981',
+                        warning: '#f59e0b',
                     }
                 }
             }
@@ -33,252 +36,792 @@
     </script>
 
     <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
         body {
-            background-color: #0f172a;
+            background-color: #0a0f1a;
             color: #ffffff;
             background-image: 
                 radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+                radial-gradient(at 50% 0%, hsla(225,39%,25%,0.8) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,25%,0.6) 0, transparent 50%);
             min-height: 100vh;
+            background-attachment: fixed;
         }
 
         /* Glassmorphism Classes */
         .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .glass-card {
             background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .glass-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px) scale(1.02);
             background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
             border-color: rgba(139, 92, 246, 0.5);
-            box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 20px 40px -15px rgba(139, 92, 246, 0.4);
         }
 
         /* Gradient Text */
         .text-gradient {
-            background: linear-gradient(to right, #c084fc, #f472b6);
+            background: linear-gradient(135deg, #c084fc, #f472b6, #fb7185);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: gradient-shift 3s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #0f172a; 
+            background: #0a0f1a; 
         }
         ::-webkit-scrollbar-thumb {
-            background: #334155; 
-            border-radius: 4px;
+            background: linear-gradient(180deg, #8b5cf6, #ec4899);
+            border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #475569; 
+            background: linear-gradient(180deg, #a78bfa, #f472b6);
         }
 
         /* Animations */
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
         }
         .animate-float {
             animation: float 6s ease-in-out infinite;
         }
 
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slide-up 0.6s ease-out forwards;
+        }
+
+        @keyframes counter {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-counter {
+            animation: counter 0.5s ease-out forwards;
+        }
+
+        /* Stagger animations */
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+
         /* Modal Transition */
         .modal {
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease-in-out;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .modal.active {
             opacity: 1;
             visibility: visible;
         }
         .modal-content {
-            transform: scale(0.95);
-            transition: all 0.3s ease-in-out;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .modal.active .modal-content {
-            transform: scale(1);
+            transform: scale(1) translateY(0);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        /* Search Input */
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Topic Card Shine Effect */
+        .card-shine {
+            position: relative;
+            overflow: hidden;
+        }
+        .card-shine::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+        .card-shine:hover::before {
+            opacity: 1;
+            animation: shine 0.5s;
+        }
+        @keyframes shine {
+            from { transform: translateX(-100%) rotate(45deg); }
+            to { transform: translateX(100%) rotate(45deg); }
+        }
+
+        /* Difficulty Badge Colors */
+        .badge-easy { background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
+        .badge-medium { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); }
+        .badge-hard { background: rgba(239, 68, 68, 0.2); color: #f87171; border-color: rgba(239, 68, 68, 0.3); }
+
+        /* Back to Top Button */
+        .back-to-top {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 1rem;
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+        }
+        .tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Progress Ring */
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.5s ease;
         }
     </style>
 </head>
 <body class="antialiased selection:bg-accent selection:text-white">
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 glass-panel border-b-0 border-white/10">
+    <nav class="fixed w-full z-50 glass-panel border-b-0" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-purple-500/30">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/50 transition-all group-hover:scale-110">
                         <i class="fa-solid fa-graduation-cap"></i>
                     </div>
                     <span class="font-bold text-2xl tracking-tight">Exam<span class="text-gradient">Prime</span></span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="#" class="text-white hover:text-accent px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">Home</a>
+                    <a href="#topics" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">Mock Tests</a>
+                    <a href="#how-it-works" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">How It Works</a>
+                    <a href="#notice-board" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">Notices</a>
+                    <a href="#testimonials" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">Reviews</a>
                 </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="#" class="text-white hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
-                        <a href="#topics" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Mock Tests</a>
-                        <a href="#notice-board" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Notices</a>
-                        <button class="bg-white/10 hover:bg-white/20 text-white px-5 py-2 rounded-full text-sm font-medium border border-white/10 transition-all">Login</button>
-                    </div>
+
+                <!-- Desktop Actions -->
+                <div class="hidden md:flex items-center gap-3">
+                    <button onclick="openSearchModal()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all tooltip" data-tooltip="Search">
+                        <i class="fa-solid fa-search text-gray-400"></i>
+                    </button>
+                    <button class="bg-gradient-to-r from-accent to-secondary hover:from-accent/80 hover:to-secondary/80 text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-all shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-user mr-2"></i>Login
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center" id="mobile-menu-btn">
+                    <i class="fa-solid fa-bars text-lg" id="menu-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu md:hidden fixed inset-y-0 right-0 w-80 bg-gray-900/95 backdrop-blur-xl border-l border-white/10 z-50" id="mobile-menu">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="font-bold text-xl">Menu</span>
+                    <button onclick="toggleMobileMenu()" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+                <div class="space-y-2">
+                    <a href="#" class="flex items-center gap-3 p-3 rounded-xl bg-accent/10 text-accent">
+                        <i class="fa-solid fa-home w-5"></i> Home
+                    </a>
+                    <a href="#topics" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-gray-300 transition-all">
+                        <i class="fa-solid fa-file-lines w-5"></i> Mock Tests
+                    </a>
+                    <a href="#how-it-works" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-gray-300 transition-all">
+                        <i class="fa-solid fa-circle-question w-5"></i> How It Works
+                    </a>
+                    <a href="#notice-board" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-gray-300 transition-all">
+                        <i class="fa-solid fa-bell w-5"></i> Notices
+                    </a>
+                    <a href="#testimonials" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-gray-300 transition-all">
+                        <i class="fa-solid fa-star w-5"></i> Reviews
+                    </a>
+                </div>
+                <div class="mt-8 pt-8 border-t border-white/10">
+                    <button class="w-full bg-gradient-to-r from-accent to-secondary text-white py-3 rounded-xl font-semibold shadow-lg">
+                        <i class="fa-solid fa-user mr-2"></i> Login / Sign Up
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative pt-32 pb-12 sm:pt-40 sm:pb-16 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-                Master Your <br />
-                <span class="text-gradient animate-float inline-block">WBJEE & JEE Mains</span>
-            </h1>
-            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-400">
-                Premium mock tests designed specifically for Mathematics. Track your progress, identify weaknesses, and ace the exam.
-            </p>
-            
-            <div class="mt-10 flex justify-center gap-4">
-                <a href="#topics" class="px-8 py-3 rounded-full bg-gradient-to-r from-accent to-secondary text-white font-semibold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-1">
-                    Start Practicing
-                </a>
-                <a href="#notice-board" class="px-8 py-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-semibold transition-all">
-                    View Notices
-                </a>
+    <div class="relative pt-32 pb-16 sm:pt-40 sm:pb-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center">
+                <!-- Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 mb-8 animate-slide-up">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span class="text-sm font-medium text-gray-300">2026 Exam Pattern Updated</span>
+                </div>
+
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 animate-slide-up stagger-1">
+                    Master Your <br />
+                    <span class="text-gradient animate-float inline-block">WBJEE & JEE Mains</span>
+                </h1>
+                <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-gray-400 animate-slide-up stagger-2">
+                    Premium mock tests designed specifically for Mathematics. Track your progress, identify weaknesses, and ace the exam with our AI-powered analytics.
+                </p>
+                
+                <div class="mt-10 flex flex-wrap justify-center gap-4 animate-slide-up stagger-3">
+                    <a href="#topics" class="group px-8 py-4 rounded-full bg-gradient-to-r from-accent to-secondary text-white font-semibold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-1 flex items-center gap-2">
+                        <span>Start Practicing</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="#how-it-works" class="px-8 py-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-semibold transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Watch Demo</span>
+                    </a>
+                </div>
+
+                <!-- Stats -->
+                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto animate-slide-up stagger-4">
+                    <div class="glass-panel rounded-2xl p-6 text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-white counter" data-target="500">0</div>
+                        <div class="text-sm text-gray-400 mt-1">Mock Tests</div>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-white counter" data-target="25">0</div>
+                        <div class="text-sm text-gray-400 mt-1">Topics</div>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-white counter" data-target="10000">0</div>
+                        <div class="text-sm text-gray-400 mt-1">Students</div>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-gradient counter" data-target="95">0</div>
+                        <div class="text-sm text-gray-400 mt-1">Success Rate %</div>
+                    </div>
+                </div>
             </div>
         </div>
         
         <!-- Background Elements -->
-        <div class="absolute top-20 left-10 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
-        <div class="absolute bottom-10 right-10 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl -z-10"></div>
+        <div class="absolute top-20 left-10 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
+        <div class="absolute bottom-10 right-10 w-[500px] h-[500px] bg-pink-600/10 rounded-full blur-3xl -z-10"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-900/20 rounded-full blur-3xl -z-10"></div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div id="how-it-works" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-accent font-semibold text-sm uppercase tracking-wider">Simple Process</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-4">How It <span class="text-gradient">Works</span></h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Get started in 3 simple steps and begin your journey to exam success</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="relative group">
+                    <div class="glass-card rounded-3xl p-8 text-center card-shine">
+                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-3xl font-bold text-white mb-6 group-hover:scale-110 transition-transform animate-pulse-glow">
+                            1
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Choose Your Topic</h3>
+                        <p class="text-gray-400">Browse through 25+ mathematics topics covering the complete WBJEE & JEE syllabus</p>
+                    </div>
+                    <div class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
+                        <i class="fa-solid fa-chevron-right text-accent/50 text-2xl"></i>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative group">
+                    <div class="glass-card rounded-3xl p-8 text-center card-shine">
+                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-3xl font-bold text-white mb-6 group-hover:scale-110 transition-transform animate-pulse-glow" style="animation-delay: 0.5s;">
+                            2
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Take Mock Tests</h3>
+                        <p class="text-gray-400">Practice with 20 mock tests per topic, designed to simulate real exam conditions</p>
+                    </div>
+                    <div class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
+                        <i class="fa-solid fa-chevron-right text-accent/50 text-2xl"></i>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="group">
+                    <div class="glass-card rounded-3xl p-8 text-center card-shine">
+                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-3xl font-bold text-white mb-6 group-hover:scale-110 transition-transform animate-pulse-glow" style="animation-delay: 1s;">
+                            3
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Track & Improve</h3>
+                        <p class="text-gray-400">Review detailed analytics, identify weak areas, and watch your scores improve</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Main Content Grid -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col lg:flex-row gap-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col lg:flex-row gap-8" id="main-content">
         
-        <!-- Left Column: Notice Board (Sticky on Desktop) -->
+        <!-- Left Column: Notice Board & Progress (Sticky on Desktop) -->
         <div class="lg:w-1/3 space-y-8">
-            <div id="notice-board" class="glass-panel rounded-2xl p-6 sticky top-24">
+            <!-- Notice Board -->
+            <div id="notice-board" class="glass-panel rounded-3xl p-6 lg:sticky lg:top-24">
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold flex items-center gap-2">
-                        <i class="fa-solid fa-bell text-secondary"></i> Notices
+                    <h2 class="text-2xl font-bold flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-secondary/20 flex items-center justify-center">
+                            <i class="fa-solid fa-bell text-secondary"></i>
+                        </div>
+                        Notices
                     </h2>
-                    <span class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full border border-green-500/30 animate-pulse">Live Updates</span>
+                    <span class="text-xs bg-green-500/20 text-green-400 px-3 py-1.5 rounded-full border border-green-500/30 flex items-center gap-1.5">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                        Live
+                    </span>
                 </div>
                 
                 <!-- Notice List Container -->
-                <div class="space-y-4 max-h-[400px] overflow-y-auto pr-2" id="notice-container">
+                <div class="space-y-3 max-h-[350px] overflow-y-auto pr-2" id="notice-container">
                     <!-- Javascript will populate this -->
                 </div>
             </div>
 
             <!-- Stats Widget -->
-            <div class="glass-panel rounded-2xl p-6 bg-gradient-to-br from-indigo-900/50 to-transparent">
-                <h3 class="text-lg font-semibold mb-4 text-gray-200">Your Progress</h3>
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-sm text-gray-400">Tests Completed</span>
-                    <span class="text-xl font-bold text-white">0/480</span>
+            <div class="glass-panel rounded-3xl p-6 bg-gradient-to-br from-indigo-900/30 to-transparent">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-accent"></i>
+                        Your Progress
+                    </h3>
+                    <button class="text-xs text-accent hover:underline">View All</button>
                 </div>
-                <div class="w-full bg-gray-700 rounded-full h-2.5">
-                    <div class="bg-gradient-to-r from-accent to-secondary h-2.5 rounded-full" style="width: 0%"></div>
+
+                <!-- Progress Ring -->
+                <div class="flex items-center gap-6 mb-6">
+                    <div class="relative">
+                        <svg class="progress-ring w-24 h-24">
+                            <circle class="text-gray-700" stroke-width="8" stroke="currentColor" fill="transparent" r="40" cx="48" cy="48"/>
+                            <circle class="progress-ring__circle text-accent" stroke-width="8" stroke="currentColor" fill="transparent" r="40" cx="48" cy="48" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" id="progress-circle"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-2xl font-bold" id="progress-percent">0%</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-white"><span id="completed-tests">0</span>/500</div>
+                        <div class="text-sm text-gray-400">Tests Completed</div>
+                    </div>
                 </div>
-                <p class="text-xs text-gray-500 mt-3">Log in to save your progress across devices.</p>
+
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm mb-2">
+                            <span class="text-gray-400">Topics Covered</span>
+                            <span class="text-white font-medium" id="topics-covered">0/25</span>
+                        </div>
+                        <div class="w-full bg-gray-700/50 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-accent to-secondary h-2 rounded-full transition-all duration-500" style="width: 0%" id="topics-progress"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-2">
+                            <span class="text-gray-400">Average Score</span>
+                            <span class="text-white font-medium" id="avg-score">--</span>
+                        </div>
+                        <div class="w-full bg-gray-700/50 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-green-500 to-emerald-400 h-2 rounded-full transition-all duration-500" style="width: 0%" id="score-progress"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="w-full mt-6 py-3 rounded-xl bg-accent/10 border border-accent/30 text-accent font-medium hover:bg-accent/20 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Login to Save Progress
+                </button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="glass-panel rounded-3xl p-6">
+                <h3 class="text-lg font-semibold text-white mb-4">Quick Actions</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="openRandomTest()" class="p-4 rounded-xl bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/20 hover:border-green-500/40 transition-all text-center group">
+                        <i class="fa-solid fa-shuffle text-2xl text-green-400 mb-2 group-hover:scale-110 transition-transform"></i>
+                        <div class="text-sm font-medium text-white">Random Test</div>
+                    </button>
+                    <button class="p-4 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/20 hover:border-blue-500/40 transition-all text-center group">
+                        <i class="fa-solid fa-clock-rotate-left text-2xl text-blue-400 mb-2 group-hover:scale-110 transition-transform"></i>
+                        <div class="text-sm font-medium text-white">Continue</div>
+                    </button>
+                    <button class="p-4 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/20 hover:border-orange-500/40 transition-all text-center group">
+                        <i class="fa-solid fa-bookmark text-2xl text-orange-400 mb-2 group-hover:scale-110 transition-transform"></i>
+                        <div class="text-sm font-medium text-white">Bookmarks</div>
+                    </button>
+                    <button class="p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/20 hover:border-purple-500/40 transition-all text-center group">
+                        <i class="fa-solid fa-trophy text-2xl text-purple-400 mb-2 group-hover:scale-110 transition-transform"></i>
+                        <div class="text-sm font-medium text-white">Leaderboard</div>
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Right Column: Topics & Tests -->
         <div class="lg:w-2/3" id="topics">
             
-            <!-- Exam Toggle -->
-            <div class="flex justify-center mb-10">
-                <div class="glass-panel p-1 rounded-full inline-flex">
-                    <button onclick="switchCategory('wbjee')" id="btn-wbjee" class="px-6 py-2 rounded-full text-sm font-semibold transition-all bg-accent text-white shadow-lg">WBJEE (Maths)</button>
-                    <button onclick="switchCategory('jee')" id="btn-jee" class="px-6 py-2 rounded-full text-sm font-semibold transition-all text-gray-400 hover:text-white">JEE Mains</button>
+            <!-- Exam Toggle & Search -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+                <div class="glass-panel p-1.5 rounded-2xl inline-flex">
+                    <button onclick="switchCategory('wbjee')" id="btn-wbjee" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all bg-accent text-white shadow-lg">
+                        <i class="fa-solid fa-calculator mr-2"></i>WBJEE Maths
+                    </button>
+                    <button onclick="switchCategory('jee')" id="btn-jee" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all text-gray-400 hover:text-white">
+                        <i class="fa-solid fa-atom mr-2"></i>JEE Mains
+                    </button>
+                </div>
+
+                <!-- Search -->
+                <div class="relative w-full sm:w-64">
+                    <input type="text" id="topic-search" placeholder="Search topics..." 
+                        class="w-full px-4 py-2.5 pl-10 rounded-xl bg-white/5 border border-white/10 focus:border-accent/50 focus:outline-none text-white placeholder-gray-500 text-sm search-input transition-all"
+                        oninput="filterTopics(this.value)">
+                    <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
                 </div>
             </div>
 
             <!-- Header for Grid -->
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-3xl font-bold text-white" id="section-title">Mathematics Topics</h2>
-                <div class="text-sm text-gray-400"><i class="fa-solid fa-layer-group"></i> Select a topic</div>
+                <div>
+                    <h2 class="text-3xl font-bold text-white" id="section-title">Mathematics Topics</h2>
+                    <p class="text-gray-400 mt-1" id="topic-count">25 topics available</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="setViewMode('grid')" id="view-grid" class="w-10 h-10 rounded-lg bg-accent/20 text-accent flex items-center justify-center transition-all">
+                        <i class="fa-solid fa-grid-2"></i>
+                    </button>
+                    <button onclick="setViewMode('list')" id="view-list" class="w-10 h-10 rounded-lg bg-white/5 text-gray-400 hover:text-white flex items-center justify-center transition-all">
+                        <i class="fa-solid fa-list"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- Topic Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="topic-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="topic-grid">
                 <!-- Javascript will populate this -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden text-center py-16">
+                <div class="w-20 h-20 mx-auto rounded-full bg-white/5 flex items-center justify-center mb-6">
+                    <i class="fa-solid fa-search text-3xl text-gray-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-2">No topics found</h3>
+                <p class="text-gray-400">Try adjusting your search terms</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div id="testimonials" class="py-20 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-accent font-semibold text-sm uppercase tracking-wider">Testimonials</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-4">What Students <span class="text-gradient">Say</span></h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Join thousands of successful students who achieved their dreams with ExamPrime</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6" id="testimonials-grid">
+                <!-- Testimonials populated by JS -->
+            </div>
+        </div>
+
+        <!-- Background decoration -->
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-accent/5 to-transparent -z-10"></div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="py-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel rounded-3xl p-10 md:p-16 text-center relative overflow-hidden">
+                <div class="relative z-10">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6">Ready to <span class="text-gradient">Ace Your Exam?</span></h2>
+                    <p class="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">Join over 10,000+ students who are already preparing smarter with ExamPrime's comprehensive mock tests.</p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <a href="#topics" class="px-8 py-4 rounded-full bg-gradient-to-r from-accent to-secondary text-white font-semibold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-1">
+                            Start Free Trial
+                        </a>
+                        <a href="#" class="px-8 py-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-semibold transition-all">
+                            View Pricing
+                        </a>
+                    </div>
+                </div>
+                <!-- Background elements -->
+                <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent/10 to-secondary/10 -z-0"></div>
+                <div class="absolute -top-20 -right-20 w-60 h-60 bg-accent/30 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-secondary/30 rounded-full blur-3xl"></div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="border-t border-white/10 mt-20 bg-dark/50 backdrop-blur-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-                <div>
-                    <h3 class="text-xl font-bold text-white mb-4">ExamPrime</h3>
-                    <p class="text-gray-400 text-sm">Helping students achieve their engineering dreams with precision-crafted mock tests.</p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-accent transition">WBJEE Syllabus</a></li>
-                        <li><a href="#" class="hover:text-accent transition">JEE Mains Pattern</a></li>
-                        <li><a href="#" class="hover:text-accent transition">Previous Year Papers</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-white mb-4">Contact</h4>
-                    <p class="text-gray-400 text-sm">support@examprime.com</p>
-                    <div class="flex justify-center md:justify-start gap-4 mt-4">
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-instagram"></i></a>
+    <footer class="border-t border-white/10 bg-darker/80 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <!-- Brand -->
+                <div class="md:col-span-1">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-white font-bold text-lg">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <span class="font-bold text-2xl">Exam<span class="text-gradient">Prime</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Helping students achieve their engineering dreams with precision-crafted mock tests and AI-powered analytics.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
                     </div>
                 </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-6">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Home</a></li>
+                        <li><a href="#topics" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Mock Tests</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> WBJEE Syllabus</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> JEE Mains Pattern</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Previous Year Papers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-6">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Study Materials</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Formula Sheets</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Video Solutions</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-6">Contact Us</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-envelope text-accent text-sm"></i>
+                            </div>
+                            <div>
+                                <div class="text-gray-400">Email</div>
+                                <a href="mailto:support@examprime.com" class="text-white hover:text-accent">support@examprime.com</a>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-phone text-accent text-sm"></i>
+                            </div>
+                            <div>
+                                <div class="text-gray-400">Phone</div>
+                                <a href="tel:+919876543210" class="text-white hover:text-accent">+91 98765 43210</a>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-location-dot text-accent text-sm"></i>
+                            </div>
+                            <div>
+                                <div class="text-gray-400">Address</div>
+                                <span class="text-white">Kolkata, West Bengal, India</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="border-t border-white/10 mt-12 pt-8 text-center text-gray-500 text-sm">
-                &copy; 2026 ExamPrime. All rights reserved.
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-gray-500 text-sm">
+                    &copy; 2026 ExamPrime. All rights reserved.
+                </div>
+                <div class="flex gap-6 text-sm">
+                    <a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Cookie Policy</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- MODAL (Hidden by default) -->
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top fixed bottom-8 right-8 w-12 h-12 rounded-full bg-gradient-to-r from-accent to-secondary text-white shadow-lg shadow-purple-500/30 flex items-center justify-center z-50 hover:scale-110 transition-all" onclick="scrollToTop()">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- TEST MODAL -->
     <div id="test-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div class="modal-content bg-gray-900 border border-white/10 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div class="modal-content bg-gray-900 border border-white/10 w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             
             <!-- Modal Header -->
-            <div class="p-6 border-b border-white/10 bg-gray-800/50 flex justify-between items-center">
+            <div class="p-6 border-b border-white/10 bg-gradient-to-r from-gray-800/50 to-gray-900/50 flex justify-between items-center">
                 <div>
                     <h3 class="text-2xl font-bold text-white" id="modal-title">Topic Name</h3>
-                    <p class="text-gray-400 text-sm mt-1">Select a mock test to begin</p>
+                    <p class="text-gray-400 text-sm mt-1" id="modal-subtitle">Select a mock test to begin</p>
                 </div>
-                <button onclick="closeModal()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
+                <button onclick="closeModal()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 hover:rotate-90 flex items-center justify-center transition-all duration-300">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
 
+            <!-- Modal Filter -->
+            <div class="px-6 py-4 bg-gray-800/30 border-b border-white/5 flex flex-wrap gap-3 items-center">
+                <span class="text-sm text-gray-400">Filter:</span>
+                <button onclick="filterTests('all')" class="test-filter active px-4 py-1.5 rounded-full text-xs font-medium bg-accent text-white transition-all" data-filter="all">All</button>
+                <button onclick="filterTests('easy')" class="test-filter px-4 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-400 hover:text-white transition-all" data-filter="easy">Easy</button>
+                <button onclick="filterTests('medium')" class="test-filter px-4 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-400 hover:text-white transition-all" data-filter="medium">Medium</button>
+                <button onclick="filterTests('hard')" class="test-filter px-4 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-400 hover:text-white transition-all" data-filter="hard">Hard</button>
+            </div>
+
             <!-- Modal Body (Scrollable List) -->
-            <div class="p-6 overflow-y-auto custom-scrollbar bg-gray-900">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="modal-test-list">
+            <div class="p-6 overflow-y-auto bg-gray-900 flex-1">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="modal-test-list">
                     <!-- Links generated here -->
                 </div>
             </div>
 
             <!-- Modal Footer -->
-            <div class="p-4 border-t border-white/10 bg-gray-800/50 text-center text-xs text-gray-500">
-                Ensure pop-ups are enabled to launch tests.
+            <div class="p-4 border-t border-white/10 bg-gray-800/50 flex justify-between items-center">
+                <div class="text-xs text-gray-500">
+                    <i class="fa-solid fa-info-circle mr-1"></i> Each test contains 20 questions
+                </div>
+                <div class="text-xs text-gray-500">
+                    <i class="fa-solid fa-clock mr-1"></i> 30 mins per test
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH MODAL -->
+    <div id="search-modal" class="modal fixed inset-0 z-[100] flex items-start justify-center pt-20 px-4 bg-black/80 backdrop-blur-sm">
+        <div class="modal-content bg-gray-900 border border-white/10 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-4 border-b border-white/10 flex items-center gap-4">
+                <i class="fa-solid fa-search text-gray-400 text-xl"></i>
+                <input type="text" id="global-search" placeholder="Search topics, tests, or type a question..." 
+                    class="flex-1 bg-transparent text-white text-lg focus:outline-none placeholder-gray-500"
+                    oninput="globalSearch(this.value)">
+                <button onclick="closeSearchModal()" class="text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4 max-h-[60vh] overflow-y-auto" id="search-results">
+                <div class="text-center text-gray-500 py-8">
+                    <i class="fa-solid fa-lightbulb text-4xl mb-4 text-yellow-500/50"></i>
+                    <p>Start typing to search...</p>
+                </div>
             </div>
         </div>
     </div>
@@ -289,63 +832,114 @@
         
         // 1. Notices Data
         const notices = [
-            { date: "Jan 10", text: "Added 20 new tests for Conic Sections.", important: true },
-            { date: "Jan 09", text: "Full WBJEE Mathematics syllabus updated.", important: true },
-            { date: "Jan 05", text: "Server maintenance scheduled for Sunday 2AM.", important: false },
-            { date: "Jan 01", text: "Happy New Year! 20% off on Premium plans.", important: false },
-            { date: "Dec 28", text: "Detailed solutions for Calculus tests now available.", important: false },
+            { date: "Jan 15", text: "🎉 New Feature: AI-powered performance analytics now available!", important: true, new: true },
+            { date: "Jan 12", text: "Added 20 new tests for Conic Sections with detailed solutions.", important: true, new: true },
+            { date: "Jan 10", text: "Full WBJEE Mathematics syllabus updated for 2026 pattern.", important: true },
+            { date: "Jan 08", text: "Mobile app launching soon! Pre-register now for early access.", important: false },
+            { date: "Jan 05", text: "Server maintenance completed. All systems running smoothly.", important: false },
+            { date: "Jan 01", text: "🎆 Happy New Year! 20% off on Premium plans - use code NEWYEAR26", important: false },
+            { date: "Dec 28", text: "Detailed solutions for all Calculus tests now available.", important: false },
         ];
 
         // 2. Topics Data (WBJEE Math - FULL UPDATE)
         const wbjeeMathTopics = [
-            { id: 'ap-gp-hp', name: 'A.P., G.P., H.P.', icon: 'fa-arrow-down-1-9', desc: 'Sequences & Series' },
-            { id: 'logarithms', name: 'Logarithms', icon: 'fa-chart-simple', desc: 'Properties & Equations' },
-            { id: 'complex-numbers', name: 'Complex Numbers', icon: 'fa-square-root-variable', desc: 'Argand Plane, Roots' },
-            { id: 'quadratic', name: 'Quadratic Equations', icon: 'fa-superscript', desc: 'Roots, Coefficients' },
-            { id: 'permutations', name: 'Permutations & Combinations', icon: 'fa-list-ol', desc: 'Counting Principles' },
-            { id: 'induction', name: 'Mathematical Induction', icon: 'fa-stairs', desc: 'Proof Techniques' },
-            { id: 'binomial', name: 'Binomial Theorem', icon: 'fa-expand', desc: 'Expansion, Terms' },
-            { id: 'matrices', name: 'Matrices & Determinants', icon: 'fa-table-cells', desc: 'Operations, Inverse' },
-            { id: 'sets-functions', name: 'Sets, Relations & Functions', icon: 'fa-code-branch', desc: 'Types, Domain, Range' },
-            { id: 'stats-prob', name: 'Statistics & Probability', icon: 'fa-chart-pie', desc: 'Mean, Variance, Bayes' },
-            { id: 'trig-functions', name: 'Trigonometric Functions', icon: 'fa-wave-square', desc: 'Ratios, Identities' },
-            { id: 'sot', name: 'Solution of Triangles', icon: 'fa-ruler-combined', desc: 'Sine/Cosine Rules' },
-            { id: 'inverse-trig', name: 'Inverse Trig. Functions', icon: 'fa-rotate-left', desc: 'Principal Values' },
-            { id: 'straight-lines', name: 'Straight Lines', icon: 'fa-minus', desc: 'Slope, Forms' },
-            { id: 'circles', name: 'Circles', icon: 'fa-circle-notch', desc: 'Tangents, Normals' },
-            { id: 'conics', name: 'Conic Sections', icon: 'fa-bullseye', desc: 'Parabola, Ellipse, Hyperbola' },
-            { id: 'limits', name: 'Limits & Continuity', icon: 'fa-infinity', desc: 'L\'Hospital, Continuity' },
-            { id: 'derivatives', name: 'Derivatives', icon: 'fa-microscope', desc: 'Differentiation Rules' },
-            { id: 'aod', name: 'Application of Derivatives', icon: 'fa-chart-line', desc: 'Maxima, Minima, Tangents' },
-            { id: 'indefinite', name: 'Indefinite Integrals', icon: 'fa-bezier-curve', desc: 'Integration Methods' },
-            { id: 'definite', name: 'Definite Integrals', icon: 'fa-draw-polygon', desc: 'Properties, Area' },
-            { id: 'aoi', name: 'Application of Integrals', icon: 'fa-shapes', desc: 'Area Under Curves' },
-            { id: 'diff-eqn', name: 'Differential Equations', icon: 'fa-calculator', desc: 'Order, Degree, Solution' },
-            { id: '3d-geo', name: '3D Geometry', icon: 'fa-cube', desc: 'Lines, Planes in 3D' },
-            { id: 'vectors', name: 'Vector Algebra', icon: 'fa-arrows-to-dot', desc: 'Dot/Cross Product' },
+            { id: 'ap-gp-hp', name: 'A.P., G.P., H.P.', icon: 'fa-arrow-down-1-9', desc: 'Sequences & Series', difficulty: 'medium', questions: 400 },
+            { id: 'logarithms', name: 'Logarithms', icon: 'fa-chart-simple', desc: 'Properties & Equations', difficulty: 'easy', questions: 400 },
+            { id: 'complex-numbers', name: 'Complex Numbers', icon: 'fa-square-root-variable', desc: 'Argand Plane, Roots', difficulty: 'hard', questions: 400 },
+            { id: 'quadratic', name: 'Quadratic Equations', icon: 'fa-superscript', desc: 'Roots, Coefficients', difficulty: 'medium', questions: 400 },
+            { id: 'permutations', name: 'Permutations & Combinations', icon: 'fa-list-ol', desc: 'Counting Principles', difficulty: 'hard', questions: 400 },
+            { id: 'induction', name: 'Mathematical Induction', icon: 'fa-stairs', desc: 'Proof Techniques', difficulty: 'medium', questions: 400 },
+            { id: 'binomial', name: 'Binomial Theorem', icon: 'fa-expand', desc: 'Expansion, Terms', difficulty: 'medium', questions: 400 },
+            { id: 'matrices', name: 'Matrices & Determinants', icon: 'fa-table-cells', desc: 'Operations, Inverse', difficulty: 'hard', questions: 400 },
+            { id: 'sets-functions', name: 'Sets, Relations & Functions', icon: 'fa-code-branch', desc: 'Types, Domain, Range', difficulty: 'medium', questions: 400 },
+            { id: 'stats-prob', name: 'Statistics & Probability', icon: 'fa-chart-pie', desc: 'Mean, Variance, Bayes', difficulty: 'medium', questions: 400 },
+            { id: 'trig-functions', name: 'Trigonometric Functions', icon: 'fa-wave-square', desc: 'Ratios, Identities', difficulty: 'medium', questions: 400 },
+            { id: 'sot', name: 'Solution of Triangles', icon: 'fa-ruler-combined', desc: 'Sine/Cosine Rules', difficulty: 'medium', questions: 400 },
+            { id: 'inverse-trig', name: 'Inverse Trig. Functions', icon: 'fa-rotate-left', desc: 'Principal Values', difficulty: 'hard', questions: 400 },
+            { id: 'straight-lines', name: 'Straight Lines', icon: 'fa-minus', desc: 'Slope, Forms', difficulty: 'easy', questions: 400 },
+            { id: 'circles', name: 'Circles', icon: 'fa-circle-notch', desc: 'Tangents, Normals', difficulty: 'medium', questions: 400 },
+            { id: 'conics', name: 'Conic Sections', icon: 'fa-bullseye', desc: 'Parabola, Ellipse, Hyperbola', difficulty: 'hard', questions: 400 },
+            { id: 'limits', name: 'Limits & Continuity', icon: 'fa-infinity', desc: "L'Hospital, Continuity", difficulty: 'medium', questions: 400 },
+            { id: 'derivatives', name: 'Derivatives', icon: 'fa-microscope', desc: 'Differentiation Rules', difficulty: 'medium', questions: 400 },
+            { id: 'aod', name: 'Application of Derivatives', icon: 'fa-chart-line', desc: 'Maxima, Minima, Tangents', difficulty: 'hard', questions: 400 },
+            { id: 'indefinite', name: 'Indefinite Integrals', icon: 'fa-bezier-curve', desc: 'Integration Methods', difficulty: 'hard', questions: 400 },
+            { id: 'definite', name: 'Definite Integrals', icon: 'fa-draw-polygon', desc: 'Properties, Area', difficulty: 'medium', questions: 400 },
+            { id: 'aoi', name: 'Application of Integrals', icon: 'fa-shapes', desc: 'Area Under Curves', difficulty: 'medium', questions: 400 },
+            { id: 'diff-eqn', name: 'Differential Equations', icon: 'fa-calculator', desc: 'Order, Degree, Solution', difficulty: 'hard', questions: 400 },
+            { id: '3d-geo', name: '3D Geometry', icon: 'fa-cube', desc: 'Lines, Planes in 3D', difficulty: 'hard', questions: 400 },
+            { id: 'vectors', name: 'Vector Algebra', icon: 'fa-arrows-to-dot', desc: 'Dot/Cross Product', difficulty: 'medium', questions: 400 },
         ];
 
         const jeeTopics = [
-            { id: 'jee-physics', name: 'Physics (Full)', icon: 'fa-atom', desc: 'Mechanics, Electrodynamics' },
-            { id: 'jee-chem', name: 'Chemistry (Full)', icon: 'fa-flask', desc: 'Organic, Inorganic, Physical' },
-            { id: 'jee-math', name: 'Maths (Full)', icon: 'fa-calculator', desc: 'Complete Syllabus' },
+            { id: 'jee-physics-mechanics', name: 'Mechanics', icon: 'fa-gears', desc: 'Laws of Motion, Gravitation', difficulty: 'hard', questions: 400 },
+            { id: 'jee-physics-thermo', name: 'Thermodynamics', icon: 'fa-temperature-high', desc: 'Heat, Entropy, Laws', difficulty: 'medium', questions: 400 },
+            { id: 'jee-physics-electro', name: 'Electromagnetism', icon: 'fa-bolt', desc: 'Electric & Magnetic Fields', difficulty: 'hard', questions: 400 },
+            { id: 'jee-physics-optics', name: 'Optics', icon: 'fa-glasses', desc: 'Light, Mirrors, Lenses', difficulty: 'medium', questions: 400 },
+            { id: 'jee-physics-modern', name: 'Modern Physics', icon: 'fa-atom', desc: 'Quantum, Nuclear, Relativity', difficulty: 'hard', questions: 400 },
+            { id: 'jee-chem-organic', name: 'Organic Chemistry', icon: 'fa-flask-vial', desc: 'Hydrocarbons, Reactions', difficulty: 'hard', questions: 400 },
+            { id: 'jee-chem-inorganic', name: 'Inorganic Chemistry', icon: 'fa-vial', desc: 'Periodic Table, Bonding', difficulty: 'medium', questions: 400 },
+            { id: 'jee-chem-physical', name: 'Physical Chemistry', icon: 'fa-flask', desc: 'Equilibrium, Kinetics', difficulty: 'hard', questions: 400 },
+            { id: 'jee-math-algebra', name: 'Algebra', icon: 'fa-superscript', desc: 'Complete JEE Algebra', difficulty: 'medium', questions: 400 },
+            { id: 'jee-math-calculus', name: 'Calculus', icon: 'fa-chart-line', desc: 'Differential & Integral', difficulty: 'hard', questions: 400 },
+            { id: 'jee-math-coordinate', name: 'Coordinate Geometry', icon: 'fa-chart-area', desc: '2D & 3D Geometry', difficulty: 'medium', questions: 400 },
+            { id: 'jee-math-vectors', name: 'Vectors & 3D', icon: 'fa-cube', desc: 'Vectors, 3D Space', difficulty: 'medium', questions: 400 },
         ];
 
+        // Testimonials Data
+        const testimonials = [
+            { name: "Arjun Sharma", college: "IIT Kharagpur", image: "https://randomuser.me/api/portraits/men/1.jpg", text: "ExamPrime helped me crack WBJEE with 98.5 percentile. The mock tests were incredibly similar to the actual exam!", rating: 5 },
+            { name: "Priya Patel", college: "NIT Durgapur", image: "https://randomuser.me/api/portraits/women/2.jpg", text: "The analytics feature helped me identify my weak areas. I improved my scores by 40% in just 2 months!", rating: 5 },
+            { name: "Rahul Das", college: "Jadavpur University", image: "https://randomuser.me/api/portraits/men/3.jpg", text: "Best platform for WBJEE preparation. The difficulty level matches perfectly with the actual exam.", rating: 5 },
+            { name: "Sneha Roy", college: "IIT Bombay", image: "https://randomuser.me/api/portraits/women/4.jpg", text: "I used ExamPrime for 3 months before JEE. The timed tests really helped build my exam stamina.", rating: 5 },
+            { name: "Amit Kumar", college: "BITS Pilani", image: "https://randomuser.me/api/portraits/men/5.jpg", text: "The detailed solutions for each question helped me understand concepts better than any coaching.", rating: 4 },
+            { name: "Kavya Singh", college: "IIT Delhi", image: "https://randomuser.me/api/portraits/women/6.jpg", text: "ExamPrime's mobile-friendly interface allowed me to practice during my commute. Highly recommend!", rating: 5 },
+        ];
+
+        // State Variables
+        let currentCategory = 'wbjee';
+        let currentViewMode = 'grid';
+        let currentTopic = null;
+        let currentTestFilter = 'all';
+
         // --- FUNCTIONS ---
+
+        // Animate Counter
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const inc = target / speed;
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(() => animateCounters(), 1);
+                } else {
+                    counter.innerText = target.toLocaleString() + (counter.classList.contains('text-gradient') ? '%' : '+');
+                }
+            });
+        }
 
         // Render Notices
         function renderNotices() {
             const container = document.getElementById('notice-container');
             container.innerHTML = '';
             
-            notices.forEach(notice => {
+            notices.forEach((notice, index) => {
                 const div = document.createElement('div');
-                div.className = `p-4 rounded-xl border border-white/5 transition hover:bg-white/5 ${notice.important ? 'bg-red-500/10 border-red-500/20' : 'bg-white/5'}`;
+                div.className = `p-4 rounded-xl border transition-all hover:bg-white/5 cursor-pointer ${notice.important ? 'bg-red-500/10 border-red-500/20' : 'bg-white/5 border-white/5'}`;
+                div.style.animationDelay = `${index * 0.1}s`;
+                div.classList.add('animate-slide-up');
                 
                 div.innerHTML = `
-                    <div class="flex justify-between items-start mb-1">
+                    <div class="flex justify-between items-start mb-2">
                         <span class="text-xs font-bold ${notice.important ? 'text-red-400' : 'text-accent'}">${notice.date}</span>
-                        ${notice.important ? '<i class="fa-solid fa-circle-exclamation text-red-400 text-xs"></i>' : ''}
+                        <div class="flex gap-2">
+                            ${notice.new ? '<span class="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full">New</span>' : ''}
+                            ${notice.important ? '<i class="fa-solid fa-circle-exclamation text-red-400 text-xs"></i>' : ''}
+                        </div>
                     </div>
                     <p class="text-sm text-gray-300 leading-relaxed">${notice.text}</p>
                 `;
@@ -353,125 +947,453 @@
             });
         }
 
+        // Get Difficulty Badge HTML
+        function getDifficultyBadge(difficulty) {
+            const badges = {
+                easy: '<span class="badge-easy text-xs px-2 py-1 rounded-full border">Easy</span>',
+                medium: '<span class="badge-medium text-xs px-2 py-1 rounded-full border">Medium</span>',
+                hard: '<span class="badge-hard text-xs px-2 py-1 rounded-full border">Hard</span>'
+            };
+            return badges[difficulty] || badges.medium;
+        }
+
         // Render Topics
-        function renderTopics(type) {
+        function renderTopics(type, searchQuery = '') {
             const grid = document.getElementById('topic-grid');
+            const emptyState = document.getElementById('empty-state');
+            const countEl = document.getElementById('topic-count');
             grid.innerHTML = '';
-            const data = type === 'wbjee' ? wbjeeMathTopics : jeeTopics;
+            
+            let data = type === 'wbjee' ? wbjeeMathTopics : jeeTopics;
+            
+            // Filter by search query
+            if (searchQuery) {
+                data = data.filter(topic => 
+                    topic.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    topic.desc.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            }
+
+            countEl.textContent = `${data.length} topics available`;
+
+            if (data.length === 0) {
+                emptyState.classList.remove('hidden');
+                grid.classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.classList.remove('hidden');
+
+            // Set grid layout based on view mode
+            if (currentViewMode === 'grid') {
+                grid.className = 'grid grid-cols-1 md:grid-cols-2 gap-5';
+            } else {
+                grid.className = 'flex flex-col gap-4';
+            }
 
             data.forEach((topic, index) => {
                 const card = document.createElement('div');
-                card.className = 'glass-card p-6 rounded-2xl cursor-pointer group relative overflow-hidden';
+                card.className = 'glass-card rounded-2xl cursor-pointer group relative overflow-hidden card-shine animate-slide-up';
+                card.style.animationDelay = `${index * 0.05}s`;
                 card.onclick = () => openTestModal(topic);
 
-                // Adding a subtle number background
-                card.innerHTML = `
-                    <div class="absolute -right-4 -bottom-4 text-9xl font-bold text-white/5 group-hover:text-white/10 transition-colors select-none">
-                        ${index + 1}
-                    </div>
-                    <div class="relative z-10 flex items-start justify-between">
-                        <div>
-                            <div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-2xl text-accent mb-4 group-hover:scale-110 transition-transform duration-300">
+                if (currentViewMode === 'grid') {
+                    card.innerHTML = `
+                        <div class="p-6">
+                            <div class="absolute -right-6 -bottom-6 text-8xl font-bold text-white/[0.03] group-hover:text-white/[0.08] transition-colors select-none">
+                                ${String(index + 1).padStart(2, '0')}
+                            </div>
+                            <div class="relative z-10">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-secondary/20 flex items-center justify-center text-2xl text-accent group-hover:scale-110 transition-transform duration-300 border border-accent/20">
+                                        <i class="fa-solid ${topic.icon}"></i>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        ${getDifficultyBadge(topic.difficulty)}
+                                    </div>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-accent transition-colors">${topic.name}</h3>
+                                <p class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">${topic.desc}</p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-white/5 flex justify-between items-center relative z-10">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-xs text-gray-500 flex items-center gap-1">
+                                        <i class="fa-regular fa-file-lines"></i> 20 Tests
+                                    </span>
+                                    <span class="text-xs text-gray-500 flex items-center gap-1">
+                                        <i class="fa-regular fa-clock"></i> 30 min
+                                    </span>
+                                </div>
+                                <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-accent group-hover:border-accent transition-all">
+                                    <i class="fa-solid fa-arrow-right text-xs text-white transform group-hover:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // List view
+                    card.innerHTML = `
+                        <div class="p-4 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-secondary/20 flex items-center justify-center text-xl text-accent flex-shrink-0 border border-accent/20">
                                 <i class="fa-solid ${topic.icon}"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-white mb-2">${topic.name}</h3>
-                            <p class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">${topic.desc}</p>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-lg font-bold text-white group-hover:text-accent transition-colors truncate">${topic.name}</h3>
+                                <p class="text-sm text-gray-400 truncate">${topic.desc}</p>
+                            </div>
+                            <div class="hidden sm:flex items-center gap-3">
+                                ${getDifficultyBadge(topic.difficulty)}
+                                <span class="text-xs text-gray-500">20 Tests</span>
+                            </div>
+                            <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-accent group-hover:border-accent transition-all flex-shrink-0">
+                                <i class="fa-solid fa-arrow-right text-xs text-white"></i>
+                            </div>
                         </div>
-                        <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-accent group-hover:border-accent transition-all">
-                            <i class="fa-solid fa-arrow-right text-sm text-white transform group-hover:translate-x-1 transition-transform"></i>
-                        </div>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-white/5 flex justify-between items-center">
-                        <span class="text-xs font-mono text-gray-500"><i class="fa-regular fa-file-code"></i> 20 Tests</span>
-                        <span class="text-xs text-green-400">Available</span>
-                    </div>
-                `;
+                    `;
+                }
+                
                 grid.appendChild(card);
             });
         }
 
+        // Filter Topics by Search
+        function filterTopics(query) {
+            renderTopics(currentCategory, query);
+        }
+
+        // Set View Mode
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            const gridBtn = document.getElementById('view-grid');
+            const listBtn = document.getElementById('view-list');
+
+            if (mode === 'grid') {
+                gridBtn.className = 'w-10 h-10 rounded-lg bg-accent/20 text-accent flex items-center justify-center transition-all';
+                listBtn.className = 'w-10 h-10 rounded-lg bg-white/5 text-gray-400 hover:text-white flex items-center justify-center transition-all';
+            } else {
+                listBtn.className = 'w-10 h-10 rounded-lg bg-accent/20 text-accent flex items-center justify-center transition-all';
+                gridBtn.className = 'w-10 h-10 rounded-lg bg-white/5 text-gray-400 hover:text-white flex items-center justify-center transition-all';
+            }
+
+            const searchQuery = document.getElementById('topic-search').value;
+            renderTopics(currentCategory, searchQuery);
+        }
+
         // Switch Category (WBJEE vs JEE)
         function switchCategory(type) {
+            currentCategory = type;
             const btnWbjee = document.getElementById('btn-wbjee');
             const btnJee = document.getElementById('btn-jee');
             const title = document.getElementById('section-title');
 
             if (type === 'wbjee') {
-                btnWbjee.classList.replace('text-gray-400', 'text-white');
-                btnWbjee.classList.add('bg-accent', 'shadow-lg');
-                btnWbjee.classList.remove('hover:text-white');
-                
-                btnJee.classList.remove('bg-accent', 'text-white', 'shadow-lg');
-                btnJee.classList.add('text-gray-400', 'hover:text-white');
-                
+                btnWbjee.className = 'px-6 py-2.5 rounded-xl text-sm font-semibold transition-all bg-accent text-white shadow-lg';
+                btnJee.className = 'px-6 py-2.5 rounded-xl text-sm font-semibold transition-all text-gray-400 hover:text-white';
                 title.innerText = "WBJEE Mathematics Topics";
             } else {
-                btnJee.classList.replace('text-gray-400', 'text-white');
-                btnJee.classList.add('bg-accent', 'shadow-lg');
-                btnJee.classList.remove('hover:text-white');
-
-                btnWbjee.classList.remove('bg-accent', 'text-white', 'shadow-lg');
-                btnWbjee.classList.add('text-gray-400', 'hover:text-white');
-
+                btnJee.className = 'px-6 py-2.5 rounded-xl text-sm font-semibold transition-all bg-accent text-white shadow-lg';
+                btnWbjee.className = 'px-6 py-2.5 rounded-xl text-sm font-semibold transition-all text-gray-400 hover:text-white';
                 title.innerText = "JEE Mains Subjects";
             }
+
+            document.getElementById('topic-search').value = '';
             renderTopics(type);
+        }
+
+        // Get test difficulty
+        function getTestDifficulty(testNum) {
+            if (testNum <= 7) return 'easy';
+            if (testNum <= 14) return 'medium';
+            return 'hard';
         }
 
         // Open Modal and Generate Links
         function openTestModal(topic) {
+            currentTopic = topic;
             const modal = document.getElementById('test-modal');
             const title = document.getElementById('modal-title');
-            const list = document.getElementById('modal-test-list');
-
+            const subtitle = document.getElementById('modal-subtitle');
+            
             title.innerText = topic.name;
+            subtitle.innerHTML = `<i class="fa-solid fa-layer-group mr-1"></i> ${topic.desc} • 20 Mock Tests`;
+
+            // Reset filter
+            currentTestFilter = 'all';
+            document.querySelectorAll('.test-filter').forEach(btn => {
+                btn.classList.remove('bg-accent', 'text-white');
+                btn.classList.add('bg-white/5', 'text-gray-400');
+            });
+            document.querySelector('[data-filter="all"]').classList.remove('bg-white/5', 'text-gray-400');
+            document.querySelector('[data-filter="all"]').classList.add('bg-accent', 'text-white');
+
+            generateTestList(topic);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Generate Test List
+        function generateTestList(topic, filter = 'all') {
+            const list = document.getElementById('modal-test-list');
             list.innerHTML = '';
 
-            // Generate 20 Mock Test Links
             for (let i = 1; i <= 20; i++) {
-                // Determine file name format: e.g., complex-numbers-test-1.html
+                const difficulty = getTestDifficulty(i);
+                
+                if (filter !== 'all' && difficulty !== filter) continue;
+
                 const fileName = `${topic.id}-test-${i}.html`;
                 
                 const link = document.createElement('a');
                 link.href = fileName; 
                 
-                link.className = "flex items-center gap-3 p-4 rounded-xl bg-white/5 hover:bg-accent/20 border border-white/5 hover:border-accent/50 transition-all group";
+                const diffColors = {
+                    easy: 'from-green-500/20 to-green-600/10 border-green-500/20 hover:border-green-500/50',
+                    medium: 'from-yellow-500/20 to-yellow-600/10 border-yellow-500/20 hover:border-yellow-500/50',
+                    hard: 'from-red-500/20 to-red-600/10 border-red-500/20 hover:border-red-500/50'
+                };
+
+                link.className = `flex items-center gap-4 p-4 rounded-xl bg-gradient-to-br ${diffColors[difficulty]} border transition-all group hover:-translate-y-1`;
                 
                 link.innerHTML = `
-                    <div class="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-400 group-hover:text-white group-hover:bg-accent transition-colors">
-                        ${i}
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 flex items-center justify-center text-lg font-bold text-gray-400 group-hover:text-white group-hover:bg-accent transition-colors">
+                        ${String(i).padStart(2, '0')}
                     </div>
-                    <div>
-                        <div class="text-sm font-semibold text-gray-200 group-hover:text-white">Mock Test ${i}</div>
-                        <div class="text-xs text-gray-500 group-hover:text-gray-300">Start Exam</div>
+                    <div class="flex-1">
+                        <div class="text-sm font-semibold text-gray-200 group-hover:text-white flex items-center gap-2">
+                            Mock Test ${i}
+                            ${getDifficultyBadge(difficulty)}
+                        </div>
+                        <div class="text-xs text-gray-500 group-hover:text-gray-400 mt-1">
+                            <i class="fa-regular fa-clock mr-1"></i> 30 min • 20 questions
+                        </div>
                     </div>
-                    <i class="fa-solid fa-play ml-auto text-xs text-gray-600 group-hover:text-accent"></i>
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-accent transition-all">
+                        <i class="fa-solid fa-play text-xs text-gray-400 group-hover:text-white"></i>
+                    </div>
                 `;
                 
                 list.appendChild(link);
             }
 
-            modal.classList.add('active');
+            if (list.children.length === 0) {
+                list.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i class="fa-solid fa-filter-circle-xmark text-4xl text-gray-600 mb-4"></i>
+                        <p class="text-gray-400">No tests match the selected filter</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Filter Tests in Modal
+        function filterTests(filter) {
+            currentTestFilter = filter;
+            
+            document.querySelectorAll('.test-filter').forEach(btn => {
+                if (btn.dataset.filter === filter) {
+                    btn.classList.remove('bg-white/5', 'text-gray-400');
+                    btn.classList.add('bg-accent', 'text-white');
+                } else {
+                    btn.classList.remove('bg-accent', 'text-white');
+                    btn.classList.add('bg-white/5', 'text-gray-400');
+                }
+            });
+
+            if (currentTopic) {
+                generateTestList(currentTopic, filter);
+            }
         }
 
         function closeModal() {
             document.getElementById('test-modal').classList.remove('active');
+            document.body.style.overflow = '';
         }
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('test-modal');
-            if (event.target == modal) {
-                closeModal();
+        // Search Modal
+        function openSearchModal() {
+            const modal = document.getElementById('search-modal');
+            modal.classList.add('active');
+            document.getElementById('global-search').focus();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSearchModal() {
+            document.getElementById('search-modal').classList.remove('active');
+            document.getElementById('global-search').value = '';
+            document.body.style.overflow = '';
+        }
+
+        function globalSearch(query) {
+            const results = document.getElementById('search-results');
+            
+            if (!query.trim()) {
+                results.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fa-solid fa-lightbulb text-4xl mb-4 text-yellow-500/50"></i>
+                        <p>Start typing to search...</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const allTopics = [...wbjeeMathTopics, ...jeeTopics];
+            const filtered = allTopics.filter(t => 
+                t.name.toLowerCase().includes(query.toLowerCase()) ||
+                t.desc.toLowerCase().includes(query.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                results.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fa-solid fa-face-sad-tear text-4xl mb-4"></i>
+                        <p>No results found for "${query}"</p>
+                    </div>
+                `;
+                return;
+            }
+
+            results.innerHTML = filtered.map(topic => `
+                <div class="p-4 rounded-xl hover:bg-white/5 cursor-pointer transition-all flex items-center gap-4" onclick="closeSearchModal(); openTestModal(${JSON.stringify(topic).replace(/"/g, '&quot;')})">
+                    <div class="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center text-accent">
+                        <i class="fa-solid ${topic.icon}"></i>
+                    </div>
+                    <div>
+                        <div class="font-medium text-white">${topic.name}</div>
+                        <div class="text-sm text-gray-400">${topic.desc}</div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right ml-auto text-gray-600"></i>
+                </div>
+            `).join('');
+        }
+
+        // Open Random Test
+        function openRandomTest() {
+            const topics = currentCategory === 'wbjee' ? wbjeeMathTopics : jeeTopics;
+            const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+            const randomTest = Math.floor(Math.random() * 20) + 1;
+            window.location.href = `${randomTopic.id}-test-${randomTest}.html`;
+        }
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            menu.classList.toggle('active');
+            
+            if (menu.classList.contains('active')) {
+                icon.classList.replace('fa-bars', 'fa-xmark');
+                document.body.style.overflow = 'hidden';
+            } else {
+                icon.classList.replace('fa-xmark', 'fa-bars');
+                document.body.style.overflow = '';
             }
         }
+
+        // Back to Top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Testimonials
+        function renderTestimonials() {
+            const grid = document.getElementById('testimonials-grid');
+            grid.innerHTML = testimonials.map((t, i) => `
+                <div class="glass-card rounded-2xl p-6 animate-slide-up" style="animation-delay: ${i * 0.1}s">
+                    <div class="flex items-center gap-4 mb-4">
+                        <img src="${t.image}" alt="${t.name}" class="w-14 h-14 rounded-full object-cover border-2 border-accent/50">
+                        <div>
+                            <h4 class="font-semibold text-white">${t.name}</h4>
+                            <p class="text-sm text-gray-400">${t.college}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 mb-4">
+                        ${Array(5).fill().map((_, i) => `<i class="fa-solid fa-star ${i < t.rating ? 'text-yellow-400' : 'text-gray-600'}"></i>`).join('')}
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed">"${t.text}"</p>
+                </div>
+            `).join('');
+        }
+
+        // Update Progress (from localStorage)
+        function updateProgress() {
+            const completed = parseInt(localStorage.getItem('completedTests') || 0);
+            const total = 500;
+            const percent = Math.round((completed / total) * 100);
+
+            document.getElementById('completed-tests').textContent = completed;
+            document.getElementById('progress-percent').textContent = percent + '%';
+
+            const circle = document.getElementById('progress-circle');
+            const circumference = 2 * Math.PI * 40;
+            circle.style.strokeDashoffset = circumference - (percent / 100) * circumference;
+        }
+
+        // Handle Scroll Events
+        window.addEventListener('scroll', () => {
+            // Back to top button visibility
+            const backToTop = document.getElementById('back-to-top');
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+
+            // Navbar background
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-darker/90');
+            } else {
+                navbar.classList.remove('bg-darker/90');
+            }
+        });
+
+        // Close modals on click outside
+        window.onclick = function(event) {
+            const testModal = document.getElementById('test-modal');
+            const searchModal = document.getElementById('search-modal');
+            
+            if (event.target === testModal) closeModal();
+            if (event.target === searchModal) closeSearchModal();
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeSearchModal();
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (mobileMenu.classList.contains('active')) {
+                    toggleMobileMenu();
+                }
+            }
+            if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                openSearchModal();
+            }
+        });
 
         // Initialize
         window.onload = function() {
             renderNotices();
             renderTopics('wbjee');
-        }
+            renderTestimonials();
+            updateProgress();
+            
+            // Animate counters when in viewport
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
 
+            document.querySelectorAll('.counter').forEach(counter => {
+                observer.observe(counter);
+            });
+        }
     </script>
 </body>
 </html>
