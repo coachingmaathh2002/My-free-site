@@ -86,6 +86,14 @@
             50% { background-position: 100% 50%; }
         }
 
+        .text-gold-gradient {
+            background: linear-gradient(135deg, #fde68a, #f59e0b, #fbbf24);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 3s ease infinite;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -118,6 +126,14 @@
             animation: pulse-glow 2s ease-in-out infinite;
         }
 
+        @keyframes pulse-glow-gold {
+            0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.7); }
+        }
+        .premium-glow {
+            animation: pulse-glow-gold 2s ease-in-out infinite;
+        }
+
         @keyframes slide-up {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -126,12 +142,28 @@
             animation: slide-up 0.6s ease-out forwards;
         }
 
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.4s ease-out forwards;
+        }
+
         @keyframes counter {
             from { opacity: 0; transform: scale(0.5); }
             to { opacity: 1; transform: scale(1); }
         }
         .animate-counter {
             animation: counter 0.5s ease-out forwards;
+        }
+
+        @keyframes toast-in {
+            from { opacity: 0; transform: translateY(30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .toast-in {
+            animation: toast-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         /* Stagger animations */
@@ -172,7 +204,7 @@
             box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
         }
 
-        /* Topic Card Shine Effect */
+        /* Card Shine Effect */
         .card-shine {
             position: relative;
             overflow: hidden;
@@ -208,6 +240,67 @@
         .badge-medium { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); }
         .badge-hard { background: rgba(239, 68, 68, 0.2); color: #f87171; border-color: rgba(239, 68, 68, 0.3); }
 
+        /* Premium Card Border */
+        .premium-topic-card {
+            border: 1px solid rgba(245, 158, 11, 0.3) !important;
+        }
+        .premium-topic-card:hover {
+            border-color: rgba(245, 158, 11, 0.7) !important;
+            box-shadow: 0 20px 40px -15px rgba(245, 158, 11, 0.4) !important;
+        }
+
+        .premium-lock-overlay {
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            background: rgba(10, 15, 26, 0.72);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .group:hover .premium-lock-overlay {
+            opacity: 1;
+        }
+
+        /* Exam Card */
+        .exam-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .exam-card .exam-glow {
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 220px;
+            height: 220px;
+            border-radius: 9999px;
+            filter: blur(60px);
+            opacity: 0.35;
+            transition: opacity 0.4s ease;
+        }
+        .exam-card:hover .exam-glow {
+            opacity: 0.6;
+        }
+        .exam-card-disabled {
+            filter: grayscale(0.6);
+            opacity: 0.6;
+            cursor: not-allowed !important;
+        }
+        .exam-card-disabled:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .pricing-card-popular {
+            position: relative;
+            border: 2px solid transparent;
+            background-image: linear-gradient(rgba(30,41,59,0.9), rgba(30,41,59,0.9)), linear-gradient(135deg, #f59e0b, #ec4899, #8b5cf6);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        .billing-toggle-dot {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         /* Back to Top Button */
         .back-to-top {
             opacity: 0;
@@ -217,17 +310,6 @@
         .back-to-top.visible {
             opacity: 1;
             visibility: visible;
-        }
-
-        /* Loading Skeleton */
-        .skeleton {
-            background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
-        }
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
         }
 
         /* Tooltip */
@@ -262,6 +344,10 @@
         .progress-ring__circle {
             transition: stroke-dashoffset 0.5s ease;
         }
+
+        .view-hidden {
+            display: none;
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-accent selection:text-white">
@@ -271,7 +357,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <!-- Logo -->
-                <a href="#" class="flex items-center gap-3 group">
+                <a href="#" onclick="backToExams()" class="flex items-center gap-3 group">
                     <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/50 transition-all group-hover:scale-110">
                         <i class="fa-solid fa-graduation-cap"></i>
                     </div>
@@ -281,8 +367,9 @@
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-1">
                     <a href="#" class="text-white hover:text-accent px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">Home</a>
-                    <a href="#topics" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">Mock Tests</a>
+                    <a href="#topics" onclick="backToExams()" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">Mock Tests</a>
                     <a href="#how-it-works" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">How It Works</a>
+                    <a href="#pricing" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">Pricing</a>
                     <a href="#notice-board" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">Notices</a>
                     <a href="#testimonials" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/5">Reviews</a>
                 </div>
@@ -291,6 +378,9 @@
                 <div class="hidden md:flex items-center gap-3">
                     <button onclick="openSearchModal()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all tooltip" data-tooltip="Search">
                         <i class="fa-solid fa-search text-gray-400"></i>
+                    </button>
+                    <button onclick="openPremiumModal()" id="premium-nav-btn" class="flex items-center gap-2 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-crown"></i> Go Premium
                     </button>
                     <button class="bg-gradient-to-r from-accent to-secondary hover:from-accent/80 hover:to-secondary/80 text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-all shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:-translate-y-0.5">
                         <i class="fa-solid fa-user mr-2"></i>Login
@@ -317,11 +407,14 @@
                     <a href="#" class="flex items-center gap-3 p-3 rounded-xl bg-accent/10 text-accent">
                         <i class="fa-solid fa-home w-5"></i> Home
                     </a>
-                    <a href="#topics" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-gray-300 transition-all">
+                    <a href="#topics" onclick="backToExams(); toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-gray-300 transition-all">
                         <i class="fa-solid fa-file-lines w-5"></i> Mock Tests
                     </a>
                     <a href="#how-it-works" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-gray-300 transition-all">
                         <i class="fa-solid fa-circle-question w-5"></i> How It Works
+                    </a>
+                    <a href="#pricing" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-gray-300 transition-all">
+                        <i class="fa-solid fa-crown w-5 text-amber-400"></i> Pricing
                     </a>
                     <a href="#notice-board" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-gray-300 transition-all">
                         <i class="fa-solid fa-bell w-5"></i> Notices
@@ -330,7 +423,10 @@
                         <i class="fa-solid fa-star w-5"></i> Reviews
                     </a>
                 </div>
-                <div class="mt-8 pt-8 border-t border-white/10">
+                <div class="mt-8 pt-8 border-t border-white/10 space-y-3">
+                    <button onclick="openPremiumModal()" id="premium-nav-btn-mobile" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 py-3 rounded-xl font-bold shadow-lg">
+                        <i class="fa-solid fa-crown"></i> Go Premium
+                    </button>
                     <button class="w-full bg-gradient-to-r from-accent to-secondary text-white py-3 rounded-xl font-semibold shadow-lg">
                         <i class="fa-solid fa-user mr-2"></i> Login / Sign Up
                     </button>
@@ -353,33 +449,33 @@
                 </div>
 
                 <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 animate-slide-up stagger-1">
-                    Master Your <br />
-                    <span class="text-gradient animate-float inline-block">WBJEE & JEE Mains</span>
+                    Master Every <br />
+                    <span class="text-gradient animate-float inline-block">Competitive Exam</span>
                 </h1>
                 <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-gray-400 animate-slide-up stagger-2">
-                    Premium mock tests designed specifically for Mathematics. Track your progress, identify weaknesses, and ace the exam with our AI-powered analytics.
+                    One platform, multiple exams. Choose WBJEE, JEE Mains, SLST & more — practice topic-wise mock tests, track your progress, and ace it with AI-powered analytics.
                 </p>
                 
                 <div class="mt-10 flex flex-wrap justify-center gap-4 animate-slide-up stagger-3">
-                    <a href="#topics" class="group px-8 py-4 rounded-full bg-gradient-to-r from-accent to-secondary text-white font-semibold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-1 flex items-center gap-2">
-                        <span>Start Practicing</span>
+                    <a href="#topics" onclick="backToExams()" class="group px-8 py-4 rounded-full bg-gradient-to-r from-accent to-secondary text-white font-semibold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-1 flex items-center gap-2">
+                        <span>Choose Your Exam</span>
                         <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </a>
-                    <a href="#how-it-works" class="px-8 py-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-semibold transition-all flex items-center gap-2">
-                        <i class="fa-solid fa-play"></i>
-                        <span>Watch Demo</span>
+                    <a href="#pricing" class="px-8 py-4 rounded-full bg-white/5 border border-amber-500/30 hover:bg-amber-500/10 text-white font-semibold transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-crown text-amber-400"></i>
+                        <span>Go Premium</span>
                     </a>
                 </div>
 
                 <!-- Stats -->
                 <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto animate-slide-up stagger-4">
                     <div class="glass-panel rounded-2xl p-6 text-center">
-                        <div class="text-3xl md:text-4xl font-bold text-white counter" data-target="500">0</div>
+                        <div class="text-3xl md:text-4xl font-bold text-white counter" data-target="900">0</div>
                         <div class="text-sm text-gray-400 mt-1">Mock Tests</div>
                     </div>
                     <div class="glass-panel rounded-2xl p-6 text-center">
-                        <div class="text-3xl md:text-4xl font-bold text-white counter" data-target="25">0</div>
-                        <div class="text-sm text-gray-400 mt-1">Topics</div>
+                        <div class="text-3xl md:text-4xl font-bold text-white counter" data-target="3">0</div>
+                        <div class="text-sm text-gray-400 mt-1">Exam Categories</div>
                     </div>
                     <div class="glass-panel rounded-2xl p-6 text-center">
                         <div class="text-3xl md:text-4xl font-bold text-white counter" data-target="10000">0</div>
@@ -405,18 +501,18 @@
             <div class="text-center mb-16">
                 <span class="text-accent font-semibold text-sm uppercase tracking-wider">Simple Process</span>
                 <h2 class="text-4xl md:text-5xl font-bold mt-4">How It <span class="text-gradient">Works</span></h2>
-                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Get started in 3 simple steps and begin your journey to exam success</p>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Get started in 4 simple steps and begin your journey to exam success</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-4 gap-6">
                 <!-- Step 1 -->
                 <div class="relative group">
                     <div class="glass-card rounded-3xl p-8 text-center card-shine">
                         <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-3xl font-bold text-white mb-6 group-hover:scale-110 transition-transform animate-pulse-glow">
                             1
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Choose Your Topic</h3>
-                        <p class="text-gray-400">Browse through 25+ mathematics topics covering the complete WBJEE & JEE syllabus</p>
+                        <h3 class="text-lg font-bold text-white mb-3">Pick Your Exam</h3>
+                        <p class="text-gray-400 text-sm">Choose from WBJEE, JEE Mains, SLST & more exam categories</p>
                     </div>
                     <div class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
                         <i class="fa-solid fa-chevron-right text-accent/50 text-2xl"></i>
@@ -426,11 +522,11 @@
                 <!-- Step 2 -->
                 <div class="relative group">
                     <div class="glass-card rounded-3xl p-8 text-center card-shine">
-                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-3xl font-bold text-white mb-6 group-hover:scale-110 transition-transform animate-pulse-glow" style="animation-delay: 0.5s;">
+                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-3xl font-bold text-white mb-6 group-hover:scale-110 transition-transform animate-pulse-glow" style="animation-delay: 0.3s;">
                             2
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Take Mock Tests</h3>
-                        <p class="text-gray-400">Practice with 20 mock tests per topic, designed to simulate real exam conditions</p>
+                        <h3 class="text-lg font-bold text-white mb-3">Choose Your Topic</h3>
+                        <p class="text-gray-400 text-sm">Browse topics covering the complete syllabus for that exam</p>
                     </div>
                     <div class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
                         <i class="fa-solid fa-chevron-right text-accent/50 text-2xl"></i>
@@ -438,14 +534,129 @@
                 </div>
 
                 <!-- Step 3 -->
-                <div class="group">
+                <div class="relative group">
                     <div class="glass-card rounded-3xl p-8 text-center card-shine">
-                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-3xl font-bold text-white mb-6 group-hover:scale-110 transition-transform animate-pulse-glow" style="animation-delay: 1s;">
+                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-3xl font-bold text-white mb-6 group-hover:scale-110 transition-transform animate-pulse-glow" style="animation-delay: 0.6s;">
                             3
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Track & Improve</h3>
-                        <p class="text-gray-400">Review detailed analytics, identify weak areas, and watch your scores improve</p>
+                        <h3 class="text-lg font-bold text-white mb-3">Take Mock Tests</h3>
+                        <p class="text-gray-400 text-sm">Practice with 20 mock tests per topic under real exam conditions</p>
                     </div>
+                    <div class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
+                        <i class="fa-solid fa-chevron-right text-accent/50 text-2xl"></i>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="group">
+                    <div class="glass-card rounded-3xl p-8 text-center card-shine">
+                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-3xl font-bold text-white mb-6 group-hover:scale-110 transition-transform animate-pulse-glow" style="animation-delay: 0.9s;">
+                            4
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-3">Track & Improve</h3>
+                        <p class="text-gray-400 text-sm">Review analytics, identify weak areas, and watch your scores improve</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRICING / PREMIUM SECTION -->
+    <div id="pricing" class="py-20 relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14">
+                <span class="text-amber-400 font-semibold text-sm uppercase tracking-wider"><i class="fa-solid fa-crown mr-1"></i> Unlock Everything</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-4">Go <span class="text-gold-gradient">Premium</span></h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Get unlimited access to all mock tests across every exam category, deep analytics, and exclusive premium-only topics</p>
+
+                <!-- Billing Toggle -->
+                <div class="inline-flex items-center gap-4 mt-8 glass-panel px-4 py-2.5 rounded-full">
+                    <span class="text-sm font-medium" id="label-monthly">Monthly</span>
+                    <button onclick="toggleBillingCycle()" class="relative w-14 h-7 rounded-full bg-gradient-to-r from-accent to-secondary flex items-center px-1" id="billing-switch">
+                        <span class="billing-toggle-dot w-5 h-5 rounded-full bg-white shadow-md" id="billing-dot"></span>
+                    </button>
+                    <span class="text-sm font-medium text-gray-400" id="label-yearly">Yearly <span class="text-green-400 text-xs">(Save 50%)</span></span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 items-stretch">
+                <!-- Free Plan -->
+                <div class="glass-card rounded-3xl p-8 flex flex-col">
+                    <div class="mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-xl text-gray-400 mb-4">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">Free</h3>
+                        <p class="text-gray-400 text-sm">Perfect to get started</p>
+                    </div>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-white">₹0</span>
+                        <span class="text-gray-400 text-sm">/forever</span>
+                    </div>
+                    <ul class="space-y-3 text-sm text-gray-300 flex-1 mb-8">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-green-400"></i> 5 free tests per topic</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-green-400"></i> Access to non-premium topics</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-green-400"></i> Basic performance tracking</li>
+                        <li class="flex items-center gap-3 text-gray-500"><i class="fa-solid fa-xmark text-gray-600"></i> Premium-only topics</li>
+                        <li class="flex items-center gap-3 text-gray-500"><i class="fa-solid fa-xmark text-gray-600"></i> Detailed analytics & PDF solutions</li>
+                        <li class="flex items-center gap-3 text-gray-500"><i class="fa-solid fa-xmark text-gray-600"></i> Ad-free experience</li>
+                    </ul>
+                    <button class="w-full py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition-all">
+                        Current Plan
+                    </button>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="pricing-card-popular rounded-3xl p-8 flex flex-col relative md:scale-105 shadow-2xl shadow-amber-500/10">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                        <i class="fa-solid fa-star"></i> Most Popular
+                    </div>
+                    <div class="mb-6 mt-2">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400/20 to-yellow-500/20 border border-amber-500/30 flex items-center justify-center text-xl text-amber-400 mb-4">
+                            <i class="fa-solid fa-crown"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">Premium</h3>
+                        <p class="text-gray-400 text-sm">For serious aspirants — all exams included</p>
+                    </div>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-gold-gradient" id="premium-price">₹199</span>
+                        <span class="text-gray-400 text-sm" id="premium-period">/month</span>
+                    </div>
+                    <ul class="space-y-3 text-sm text-gray-200 flex-1 mb-8">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-amber-400"></i> <strong>Unlimited</strong> tests across all exam categories</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-amber-400"></i> All premium-only topics unlocked</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-amber-400"></i> AI-powered performance analytics</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-amber-400"></i> Downloadable PDF solutions</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-amber-400"></i> Ad-free, distraction-free UI</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-amber-400"></i> Priority doubt support</li>
+                    </ul>
+                    <button onclick="openPremiumModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 font-bold hover:shadow-lg hover:shadow-amber-500/30 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-crown"></i> Upgrade Now
+                    </button>
+                </div>
+
+                <!-- Institute Plan -->
+                <div class="glass-card rounded-3xl p-8 flex flex-col">
+                    <div class="mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-xl text-indigo-400 mb-4">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">Institute</h3>
+                        <p class="text-gray-400 text-sm">For coaching centers & schools</p>
+                    </div>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-white">Custom</span>
+                    </div>
+                    <ul class="space-y-3 text-sm text-gray-300 flex-1 mb-8">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-green-400"></i> Everything in Premium</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-green-400"></i> Bulk student accounts</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-green-400"></i> Teacher dashboard</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-green-400"></i> Custom test creation</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-green-400"></i> Dedicated account manager</li>
+                    </ul>
+                    <button class="w-full py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition-all">
+                        Contact Sales
+                    </button>
                 </div>
             </div>
         </div>
@@ -481,13 +692,13 @@
             </div>
 
             <!-- Stats Widget -->
-            <div class="glass-panel rounded-3xl p-6 bg-gradient-to-br from-indigo-900/30 to-transparent">
+            <div class="glass-panel rounded-3xl p-6 bg-gradient-to-br from-indigo-900/30 to-transparent relative overflow-hidden">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-lg font-semibold text-white flex items-center gap-2">
                         <i class="fa-solid fa-chart-line text-accent"></i>
                         Your Progress
                     </h3>
-                    <button class="text-xs text-accent hover:underline">View All</button>
+                    <span id="member-status-badge" class="text-xs bg-white/5 text-gray-400 px-3 py-1 rounded-full border border-white/10">Free Member</span>
                 </div>
 
                 <!-- Progress Ring -->
@@ -502,7 +713,7 @@
                         </div>
                     </div>
                     <div>
-                        <div class="text-3xl font-bold text-white"><span id="completed-tests">0</span>/500</div>
+                        <div class="text-3xl font-bold text-white"><span id="completed-tests">0</span>/<span id="total-tests-count">900</span></div>
                         <div class="text-sm text-gray-400">Tests Completed</div>
                     </div>
                 </div>
@@ -511,7 +722,7 @@
                     <div>
                         <div class="flex justify-between text-sm mb-2">
                             <span class="text-gray-400">Topics Covered</span>
-                            <span class="text-white font-medium" id="topics-covered">0/25</span>
+                            <span class="text-white font-medium" id="topics-covered">0/45</span>
                         </div>
                         <div class="w-full bg-gray-700/50 rounded-full h-2">
                             <div class="bg-gradient-to-r from-accent to-secondary h-2 rounded-full transition-all duration-500" style="width: 0%" id="topics-progress"></div>
@@ -528,7 +739,20 @@
                     </div>
                 </div>
 
-                <button class="w-full mt-6 py-3 rounded-xl bg-accent/10 border border-accent/30 text-accent font-medium hover:bg-accent/20 transition-all flex items-center justify-center gap-2">
+                <!-- AI Analytics Premium Teaser -->
+                <div class="mt-5 p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/20 relative overflow-hidden" id="analytics-teaser">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                        <span class="text-sm font-semibold text-white">AI Weakness Analysis</span>
+                        <span class="ml-auto text-[10px] bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 px-2 py-0.5 rounded-full font-bold">PRO</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-3">Get chapter-wise weak area detection powered by AI — only for Premium members.</p>
+                    <button onclick="openPremiumModal()" class="w-full py-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-semibold hover:bg-amber-500/30 transition-all">
+                        Unlock with Premium
+                    </button>
+                </div>
+
+                <button id="progress-login-btn" class="w-full mt-4 py-3 rounded-xl bg-accent/10 border border-accent/30 text-accent font-medium hover:bg-accent/20 transition-all flex items-center justify-center gap-2">
                     <i class="fa-solid fa-right-to-bracket"></i>
                     Login to Save Progress
                 </button>
@@ -550,7 +774,8 @@
                         <i class="fa-solid fa-bookmark text-2xl text-orange-400 mb-2 group-hover:scale-110 transition-transform"></i>
                         <div class="text-sm font-medium text-white">Bookmarks</div>
                     </button>
-                    <button class="p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/20 hover:border-purple-500/40 transition-all text-center group">
+                    <button onclick="openPremiumModal()" class="relative p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/20 hover:border-purple-500/40 transition-all text-center group">
+                        <span class="absolute top-1.5 right-1.5 text-[9px] bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 px-1.5 py-0.5 rounded-full font-bold">PRO</span>
                         <i class="fa-solid fa-trophy text-2xl text-purple-400 mb-2 group-hover:scale-110 transition-transform"></i>
                         <div class="text-sm font-medium text-white">Leaderboard</div>
                     </button>
@@ -558,57 +783,86 @@
             </div>
         </div>
 
-        <!-- Right Column: Topics & Tests -->
+        <!-- Right Column: Exams -> Topics & Tests -->
         <div class="lg:w-2/3" id="topics">
-            
-            <!-- Exam Toggle & Search -->
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-                <div class="glass-panel p-1.5 rounded-2xl inline-flex">
-                    <button onclick="switchCategory('wbjee')" id="btn-wbjee" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all bg-accent text-white shadow-lg">
-                        <i class="fa-solid fa-calculator mr-2"></i>WBJEE Maths
-                    </button>
-                    <button onclick="switchCategory('jee')" id="btn-jee" class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all text-gray-400 hover:text-white">
-                        <i class="fa-solid fa-atom mr-2"></i>JEE Mains
-                    </button>
+
+            <!-- ============ VIEW 1: EXAM SELECTION ============ -->
+            <div id="exam-selection-view" class="animate-fade-in">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold text-white">Choose Your Exam</h2>
+                        <p class="text-gray-400 mt-1" id="exam-count-text">Select an exam category to view mock test topics</p>
+                    </div>
+                    <div class="relative w-full sm:w-64">
+                        <input type="text" id="exam-search" placeholder="Search exams..." 
+                            class="w-full px-4 py-2.5 pl-10 rounded-xl bg-white/5 border border-white/10 focus:border-accent/50 focus:outline-none text-white placeholder-gray-500 text-sm search-input transition-all"
+                            oninput="filterExams(this.value)">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                    </div>
                 </div>
 
-                <!-- Search -->
-                <div class="relative w-full sm:w-64">
-                    <input type="text" id="topic-search" placeholder="Search topics..." 
-                        class="w-full px-4 py-2.5 pl-10 rounded-xl bg-white/5 border border-white/10 focus:border-accent/50 focus:outline-none text-white placeholder-gray-500 text-sm search-input transition-all"
-                        oninput="filterTopics(this.value)">
-                    <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5" id="exam-grid">
+                    <!-- Javascript will populate this -->
+                </div>
+
+                <div id="exam-empty-state" class="hidden text-center py-16">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-white/5 flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-search text-3xl text-gray-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">No exams found</h3>
+                    <p class="text-gray-400">Try a different search term</p>
                 </div>
             </div>
 
-            <!-- Header for Grid -->
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h2 class="text-3xl font-bold text-white" id="section-title">Mathematics Topics</h2>
-                    <p class="text-gray-400 mt-1" id="topic-count">25 topics available</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="setViewMode('grid')" id="view-grid" class="w-10 h-10 rounded-lg bg-accent/20 text-accent flex items-center justify-center transition-all">
-                        <i class="fa-solid fa-grid-2"></i>
-                    </button>
-                    <button onclick="setViewMode('list')" id="view-list" class="w-10 h-10 rounded-lg bg-white/5 text-gray-400 hover:text-white flex items-center justify-center transition-all">
-                        <i class="fa-solid fa-list"></i>
-                    </button>
-                </div>
-            </div>
+            <!-- ============ VIEW 2: TOPIC DETAIL VIEW ============ -->
+            <div id="topic-detail-view" class="view-hidden animate-fade-in">
+                
+                <!-- Breadcrumb -->
+                <button onclick="backToExams()" class="flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-5 transition-all group">
+                    <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Back to All Exams
+                </button>
 
-            <!-- Topic Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="topic-grid">
-                <!-- Javascript will populate this -->
-            </div>
-
-            <!-- Empty State -->
-            <div id="empty-state" class="hidden text-center py-16">
-                <div class="w-20 h-20 mx-auto rounded-full bg-white/5 flex items-center justify-center mb-6">
-                    <i class="fa-solid fa-search text-3xl text-gray-600"></i>
+                <!-- Exam Header -->
+                <div class="glass-panel rounded-2xl p-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center gap-5" id="exam-header">
+                    <!-- populated by JS -->
                 </div>
-                <h3 class="text-xl font-semibold text-white mb-2">No topics found</h3>
-                <p class="text-gray-400">Try adjusting your search terms</p>
+
+                <!-- Search + View Toggle -->
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+                    <div class="relative w-full sm:w-64 order-2 sm:order-1">
+                        <input type="text" id="topic-search" placeholder="Search topics..." 
+                            class="w-full px-4 py-2.5 pl-10 rounded-xl bg-white/5 border border-white/10 focus:border-accent/50 focus:outline-none text-white placeholder-gray-500 text-sm search-input transition-all"
+                            oninput="filterTopics(this.value)">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                    </div>
+                    <div class="flex items-center gap-2 order-1 sm:order-2">
+                        <button onclick="setViewMode('grid')" id="view-grid" class="w-10 h-10 rounded-lg bg-accent/20 text-accent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-grid-2"></i>
+                        </button>
+                        <button onclick="setViewMode('list')" id="view-list" class="w-10 h-10 rounded-lg bg-white/5 text-gray-400 hover:text-white flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Header for Grid -->
+                <div class="flex items-center justify-between mb-6">
+                    <p class="text-gray-400" id="topic-count">25 topics available</p>
+                </div>
+
+                <!-- Topic Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="topic-grid">
+                    <!-- Javascript will populate this -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden text-center py-16">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-white/5 flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-search text-3xl text-gray-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">No topics found</h3>
+                    <p class="text-gray-400">Try adjusting your search terms</p>
+                </div>
             </div>
         </div>
     </div>
@@ -639,11 +893,11 @@
                     <h2 class="text-3xl md:text-5xl font-bold mb-6">Ready to <span class="text-gradient">Ace Your Exam?</span></h2>
                     <p class="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">Join over 10,000+ students who are already preparing smarter with ExamPrime's comprehensive mock tests.</p>
                     <div class="flex flex-wrap justify-center gap-4">
-                        <a href="#topics" class="px-8 py-4 rounded-full bg-gradient-to-r from-accent to-secondary text-white font-semibold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-1">
+                        <a href="#topics" onclick="backToExams()" class="px-8 py-4 rounded-full bg-gradient-to-r from-accent to-secondary text-white font-semibold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-1">
                             Start Free Trial
                         </a>
-                        <a href="#" class="px-8 py-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-semibold transition-all">
-                            View Pricing
+                        <a href="#pricing" class="px-8 py-4 rounded-full bg-white/5 border border-amber-500/30 hover:bg-amber-500/10 text-white font-semibold transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-crown text-amber-400"></i> View Pricing
                         </a>
                     </div>
                 </div>
@@ -667,7 +921,7 @@
                         </div>
                         <span class="font-bold text-2xl">Exam<span class="text-gradient">Prime</span></span>
                     </div>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Helping students achieve their engineering dreams with precision-crafted mock tests and AI-powered analytics.</p>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Helping students achieve their engineering, medical, and academic career dreams with precision-crafted mock tests and AI-powered analytics.</p>
                     <div class="flex gap-4">
                         <a href="#" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all">
                             <i class="fa-brands fa-facebook-f"></i>
@@ -689,9 +943,10 @@
                     <h4 class="text-lg font-semibold text-white mb-6">Quick Links</h4>
                     <ul class="space-y-3 text-sm">
                         <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Home</a></li>
-                        <li><a href="#topics" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Mock Tests</a></li>
+                        <li><a href="#topics" onclick="backToExams()" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Mock Tests</a></li>
+                        <li><a href="#pricing" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Pricing</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> WBJEE Syllabus</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> JEE Mains Pattern</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> SLST Syllabus</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs"></i> Previous Year Papers</a></li>
                     </ul>
                 </div>
@@ -762,6 +1017,9 @@
         <i class="fa-solid fa-arrow-up"></i>
     </button>
 
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-24 right-8 z-[110] hidden"></div>
+
     <!-- TEST MODAL -->
     <div id="test-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
         <div class="modal-content bg-gray-900 border border-white/10 w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
@@ -769,7 +1027,7 @@
             <!-- Modal Header -->
             <div class="p-6 border-b border-white/10 bg-gradient-to-r from-gray-800/50 to-gray-900/50 flex justify-between items-center">
                 <div>
-                    <h3 class="text-2xl font-bold text-white" id="modal-title">Topic Name</h3>
+                    <h3 class="text-2xl font-bold text-white flex items-center gap-2" id="modal-title">Topic Name</h3>
                     <p class="text-gray-400 text-sm mt-1" id="modal-subtitle">Select a mock test to begin</p>
                 </div>
                 <button onclick="closeModal()" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 hover:rotate-90 flex items-center justify-center transition-all duration-300">
@@ -778,12 +1036,17 @@
             </div>
 
             <!-- Modal Filter -->
-            <div class="px-6 py-4 bg-gray-800/30 border-b border-white/5 flex flex-wrap gap-3 items-center">
-                <span class="text-sm text-gray-400">Filter:</span>
-                <button onclick="filterTests('all')" class="test-filter active px-4 py-1.5 rounded-full text-xs font-medium bg-accent text-white transition-all" data-filter="all">All</button>
-                <button onclick="filterTests('easy')" class="test-filter px-4 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-400 hover:text-white transition-all" data-filter="easy">Easy</button>
-                <button onclick="filterTests('medium')" class="test-filter px-4 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-400 hover:text-white transition-all" data-filter="medium">Medium</button>
-                <button onclick="filterTests('hard')" class="test-filter px-4 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-400 hover:text-white transition-all" data-filter="hard">Hard</button>
+            <div class="px-6 py-4 bg-gray-800/30 border-b border-white/5 flex flex-wrap gap-3 items-center justify-between">
+                <div class="flex flex-wrap gap-3 items-center">
+                    <span class="text-sm text-gray-400">Filter:</span>
+                    <button onclick="filterTests('all')" class="test-filter active px-4 py-1.5 rounded-full text-xs font-medium bg-accent text-white transition-all" data-filter="all">All</button>
+                    <button onclick="filterTests('easy')" class="test-filter px-4 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-400 hover:text-white transition-all" data-filter="easy">Easy</button>
+                    <button onclick="filterTests('medium')" class="test-filter px-4 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-400 hover:text-white transition-all" data-filter="medium">Medium</button>
+                    <button onclick="filterTests('hard')" class="test-filter px-4 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-400 hover:text-white transition-all" data-filter="hard">Hard</button>
+                </div>
+                <div id="modal-premium-hint" class="text-xs text-amber-400 flex items-center gap-1.5 hidden">
+                    <i class="fa-solid fa-lock"></i> <span>Locked tests require Premium</span>
+                </div>
             </div>
 
             <!-- Modal Body (Scrollable List) -->
@@ -810,7 +1073,7 @@
         <div class="modal-content bg-gray-900 border border-white/10 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden">
             <div class="p-4 border-b border-white/10 flex items-center gap-4">
                 <i class="fa-solid fa-search text-gray-400 text-xl"></i>
-                <input type="text" id="global-search" placeholder="Search topics, tests, or type a question..." 
+                <input type="text" id="global-search" placeholder="Search exams, topics or tests..." 
                     class="flex-1 bg-transparent text-white text-lg focus:outline-none placeholder-gray-500"
                     oninput="globalSearch(this.value)">
                 <button onclick="closeSearchModal()" class="text-gray-400 hover:text-white">
@@ -826,13 +1089,60 @@
         </div>
     </div>
 
+    <!-- PREMIUM UPGRADE MODAL -->
+    <div id="premium-modal" class="modal fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+        <div class="modal-content bg-gray-900 border border-amber-500/20 w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden">
+            <!-- Header -->
+            <div class="p-8 pb-6 text-center bg-gradient-to-b from-amber-500/10 to-transparent relative">
+                <button onclick="closePremiumModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center text-3xl text-gray-900 mb-4 premium-glow">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2" id="premium-modal-title">Unlock Premium Access</h3>
+                <p class="text-gray-400 text-sm" id="premium-modal-subtitle">Get unlimited tests, exclusive topics & AI analytics</p>
+            </div>
+
+            <!-- Body -->
+            <div class="px-8 pb-8" id="premium-modal-body">
+                <!-- Plan Toggle -->
+                <div class="flex items-center justify-center gap-4 mb-6">
+                    <button onclick="setModalPlan('monthly')" id="plan-btn-monthly" class="flex-1 p-4 rounded-xl border-2 border-amber-500 bg-amber-500/10 text-center transition-all">
+                        <div class="text-xs text-gray-400 mb-1">Monthly</div>
+                        <div class="text-xl font-bold text-white">₹199</div>
+                    </button>
+                    <button onclick="setModalPlan('yearly')" id="plan-btn-yearly" class="flex-1 p-4 rounded-xl border-2 border-white/10 hover:border-amber-500/50 text-center transition-all relative">
+                        <span class="absolute -top-2.5 right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">SAVE 50%</span>
+                        <div class="text-xs text-gray-400 mb-1">Yearly</div>
+                        <div class="text-xl font-bold text-white">₹1199</div>
+                    </button>
+                </div>
+
+                <ul class="space-y-2.5 text-sm text-gray-300 mb-6">
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-amber-400"></i> Unlimited access across all exam categories</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-amber-400"></i> All premium-locked topics unlocked</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-amber-400"></i> AI-powered weak area analysis</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-amber-400"></i> Downloadable PDF solutions</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-amber-400"></i> Ad-free experience</li>
+                </ul>
+
+                <button onclick="activatePremium()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 font-bold hover:shadow-lg hover:shadow-amber-500/40 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-crown"></i> <span id="activate-btn-text">Activate Premium — ₹199/mo</span>
+                </button>
+                <p class="text-center text-xs text-gray-500 mt-4"><i class="fa-solid fa-shield-halved mr-1"></i> Demo mode — no real payment required</p>
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // --- DATA CONFIGURATION ---
         
         // 1. Notices Data
         const notices = [
-            { date: "Jan 15", text: "🎉 New Feature: AI-powered performance analytics now available!", important: true, new: true },
+            { date: "Jan 15", text: "🎉 New Feature: AI-powered performance analytics now available for Premium members!", important: true, new: true },
+            { date: "Jan 13", text: "🎓 SLST Mathematics exam category is now live with 10 topics!", important: true, new: true },
             { date: "Jan 12", text: "Added 20 new tests for Conic Sections with detailed solutions.", important: true, new: true },
             { date: "Jan 10", text: "Full WBJEE Mathematics syllabus updated for 2026 pattern.", important: true },
             { date: "Jan 08", text: "Mobile app launching soon! Pre-register now for early access.", important: false },
@@ -841,69 +1151,292 @@
             { date: "Dec 28", text: "Detailed solutions for all Calculus tests now available.", important: false },
         ];
 
-        // 2. Topics Data (WBJEE Math - FULL UPDATE)
+        // 2. Topics Data — WBJEE Math
         const wbjeeMathTopics = [
-            { id: 'ap-gp-hp', name: 'A.P., G.P., H.P.', icon: 'fa-arrow-down-1-9', desc: 'Sequences & Series', difficulty: 'medium', questions: 400 },
-            { id: 'logarithms', name: 'Logarithms', icon: 'fa-chart-simple', desc: 'Properties & Equations', difficulty: 'easy', questions: 400 },
-            { id: 'complex-numbers', name: 'Complex Numbers', icon: 'fa-square-root-variable', desc: 'Argand Plane, Roots', difficulty: 'hard', questions: 400 },
-            { id: 'quadratic', name: 'Quadratic Equations', icon: 'fa-superscript', desc: 'Roots, Coefficients', difficulty: 'medium', questions: 400 },
-            { id: 'permutations', name: 'Permutations & Combinations', icon: 'fa-list-ol', desc: 'Counting Principles', difficulty: 'hard', questions: 400 },
-            { id: 'induction', name: 'Mathematical Induction', icon: 'fa-stairs', desc: 'Proof Techniques', difficulty: 'medium', questions: 400 },
-            { id: 'binomial', name: 'Binomial Theorem', icon: 'fa-expand', desc: 'Expansion, Terms', difficulty: 'medium', questions: 400 },
-            { id: 'matrices', name: 'Matrices & Determinants', icon: 'fa-table-cells', desc: 'Operations, Inverse', difficulty: 'hard', questions: 400 },
-            { id: 'sets-functions', name: 'Sets, Relations & Functions', icon: 'fa-code-branch', desc: 'Types, Domain, Range', difficulty: 'medium', questions: 400 },
-            { id: 'stats-prob', name: 'Statistics & Probability', icon: 'fa-chart-pie', desc: 'Mean, Variance, Bayes', difficulty: 'medium', questions: 400 },
-            { id: 'trig-functions', name: 'Trigonometric Functions', icon: 'fa-wave-square', desc: 'Ratios, Identities', difficulty: 'medium', questions: 400 },
-            { id: 'sot', name: 'Solution of Triangles', icon: 'fa-ruler-combined', desc: 'Sine/Cosine Rules', difficulty: 'medium', questions: 400 },
-            { id: 'inverse-trig', name: 'Inverse Trig. Functions', icon: 'fa-rotate-left', desc: 'Principal Values', difficulty: 'hard', questions: 400 },
-            { id: 'straight-lines', name: 'Straight Lines', icon: 'fa-minus', desc: 'Slope, Forms', difficulty: 'easy', questions: 400 },
-            { id: 'circles', name: 'Circles', icon: 'fa-circle-notch', desc: 'Tangents, Normals', difficulty: 'medium', questions: 400 },
-            { id: 'conics', name: 'Conic Sections', icon: 'fa-bullseye', desc: 'Parabola, Ellipse, Hyperbola', difficulty: 'hard', questions: 400 },
-            { id: 'limits', name: 'Limits & Continuity', icon: 'fa-infinity', desc: "L'Hospital, Continuity", difficulty: 'medium', questions: 400 },
-            { id: 'derivatives', name: 'Derivatives', icon: 'fa-microscope', desc: 'Differentiation Rules', difficulty: 'medium', questions: 400 },
-            { id: 'aod', name: 'Application of Derivatives', icon: 'fa-chart-line', desc: 'Maxima, Minima, Tangents', difficulty: 'hard', questions: 400 },
-            { id: 'indefinite', name: 'Indefinite Integrals', icon: 'fa-bezier-curve', desc: 'Integration Methods', difficulty: 'hard', questions: 400 },
-            { id: 'definite', name: 'Definite Integrals', icon: 'fa-draw-polygon', desc: 'Properties, Area', difficulty: 'medium', questions: 400 },
-            { id: 'aoi', name: 'Application of Integrals', icon: 'fa-shapes', desc: 'Area Under Curves', difficulty: 'medium', questions: 400 },
-            { id: 'diff-eqn', name: 'Differential Equations', icon: 'fa-calculator', desc: 'Order, Degree, Solution', difficulty: 'hard', questions: 400 },
-            { id: '3d-geo', name: '3D Geometry', icon: 'fa-cube', desc: 'Lines, Planes in 3D', difficulty: 'hard', questions: 400 },
-            { id: 'vectors', name: 'Vector Algebra', icon: 'fa-arrows-to-dot', desc: 'Dot/Cross Product', difficulty: 'medium', questions: 400 },
+            { id: 'ap-gp-hp', name: 'A.P., G.P., H.P.', icon: 'fa-arrow-down-1-9', desc: 'Sequences & Series', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'logarithms', name: 'Logarithms', icon: 'fa-chart-simple', desc: 'Properties & Equations', difficulty: 'easy', questions: 400, premium: false },
+            { id: 'complex-numbers', name: 'Complex Numbers', icon: 'fa-square-root-variable', desc: 'Argand Plane, Roots', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'quadratic', name: 'Quadratic Equations', icon: 'fa-superscript', desc: 'Roots, Coefficients', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'permutations', name: 'Permutations & Combinations', icon: 'fa-list-ol', desc: 'Counting Principles', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'induction', name: 'Mathematical Induction', icon: 'fa-stairs', desc: 'Proof Techniques', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'binomial', name: 'Binomial Theorem', icon: 'fa-expand', desc: 'Expansion, Terms', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'matrices', name: 'Matrices & Determinants', icon: 'fa-table-cells', desc: 'Operations, Inverse', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'sets-functions', name: 'Sets, Relations & Functions', icon: 'fa-code-branch', desc: 'Types, Domain, Range', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'stats-prob', name: 'Statistics & Probability', icon: 'fa-chart-pie', desc: 'Mean, Variance, Bayes', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'trig-functions', name: 'Trigonometric Functions', icon: 'fa-wave-square', desc: 'Ratios, Identities', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'sot', name: 'Solution of Triangles', icon: 'fa-ruler-combined', desc: 'Sine/Cosine Rules', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'inverse-trig', name: 'Inverse Trig. Functions', icon: 'fa-rotate-left', desc: 'Principal Values', difficulty: 'hard', questions: 400, premium: false },
+            { id: 'straight-lines', name: 'Straight Lines', icon: 'fa-minus', desc: 'Slope, Forms', difficulty: 'easy', questions: 400, premium: false },
+            { id: 'circles', name: 'Circles', icon: 'fa-circle-notch', desc: 'Tangents, Normals', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'conics', name: 'Conic Sections', icon: 'fa-bullseye', desc: 'Parabola, Ellipse, Hyperbola', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'limits', name: 'Limits & Continuity', icon: 'fa-infinity', desc: "L'Hospital, Continuity", difficulty: 'medium', questions: 400, premium: false },
+            { id: 'derivatives', name: 'Derivatives', icon: 'fa-microscope', desc: 'Differentiation Rules', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'aod', name: 'Application of Derivatives', icon: 'fa-chart-line', desc: 'Maxima, Minima, Tangents', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'indefinite', name: 'Indefinite Integrals', icon: 'fa-bezier-curve', desc: 'Integration Methods', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'definite', name: 'Definite Integrals', icon: 'fa-draw-polygon', desc: 'Properties, Area', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'aoi', name: 'Application of Integrals', icon: 'fa-shapes', desc: 'Area Under Curves', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'diff-eqn', name: 'Differential Equations', icon: 'fa-calculator', desc: 'Order, Degree, Solution', difficulty: 'hard', questions: 400, premium: true },
+            { id: '3d-geo', name: '3D Geometry', icon: 'fa-cube', desc: 'Lines, Planes in 3D', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'vectors', name: 'Vector Algebra', icon: 'fa-arrows-to-dot', desc: 'Dot/Cross Product', difficulty: 'medium', questions: 400, premium: false },
         ];
 
+        // 3. Topics Data — JEE Mains
         const jeeTopics = [
-            { id: 'jee-physics-mechanics', name: 'Mechanics', icon: 'fa-gears', desc: 'Laws of Motion, Gravitation', difficulty: 'hard', questions: 400 },
-            { id: 'jee-physics-thermo', name: 'Thermodynamics', icon: 'fa-temperature-high', desc: 'Heat, Entropy, Laws', difficulty: 'medium', questions: 400 },
-            { id: 'jee-physics-electro', name: 'Electromagnetism', icon: 'fa-bolt', desc: 'Electric & Magnetic Fields', difficulty: 'hard', questions: 400 },
-            { id: 'jee-physics-optics', name: 'Optics', icon: 'fa-glasses', desc: 'Light, Mirrors, Lenses', difficulty: 'medium', questions: 400 },
-            { id: 'jee-physics-modern', name: 'Modern Physics', icon: 'fa-atom', desc: 'Quantum, Nuclear, Relativity', difficulty: 'hard', questions: 400 },
-            { id: 'jee-chem-organic', name: 'Organic Chemistry', icon: 'fa-flask-vial', desc: 'Hydrocarbons, Reactions', difficulty: 'hard', questions: 400 },
-            { id: 'jee-chem-inorganic', name: 'Inorganic Chemistry', icon: 'fa-vial', desc: 'Periodic Table, Bonding', difficulty: 'medium', questions: 400 },
-            { id: 'jee-chem-physical', name: 'Physical Chemistry', icon: 'fa-flask', desc: 'Equilibrium, Kinetics', difficulty: 'hard', questions: 400 },
-            { id: 'jee-math-algebra', name: 'Algebra', icon: 'fa-superscript', desc: 'Complete JEE Algebra', difficulty: 'medium', questions: 400 },
-            { id: 'jee-math-calculus', name: 'Calculus', icon: 'fa-chart-line', desc: 'Differential & Integral', difficulty: 'hard', questions: 400 },
-            { id: 'jee-math-coordinate', name: 'Coordinate Geometry', icon: 'fa-chart-area', desc: '2D & 3D Geometry', difficulty: 'medium', questions: 400 },
-            { id: 'jee-math-vectors', name: 'Vectors & 3D', icon: 'fa-cube', desc: 'Vectors, 3D Space', difficulty: 'medium', questions: 400 },
+            { id: 'jee-physics-mechanics', name: 'Mechanics', icon: 'fa-gears', desc: 'Laws of Motion, Gravitation', difficulty: 'hard', questions: 400, premium: false },
+            { id: 'jee-physics-thermo', name: 'Thermodynamics', icon: 'fa-temperature-high', desc: 'Heat, Entropy, Laws', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'jee-physics-electro', name: 'Electromagnetism', icon: 'fa-bolt', desc: 'Electric & Magnetic Fields', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'jee-physics-optics', name: 'Optics', icon: 'fa-glasses', desc: 'Light, Mirrors, Lenses', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'jee-physics-modern', name: 'Modern Physics', icon: 'fa-atom', desc: 'Quantum, Nuclear, Relativity', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'jee-chem-organic', name: 'Organic Chemistry', icon: 'fa-flask-vial', desc: 'Hydrocarbons, Reactions', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'jee-chem-inorganic', name: 'Inorganic Chemistry', icon: 'fa-vial', desc: 'Periodic Table, Bonding', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'jee-chem-physical', name: 'Physical Chemistry', icon: 'fa-flask', desc: 'Equilibrium, Kinetics', difficulty: 'hard', questions: 400, premium: false },
+            { id: 'jee-math-algebra', name: 'Algebra', icon: 'fa-superscript', desc: 'Complete JEE Algebra', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'jee-math-calculus', name: 'Calculus', icon: 'fa-chart-line', desc: 'Differential & Integral', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'jee-math-coordinate', name: 'Coordinate Geometry', icon: 'fa-chart-area', desc: '2D & 3D Geometry', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'jee-math-vectors', name: 'Vectors & 3D', icon: 'fa-cube', desc: 'Vectors, 3D Space', difficulty: 'medium', questions: 400, premium: false },
+        ];
+
+        // 4. Topics Data — SLST Mathematics (WB School Service Commission)
+        const slstMathTopics = [
+            { id: 'slst-abstract-algebra', name: 'Abstract Algebra', icon: 'fa-shapes', desc: 'Groups, Rings, Fields', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'slst-real-analysis', name: 'Real Analysis', icon: 'fa-magnifying-glass-chart', desc: 'Sequences, Series, Continuity', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'slst-complex-analysis', name: 'Complex Analysis', icon: 'fa-square-root-variable', desc: 'Analytic Functions, Contours', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'slst-linear-algebra', name: 'Linear Algebra', icon: 'fa-table-cells', desc: 'Vector Spaces, Eigenvalues', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'slst-diff-eqn', name: 'Differential Equations', icon: 'fa-calculator', desc: 'ODE & PDE Basics', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'slst-vector-calculus', name: 'Vector Calculus', icon: 'fa-arrows-to-dot', desc: 'Gradient, Divergence, Curl', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'slst-mechanics', name: 'Statics & Dynamics', icon: 'fa-gears', desc: 'Classical Mechanics', difficulty: 'hard', questions: 400, premium: true },
+            { id: 'slst-numerical', name: 'Numerical Analysis', icon: 'fa-chart-line', desc: 'Approximation Methods', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'slst-probability', name: 'Probability & Statistics', icon: 'fa-chart-pie', desc: 'Distributions, Estimation', difficulty: 'medium', questions: 400, premium: false },
+            { id: 'slst-number-theory', name: 'Number Theory', icon: 'fa-hashtag', desc: 'Divisibility, Congruences', difficulty: 'easy', questions: 400, premium: false },
+        ];
+
+        // 5. Exam Categories (shown on Home Page)
+        const examCategories = [
+            {
+                id: 'wbjee-math',
+                examName: 'WBJEE Mathematics',
+                tag: 'Engineering Entrance',
+                icon: 'fa-calculator',
+                iconGradient: 'from-accent to-secondary',
+                glowColor: '#8b5cf6',
+                desc: 'Complete mathematics syllabus for West Bengal Joint Entrance Exam',
+                topics: wbjeeMathTopics,
+                badge: 'popular'
+            },
+            {
+                id: 'jee-mains',
+                examName: 'JEE Mains',
+                tag: 'National Engineering Entrance',
+                icon: 'fa-atom',
+                iconGradient: 'from-blue-500 to-indigo-600',
+                glowColor: '#3b82f6',
+                desc: 'Physics, Chemistry & Mathematics — full JEE Mains preparation',
+                topics: jeeTopics,
+                badge: null
+            },
+            {
+                id: 'slst-math',
+                examName: 'SLST Mathematics',
+                tag: 'WB School Service Commission',
+                icon: 'fa-chalkboard-user',
+                iconGradient: 'from-emerald-500 to-teal-600',
+                glowColor: '#10b981',
+                desc: 'Graduate-level mathematics for SLST teacher recruitment exam',
+                topics: slstMathTopics,
+                badge: 'new'
+            },
+            {
+                id: 'neet-bio',
+                examName: 'NEET Biology',
+                tag: 'Medical Entrance',
+                icon: 'fa-dna',
+                iconGradient: 'from-rose-500 to-pink-600',
+                glowColor: '#f43f5e',
+                desc: 'Complete biology mock tests for NEET aspirants',
+                topics: [],
+                comingSoon: true
+            }
         ];
 
         // Testimonials Data
         const testimonials = [
             { name: "Arjun Sharma", college: "IIT Kharagpur", image: "https://randomuser.me/api/portraits/men/1.jpg", text: "ExamPrime helped me crack WBJEE with 98.5 percentile. The mock tests were incredibly similar to the actual exam!", rating: 5 },
-            { name: "Priya Patel", college: "NIT Durgapur", image: "https://randomuser.me/api/portraits/women/2.jpg", text: "The analytics feature helped me identify my weak areas. I improved my scores by 40% in just 2 months!", rating: 5 },
+            { name: "Priya Patel", college: "NIT Durgapur", image: "https://randomuser.me/api/portraits/women/2.jpg", text: "The Premium analytics feature helped me identify my weak areas. I improved my scores by 40% in just 2 months!", rating: 5 },
             { name: "Rahul Das", college: "Jadavpur University", image: "https://randomuser.me/api/portraits/men/3.jpg", text: "Best platform for WBJEE preparation. The difficulty level matches perfectly with the actual exam.", rating: 5 },
-            { name: "Sneha Roy", college: "IIT Bombay", image: "https://randomuser.me/api/portraits/women/4.jpg", text: "I used ExamPrime for 3 months before JEE. The timed tests really helped build my exam stamina.", rating: 5 },
-            { name: "Amit Kumar", college: "BITS Pilani", image: "https://randomuser.me/api/portraits/men/5.jpg", text: "The detailed solutions for each question helped me understand concepts better than any coaching.", rating: 4 },
-            { name: "Kavya Singh", college: "IIT Delhi", image: "https://randomuser.me/api/portraits/women/6.jpg", text: "ExamPrime's mobile-friendly interface allowed me to practice during my commute. Highly recommend!", rating: 5 },
+            { name: "Sneha Roy", college: "IIT Bombay", image: "https://randomuser.me/api/portraits/women/4.jpg", text: "I used ExamPrime Premium for 3 months before JEE. The timed tests really helped build my exam stamina.", rating: 5 },
+            { name: "Moumita Ghosh", college: "SLST Qualified, 2025", image: "https://randomuser.me/api/portraits/women/22.jpg", text: "Finally a platform with SLST-level mathematics mock tests! Helped me clear the written exam with confidence.", rating: 5 },
+            { name: "Kavya Singh", college: "IIT Delhi", image: "https://randomuser.me/api/portraits/women/6.jpg", text: "ExamPrime's mobile-friendly interface allowed me to practice during my commute. Highly recommend Premium!", rating: 5 },
         ];
 
         // State Variables
-        let currentCategory = 'wbjee';
+        let currentExamCategory = null;   // the exam object currently open in Topic Detail View
         let currentViewMode = 'grid';
         let currentTopic = null;
         let currentTestFilter = 'all';
+        let pendingPremiumTopic = null;
+        let billingCycle = 'monthly';
+        let modalSelectedPlan = 'monthly';
 
-        // --- FUNCTIONS ---
+        const FREE_TEST_LIMIT = 5; // Free users get this many tests per (non-premium) topic
 
-        // Animate Counter
+        // --- PREMIUM HELPERS ---
+
+        function isPremiumActive() {
+            return localStorage.getItem('examprime_premium') === 'true';
+        }
+
+        function updatePremiumUI() {
+            const active = isPremiumActive();
+            const navBtn = document.getElementById('premium-nav-btn');
+            const navBtnMobile = document.getElementById('premium-nav-btn-mobile');
+            const memberBadge = document.getElementById('member-status-badge');
+
+            [navBtn, navBtnMobile].forEach(btn => {
+                if (!btn) return;
+                if (active) {
+                    btn.innerHTML = '<i class="fa-solid fa-crown"></i> Premium Member';
+                    btn.classList.add('premium-glow');
+                } else {
+                    btn.innerHTML = '<i class="fa-solid fa-crown"></i> Go Premium';
+                    btn.classList.remove('premium-glow');
+                }
+            });
+
+            if (memberBadge) {
+                if (active) {
+                    memberBadge.textContent = '👑 Premium Member';
+                    memberBadge.className = 'text-xs bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 px-3 py-1 rounded-full font-bold';
+                } else {
+                    memberBadge.textContent = 'Free Member';
+                    memberBadge.className = 'text-xs bg-white/5 text-gray-400 px-3 py-1 rounded-full border border-white/10';
+                }
+            }
+
+            const teaser = document.getElementById('analytics-teaser');
+            if (teaser) teaser.style.display = active ? 'none' : 'block';
+
+            // Refresh whichever view is currently visible
+            renderExamCards(document.getElementById('exam-search') ? document.getElementById('exam-search').value : '');
+            if (currentExamCategory) {
+                const searchQuery = document.getElementById('topic-search') ? document.getElementById('topic-search').value : '';
+                renderTopics(searchQuery);
+            }
+
+            // If a test modal is open, refresh its list too
+            if (currentTopic && document.getElementById('test-modal').classList.contains('active')) {
+                generateTestList(currentTopic, currentTestFilter);
+            }
+        }
+
+        function showToast(message, icon = 'fa-crown') {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = `
+                <div class="toast-in flex items-center gap-3 bg-gray-900 border border-amber-500/30 shadow-2xl shadow-amber-500/20 rounded-2xl px-5 py-4">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center text-gray-900">
+                        <i class="fa-solid ${icon}"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-semibold text-white">${message}</div>
+                    </div>
+                </div>
+            `;
+            toast.classList.remove('hidden');
+            setTimeout(() => { toast.classList.add('hidden'); }, 3500);
+        }
+
+        // --- PREMIUM MODAL ---
+
+        function openPremiumModal(topic = null) {
+            pendingPremiumTopic = topic;
+            const title = document.getElementById('premium-modal-title');
+            const subtitle = document.getElementById('premium-modal-subtitle');
+
+            if (isPremiumActive()) {
+                title.textContent = "You're a Premium Member!";
+                subtitle.textContent = "Enjoy unlimited access to everything on ExamPrime.";
+            } else if (topic) {
+                title.textContent = `Unlock "${topic.name}"`;
+                subtitle.textContent = "This topic/test is available exclusively for Premium members.";
+            } else {
+                title.textContent = "Unlock Premium Access";
+                subtitle.textContent = "Get unlimited tests, exclusive topics & AI analytics";
+            }
+
+            document.getElementById('premium-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePremiumModal() {
+            document.getElementById('premium-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function setModalPlan(plan) {
+            modalSelectedPlan = plan;
+            const monthlyBtn = document.getElementById('plan-btn-monthly');
+            const yearlyBtn = document.getElementById('plan-btn-yearly');
+            const activateText = document.getElementById('activate-btn-text');
+
+            if (plan === 'monthly') {
+                monthlyBtn.classList.add('border-amber-500', 'bg-amber-500/10');
+                monthlyBtn.classList.remove('border-white/10');
+                yearlyBtn.classList.remove('border-amber-500', 'bg-amber-500/10');
+                yearlyBtn.classList.add('border-white/10');
+                activateText.textContent = 'Activate Premium — ₹199/mo';
+            } else {
+                yearlyBtn.classList.add('border-amber-500', 'bg-amber-500/10');
+                yearlyBtn.classList.remove('border-white/10');
+                monthlyBtn.classList.remove('border-amber-500', 'bg-amber-500/10');
+                monthlyBtn.classList.add('border-white/10');
+                activateText.textContent = 'Activate Premium — ₹1199/yr';
+            }
+        }
+
+        function activatePremium() {
+            if (isPremiumActive()) {
+                closePremiumModal();
+                return;
+            }
+            localStorage.setItem('examprime_premium', 'true');
+            localStorage.setItem('examprime_plan', modalSelectedPlan);
+            closePremiumModal();
+            updatePremiumUI();
+            showToast('Premium activated! All tests unlocked 🎉');
+
+            if (pendingPremiumTopic) {
+                const topic = pendingPremiumTopic;
+                pendingPremiumTopic = null;
+                setTimeout(() => openTestModal(topic), 500);
+            }
+        }
+
+        // --- PRICING SECTION BILLING TOGGLE ---
+
+        function toggleBillingCycle() {
+            billingCycle = billingCycle === 'monthly' ? 'yearly' : 'monthly';
+            const dot = document.getElementById('billing-dot');
+            const price = document.getElementById('premium-price');
+            const period = document.getElementById('premium-period');
+            const labelMonthly = document.getElementById('label-monthly');
+            const labelYearly = document.getElementById('label-yearly');
+
+            if (billingCycle === 'yearly') {
+                dot.style.transform = 'translateX(28px)';
+                price.textContent = '₹1199';
+                period.textContent = '/year';
+                labelMonthly.classList.add('text-gray-400');
+                labelYearly.classList.remove('text-gray-400');
+            } else {
+                dot.style.transform = 'translateX(0px)';
+                price.textContent = '₹199';
+                period.textContent = '/month';
+                labelYearly.classList.add('text-gray-400');
+                labelMonthly.classList.remove('text-gray-400');
+            }
+        }
+
+        // --- GENERAL HELPERS ---
+
         function animateCounters() {
             const counters = document.querySelectorAll('.counter');
             const speed = 200;
@@ -922,7 +1455,6 @@
             });
         }
 
-        // Render Notices
         function renderNotices() {
             const container = document.getElementById('notice-container');
             container.innerHTML = '';
@@ -947,7 +1479,6 @@
             });
         }
 
-        // Get Difficulty Badge HTML
         function getDifficultyBadge(difficulty) {
             const badges = {
                 easy: '<span class="badge-easy text-xs px-2 py-1 rounded-full border">Easy</span>',
@@ -957,16 +1488,185 @@
             return badges[difficulty] || badges.medium;
         }
 
-        // Render Topics
-        function renderTopics(type, searchQuery = '') {
+        function getPremiumRibbon() {
+            return `<div class="absolute top-0 right-0 z-20">
+                        <div class="bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 text-[10px] font-bold px-3 py-1.5 rounded-bl-xl rounded-tr-2xl flex items-center gap-1 shadow-lg">
+                            <i class="fa-solid fa-crown"></i> PRO
+                        </div>
+                    </div>`;
+        }
+
+        function getLockOverlay() {
+            return `<div class="absolute inset-0 z-10 premium-lock-overlay rounded-2xl flex flex-col items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock text-3xl text-amber-400"></i>
+                        <span class="text-sm font-semibold text-white">Unlock with Premium</span>
+                        <span class="text-xs text-gray-400">Tap to upgrade</span>
+                    </div>`;
+        }
+
+        // ============================================================
+        // VIEW 1: EXAM SELECTION (Home Page level)
+        // ============================================================
+
+        function renderExamCards(searchQuery = '') {
+            const grid = document.getElementById('exam-grid');
+            const emptyState = document.getElementById('exam-empty-state');
+            const countText = document.getElementById('exam-count-text');
+            grid.innerHTML = '';
+
+            let data = examCategories;
+            if (searchQuery) {
+                data = data.filter(e =>
+                    e.examName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    e.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    e.tag.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            }
+
+            countText.textContent = searchQuery ? `${data.length} exam(s) found` : 'Select an exam category to view mock test topics';
+
+            if (data.length === 0) {
+                emptyState.classList.remove('hidden');
+                grid.classList.add('hidden');
+                return;
+            }
+            emptyState.classList.add('hidden');
+            grid.classList.remove('hidden');
+
+            const premiumActive = isPremiumActive();
+
+            data.forEach((exam, index) => {
+                const totalTopics = exam.topics.length;
+                const totalTests = totalTopics * 20;
+                const premiumTopicsCount = exam.topics.filter(t => t.premium).length;
+
+                const card = document.createElement('div');
+                card.className = `exam-card glass-card rounded-3xl p-7 relative ${exam.comingSoon ? 'exam-card-disabled' : 'cursor-pointer card-shine'} animate-slide-up`;
+                card.style.animationDelay = `${index * 0.08}s`;
+
+                if (!exam.comingSoon) {
+                    card.onclick = () => selectExam(exam.id);
+                } else {
+                    card.onclick = () => showToast("Coming soon! We'll notify you at launch 🚀", 'fa-clock');
+                }
+
+                let badgeHtml = '';
+                if (exam.comingSoon) {
+                    badgeHtml = `<span class="absolute top-5 right-5 text-[10px] bg-white/10 text-gray-300 px-3 py-1 rounded-full font-bold border border-white/10">COMING SOON</span>`;
+                } else if (exam.badge === 'popular') {
+                    badgeHtml = `<span class="absolute top-5 right-5 text-[10px] bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 px-3 py-1 rounded-full font-bold flex items-center gap-1"><i class="fa-solid fa-fire"></i> Popular</span>`;
+                } else if (exam.badge === 'new') {
+                    badgeHtml = `<span class="absolute top-5 right-5 text-[10px] bg-green-500/20 text-green-400 border border-green-500/30 px-3 py-1 rounded-full font-bold">NEW</span>`;
+                }
+
+                const premiumInfoHtml = exam.comingSoon ? '' : (
+                    premiumActive
+                        ? `<span class="text-xs text-green-400 flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> All unlocked</span>`
+                        : premiumTopicsCount > 0
+                            ? `<span class="text-xs text-amber-400 flex items-center gap-1"><i class="fa-solid fa-lock"></i> ${premiumTopicsCount} Premium topics</span>`
+                            : `<span class="text-xs text-gray-500 flex items-center gap-1"><i class="fa-solid fa-unlock"></i> Fully free</span>`
+                );
+
+                card.innerHTML = `
+                    <div class="exam-glow" style="background:${exam.glowColor}"></div>
+                    ${badgeHtml}
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br ${exam.iconGradient} flex items-center justify-center text-3xl text-white mb-5 shadow-lg">
+                            <i class="fa-solid ${exam.icon}"></i>
+                        </div>
+                        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">${exam.tag}</div>
+                        <h3 class="text-2xl font-bold text-white mb-2">${exam.examName}</h3>
+                        <p class="text-sm text-gray-400 mb-5">${exam.desc}</p>
+                        
+                        <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                            <div class="flex items-center gap-4 text-xs text-gray-400">
+                                <span class="flex items-center gap-1"><i class="fa-regular fa-folder-open"></i> ${exam.comingSoon ? '—' : totalTopics + ' Topics'}</span>
+                                <span class="flex items-center gap-1"><i class="fa-regular fa-file-lines"></i> ${exam.comingSoon ? '—' : totalTests + ' Tests'}</span>
+                            </div>
+                            ${exam.comingSoon 
+                                ? `<div class="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center"><i class="fa-solid fa-bell text-xs text-gray-400"></i></div>`
+                                : `<div class="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-accent transition-all"><i class="fa-solid fa-arrow-right text-xs text-white"></i></div>`
+                            }
+                        </div>
+                        <div class="mt-3">${premiumInfoHtml}</div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function filterExams(query) {
+            renderExamCards(query);
+        }
+
+        function selectExam(examId) {
+            const exam = examCategories.find(e => e.id === examId);
+            if (!exam || exam.comingSoon) return;
+
+            currentExamCategory = exam;
+
+            document.getElementById('exam-selection-view').classList.add('view-hidden');
+            const detailView = document.getElementById('topic-detail-view');
+            detailView.classList.remove('view-hidden');
+            detailView.classList.remove('animate-fade-in');
+            void detailView.offsetWidth; // reflow to restart animation
+            detailView.classList.add('animate-fade-in');
+
+            renderExamHeader(exam);
+
+            document.getElementById('topic-search').value = '';
+            renderTopics('');
+
+            // Smooth scroll to the topics area
+            document.getElementById('topics').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function backToExams() {
+            currentExamCategory = null;
+            const detailView = document.getElementById('topic-detail-view');
+            const examView = document.getElementById('exam-selection-view');
+            detailView.classList.add('view-hidden');
+            examView.classList.remove('view-hidden');
+            examView.classList.remove('animate-fade-in');
+            void examView.offsetWidth;
+            examView.classList.add('animate-fade-in');
+        }
+
+        function renderExamHeader(exam) {
+            const header = document.getElementById('exam-header');
+            const totalTopics = exam.topics.length;
+            const totalTests = totalTopics * 20;
+            header.innerHTML = `
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br ${exam.iconGradient} flex items-center justify-center text-3xl text-white flex-shrink-0 shadow-lg">
+                    <i class="fa-solid ${exam.icon}"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">${exam.tag}</div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white">${exam.examName}</h2>
+                    <p class="text-gray-400 text-sm mt-1">${exam.desc}</p>
+                </div>
+                <div class="flex sm:flex-col gap-4 sm:gap-2 sm:text-right w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-white/5">
+                    <div class="text-sm text-gray-300"><i class="fa-regular fa-folder-open mr-1 text-accent"></i> ${totalTopics} Topics</div>
+                    <div class="text-sm text-gray-300"><i class="fa-regular fa-file-lines mr-1 text-accent"></i> ${totalTests} Tests</div>
+                </div>
+            `;
+        }
+
+        // ============================================================
+        // VIEW 2: TOPICS (inside a selected Exam)
+        // ============================================================
+
+        function renderTopics(searchQuery = '') {
+            if (!currentExamCategory) return;
+
             const grid = document.getElementById('topic-grid');
             const emptyState = document.getElementById('empty-state');
             const countEl = document.getElementById('topic-count');
             grid.innerHTML = '';
-            
-            let data = type === 'wbjee' ? wbjeeMathTopics : jeeTopics;
-            
-            // Filter by search query
+
+            let data = currentExamCategory.topics;
+
             if (searchQuery) {
                 data = data.filter(topic => 
                     topic.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -974,39 +1674,43 @@
                 );
             }
 
-            countEl.textContent = `${data.length} topics available`;
+            const premiumCount = data.filter(t => t.premium).length;
+            countEl.textContent = `${data.length} topics available${premiumCount ? ` • ${premiumCount} Premium` : ''}`;
 
             if (data.length === 0) {
                 emptyState.classList.remove('hidden');
                 grid.classList.add('hidden');
                 return;
             }
-
             emptyState.classList.add('hidden');
             grid.classList.remove('hidden');
 
-            // Set grid layout based on view mode
             if (currentViewMode === 'grid') {
                 grid.className = 'grid grid-cols-1 md:grid-cols-2 gap-5';
             } else {
                 grid.className = 'flex flex-col gap-4';
             }
 
+            const premiumActive = isPremiumActive();
+
             data.forEach((topic, index) => {
+                const isLocked = topic.premium && !premiumActive;
                 const card = document.createElement('div');
-                card.className = 'glass-card rounded-2xl cursor-pointer group relative overflow-hidden card-shine animate-slide-up';
+                card.className = `glass-card rounded-2xl cursor-pointer group relative overflow-hidden card-shine animate-slide-up ${topic.premium ? 'premium-topic-card' : ''}`;
                 card.style.animationDelay = `${index * 0.05}s`;
-                card.onclick = () => openTestModal(topic);
+                card.onclick = () => isLocked ? openPremiumModal(topic) : openTestModal(topic);
 
                 if (currentViewMode === 'grid') {
                     card.innerHTML = `
+                        ${topic.premium ? getPremiumRibbon() : ''}
+                        ${isLocked ? getLockOverlay() : ''}
                         <div class="p-6">
                             <div class="absolute -right-6 -bottom-6 text-8xl font-bold text-white/[0.03] group-hover:text-white/[0.08] transition-colors select-none">
                                 ${String(index + 1).padStart(2, '0')}
                             </div>
                             <div class="relative z-10">
                                 <div class="flex items-start justify-between mb-4">
-                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-secondary/20 flex items-center justify-center text-2xl text-accent group-hover:scale-110 transition-transform duration-300 border border-accent/20">
+                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${topic.premium ? 'from-amber-400/20 to-yellow-500/20 border-amber-500/30' : 'from-accent/20 to-secondary/20 border-accent/20'} flex items-center justify-center text-2xl ${topic.premium ? 'text-amber-400' : 'text-accent'} group-hover:scale-110 transition-transform duration-300 border">
                                         <i class="fa-solid ${topic.icon}"></i>
                                     </div>
                                     <div class="flex items-center gap-2">
@@ -1026,20 +1730,22 @@
                                     </span>
                                 </div>
                                 <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-accent group-hover:border-accent transition-all">
-                                    <i class="fa-solid fa-arrow-right text-xs text-white transform group-hover:translate-x-1 transition-transform"></i>
+                                    <i class="fa-solid ${isLocked ? 'fa-lock' : 'fa-arrow-right'} text-xs text-white transform group-hover:translate-x-1 transition-transform"></i>
                                 </div>
                             </div>
                         </div>
                     `;
                 } else {
-                    // List view
                     card.innerHTML = `
-                        <div class="p-4 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-secondary/20 flex items-center justify-center text-xl text-accent flex-shrink-0 border border-accent/20">
+                        <div class="p-4 flex items-center gap-4 relative">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${topic.premium ? 'from-amber-400/20 to-yellow-500/20 border-amber-500/30' : 'from-accent/20 to-secondary/20 border-accent/20'} flex items-center justify-center text-xl ${topic.premium ? 'text-amber-400' : 'text-accent'} flex-shrink-0 border">
                                 <i class="fa-solid ${topic.icon}"></i>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <h3 class="text-lg font-bold text-white group-hover:text-accent transition-colors truncate">${topic.name}</h3>
+                                <h3 class="text-lg font-bold text-white group-hover:text-accent transition-colors truncate flex items-center gap-2">
+                                    ${topic.name}
+                                    ${topic.premium ? '<span class="text-[10px] bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 px-2 py-0.5 rounded-full font-bold">PRO</span>' : ''}
+                                </h3>
                                 <p class="text-sm text-gray-400 truncate">${topic.desc}</p>
                             </div>
                             <div class="hidden sm:flex items-center gap-3">
@@ -1047,7 +1753,7 @@
                                 <span class="text-xs text-gray-500">20 Tests</span>
                             </div>
                             <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-accent group-hover:border-accent transition-all flex-shrink-0">
-                                <i class="fa-solid fa-arrow-right text-xs text-white"></i>
+                                <i class="fa-solid ${isLocked ? 'fa-lock' : 'fa-arrow-right'} text-xs text-white"></i>
                             </div>
                         </div>
                     `;
@@ -1057,12 +1763,10 @@
             });
         }
 
-        // Filter Topics by Search
         function filterTopics(query) {
-            renderTopics(currentCategory, query);
+            renderTopics(query);
         }
 
-        // Set View Mode
         function setViewMode(mode) {
             currentViewMode = mode;
             const gridBtn = document.getElementById('view-grid');
@@ -1077,48 +1781,33 @@
             }
 
             const searchQuery = document.getElementById('topic-search').value;
-            renderTopics(currentCategory, searchQuery);
+            renderTopics(searchQuery);
         }
 
-        // Switch Category (WBJEE vs JEE)
-        function switchCategory(type) {
-            currentCategory = type;
-            const btnWbjee = document.getElementById('btn-wbjee');
-            const btnJee = document.getElementById('btn-jee');
-            const title = document.getElementById('section-title');
+        // ============================================================
+        // TEST MODAL (topic-level, unchanged concept)
+        // ============================================================
 
-            if (type === 'wbjee') {
-                btnWbjee.className = 'px-6 py-2.5 rounded-xl text-sm font-semibold transition-all bg-accent text-white shadow-lg';
-                btnJee.className = 'px-6 py-2.5 rounded-xl text-sm font-semibold transition-all text-gray-400 hover:text-white';
-                title.innerText = "WBJEE Mathematics Topics";
-            } else {
-                btnJee.className = 'px-6 py-2.5 rounded-xl text-sm font-semibold transition-all bg-accent text-white shadow-lg';
-                btnWbjee.className = 'px-6 py-2.5 rounded-xl text-sm font-semibold transition-all text-gray-400 hover:text-white';
-                title.innerText = "JEE Mains Subjects";
-            }
-
-            document.getElementById('topic-search').value = '';
-            renderTopics(type);
-        }
-
-        // Get test difficulty
         function getTestDifficulty(testNum) {
             if (testNum <= 7) return 'easy';
             if (testNum <= 14) return 'medium';
             return 'hard';
         }
 
-        // Open Modal and Generate Links
         function openTestModal(topic) {
+            if (topic.premium && !isPremiumActive()) {
+                openPremiumModal(topic);
+                return;
+            }
+
             currentTopic = topic;
             const modal = document.getElementById('test-modal');
             const title = document.getElementById('modal-title');
             const subtitle = document.getElementById('modal-subtitle');
             
-            title.innerText = topic.name;
+            title.innerHTML = `${topic.name} ${topic.premium ? '<i class="fa-solid fa-crown text-amber-400 text-base"></i>' : ''}`;
             subtitle.innerHTML = `<i class="fa-solid fa-layer-group mr-1"></i> ${topic.desc} • 20 Mock Tests`;
 
-            // Reset filter
             currentTestFilter = 'all';
             document.querySelectorAll('.test-filter').forEach(btn => {
                 btn.classList.remove('bg-accent', 'text-white');
@@ -1132,49 +1821,59 @@
             document.body.style.overflow = 'hidden';
         }
 
-        // Generate Test List
         function generateTestList(topic, filter = 'all') {
             const list = document.getElementById('modal-test-list');
+            const hint = document.getElementById('modal-premium-hint');
             list.innerHTML = '';
+
+            const premiumActive = isPremiumActive();
+            let hasLocked = false;
 
             for (let i = 1; i <= 20; i++) {
                 const difficulty = getTestDifficulty(i);
-                
                 if (filter !== 'all' && difficulty !== filter) continue;
 
+                const isLocked = !premiumActive && (topic.premium || i > FREE_TEST_LIMIT);
+                if (isLocked) hasLocked = true;
+
                 const fileName = `${topic.id}-test-${i}.html`;
-                
-                const link = document.createElement('a');
-                link.href = fileName; 
                 
                 const diffColors = {
                     easy: 'from-green-500/20 to-green-600/10 border-green-500/20 hover:border-green-500/50',
                     medium: 'from-yellow-500/20 to-yellow-600/10 border-yellow-500/20 hover:border-yellow-500/50',
                     hard: 'from-red-500/20 to-red-600/10 border-red-500/20 hover:border-red-500/50'
                 };
+                const lockedClasses = 'from-gray-700/20 to-gray-800/10 border-white/5 opacity-70 hover:opacity-100';
 
-                link.className = `flex items-center gap-4 p-4 rounded-xl bg-gradient-to-br ${diffColors[difficulty]} border transition-all group hover:-translate-y-1`;
+                const item = document.createElement(isLocked ? 'div' : 'a');
+                if (!isLocked) item.href = fileName;
+                else item.onclick = () => openPremiumModal(topic);
+
+                item.className = `flex items-center gap-4 p-4 rounded-xl bg-gradient-to-br ${isLocked ? lockedClasses : diffColors[difficulty]} border transition-all group hover:-translate-y-1 cursor-pointer`;
                 
-                link.innerHTML = `
-                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 flex items-center justify-center text-lg font-bold text-gray-400 group-hover:text-white group-hover:bg-accent transition-colors">
-                        ${String(i).padStart(2, '0')}
+                item.innerHTML = `
+                    <div class="w-12 h-12 rounded-xl ${isLocked ? 'bg-gray-800/70' : 'bg-gray-800/50'} flex items-center justify-center text-lg font-bold ${isLocked ? 'text-amber-400' : 'text-gray-400'} group-hover:text-white group-hover:bg-accent transition-colors">
+                        ${isLocked ? '<i class="fa-solid fa-lock text-sm"></i>' : String(i).padStart(2, '0')}
                     </div>
                     <div class="flex-1">
                         <div class="text-sm font-semibold text-gray-200 group-hover:text-white flex items-center gap-2">
                             Mock Test ${i}
                             ${getDifficultyBadge(difficulty)}
+                            ${isLocked ? '<span class="text-[9px] bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 px-1.5 py-0.5 rounded-full font-bold">PRO</span>' : ''}
                         </div>
                         <div class="text-xs text-gray-500 group-hover:text-gray-400 mt-1">
                             <i class="fa-regular fa-clock mr-1"></i> 30 min • 20 questions
                         </div>
                     </div>
                     <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-accent transition-all">
-                        <i class="fa-solid fa-play text-xs text-gray-400 group-hover:text-white"></i>
+                        <i class="fa-solid ${isLocked ? 'fa-lock' : 'fa-play'} text-xs text-gray-400 group-hover:text-white"></i>
                     </div>
                 `;
                 
-                list.appendChild(link);
+                list.appendChild(item);
             }
+
+            hint.classList.toggle('hidden', !hasLocked);
 
             if (list.children.length === 0) {
                 list.innerHTML = `
@@ -1186,10 +1885,8 @@
             }
         }
 
-        // Filter Tests in Modal
         function filterTests(filter) {
             currentTestFilter = filter;
-            
             document.querySelectorAll('.test-filter').forEach(btn => {
                 if (btn.dataset.filter === filter) {
                     btn.classList.remove('bg-white/5', 'text-gray-400');
@@ -1199,10 +1896,7 @@
                     btn.classList.add('bg-white/5', 'text-gray-400');
                 }
             });
-
-            if (currentTopic) {
-                generateTestList(currentTopic, filter);
-            }
+            if (currentTopic) generateTestList(currentTopic, filter);
         }
 
         function closeModal() {
@@ -1210,7 +1904,10 @@
             document.body.style.overflow = '';
         }
 
-        // Search Modal
+        // ============================================================
+        // GLOBAL SEARCH MODAL (searches Exams + Topics)
+        // ============================================================
+
         function openSearchModal() {
             const modal = document.getElementById('search-modal');
             modal.classList.add('active');
@@ -1224,9 +1921,18 @@
             document.body.style.overflow = '';
         }
 
+        function goToTopicFromSearch(examId, topicId) {
+            closeSearchModal();
+            selectExam(examId);
+            const exam = examCategories.find(e => e.id === examId);
+            const topic = exam.topics.find(t => t.id === topicId);
+            setTimeout(() => openTestModal(topic), 400);
+        }
+
         function globalSearch(query) {
             const results = document.getElementById('search-results');
-            
+            results.innerHTML = '';
+
             if (!query.trim()) {
                 results.innerHTML = `
                     <div class="text-center text-gray-500 py-8">
@@ -1237,13 +1943,22 @@
                 return;
             }
 
-            const allTopics = [...wbjeeMathTopics, ...jeeTopics];
-            const filtered = allTopics.filter(t => 
-                t.name.toLowerCase().includes(query.toLowerCase()) ||
-                t.desc.toLowerCase().includes(query.toLowerCase())
-            );
+            const q = query.toLowerCase();
 
-            if (filtered.length === 0) {
+            // Matching exams
+            const examMatches = examCategories.filter(e => !e.comingSoon && e.examName.toLowerCase().includes(q));
+
+            // Matching topics (with parent exam ref)
+            const topicMatches = [];
+            examCategories.forEach(exam => {
+                exam.topics.forEach(topic => {
+                    if (topic.name.toLowerCase().includes(q) || topic.desc.toLowerCase().includes(q)) {
+                        topicMatches.push({ exam, topic });
+                    }
+                });
+            });
+
+            if (examMatches.length === 0 && topicMatches.length === 0) {
                 results.innerHTML = `
                     <div class="text-center text-gray-500 py-8">
                         <i class="fa-solid fa-face-sad-tear text-4xl mb-4"></i>
@@ -1253,29 +1968,93 @@
                 return;
             }
 
-            results.innerHTML = filtered.map(topic => `
-                <div class="p-4 rounded-xl hover:bg-white/5 cursor-pointer transition-all flex items-center gap-4" onclick="closeSearchModal(); openTestModal(${JSON.stringify(topic).replace(/"/g, '&quot;')})">
-                    <div class="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center text-accent">
-                        <i class="fa-solid ${topic.icon}"></i>
-                    </div>
-                    <div>
-                        <div class="font-medium text-white">${topic.name}</div>
-                        <div class="text-sm text-gray-400">${topic.desc}</div>
-                    </div>
-                    <i class="fa-solid fa-arrow-right ml-auto text-gray-600"></i>
-                </div>
-            `).join('');
+            if (examMatches.length > 0) {
+                const label = document.createElement('div');
+                label.className = 'text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 pt-2 pb-1';
+                label.textContent = 'Exams';
+                results.appendChild(label);
+
+                examMatches.forEach(exam => {
+                    const row = document.createElement('div');
+                    row.className = 'p-4 rounded-xl hover:bg-white/5 cursor-pointer transition-all flex items-center gap-4';
+                    row.innerHTML = `
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br ${exam.iconGradient} flex items-center justify-center text-white">
+                            <i class="fa-solid ${exam.icon}"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-white">${exam.examName}</div>
+                            <div class="text-sm text-gray-400">${exam.topics.length} topics available</div>
+                        </div>
+                        <i class="fa-solid fa-arrow-right ml-auto text-gray-600"></i>
+                    `;
+                    row.onclick = () => { closeSearchModal(); selectExam(exam.id); };
+                    results.appendChild(row);
+                });
+            }
+
+            if (topicMatches.length > 0) {
+                const label = document.createElement('div');
+                label.className = 'text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 pt-4 pb-1';
+                label.textContent = 'Topics';
+                results.appendChild(label);
+
+                topicMatches.forEach(({ exam, topic }) => {
+                    const row = document.createElement('div');
+                    row.className = 'p-4 rounded-xl hover:bg-white/5 cursor-pointer transition-all flex items-center gap-4';
+                    row.innerHTML = `
+                        <div class="w-10 h-10 rounded-lg ${topic.premium ? 'bg-amber-500/20 text-amber-400' : 'bg-accent/20 text-accent'} flex items-center justify-center">
+                            <i class="fa-solid ${topic.icon}"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-white flex items-center gap-2">
+                                ${topic.name}
+                                ${topic.premium ? '<span class="text-[9px] bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 px-1.5 py-0.5 rounded-full font-bold">PRO</span>' : ''}
+                            </div>
+                            <div class="text-xs text-gray-500">${exam.examName}</div>
+                        </div>
+                        <i class="fa-solid fa-arrow-right ml-auto text-gray-600"></i>
+                    `;
+                    row.onclick = () => goToTopicFromSearch(exam.id, topic.id);
+                    results.appendChild(row);
+                });
+            }
         }
 
-        // Open Random Test
+        // ============================================================
+        // QUICK ACTIONS
+        // ============================================================
+
         function openRandomTest() {
-            const topics = currentCategory === 'wbjee' ? wbjeeMathTopics : jeeTopics;
-            const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-            const randomTest = Math.floor(Math.random() * 20) + 1;
+            const premiumActive = isPremiumActive();
+            let pool = [];
+
+            if (currentExamCategory) {
+                // Inside an exam: pick from its topics only
+                pool = currentExamCategory.topics
+                    .filter(t => premiumActive || !t.premium)
+                    .map(t => t);
+            } else {
+                // On home page: pick from all live exams
+                examCategories.filter(e => !e.comingSoon).forEach(exam => {
+                    exam.topics.filter(t => premiumActive || !t.premium).forEach(t => pool.push(t));
+                });
+            }
+
+            if (pool.length === 0) {
+                openPremiumModal();
+                return;
+            }
+
+            const randomTopic = pool[Math.floor(Math.random() * pool.length)];
+            const maxTest = premiumActive ? 20 : FREE_TEST_LIMIT;
+            const randomTest = Math.floor(Math.random() * maxTest) + 1;
             window.location.href = `${randomTopic.id}-test-${randomTest}.html`;
         }
 
-        // Mobile Menu
+        // ============================================================
+        // MISC UI
+        // ============================================================
+
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             const icon = document.getElementById('menu-icon');
@@ -1290,12 +2069,10 @@
             }
         }
 
-        // Back to Top
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Render Testimonials
         function renderTestimonials() {
             const grid = document.getElementById('testimonials-grid');
             grid.innerHTML = testimonials.map((t, i) => `
@@ -1315,11 +2092,14 @@
             `).join('');
         }
 
-        // Update Progress (from localStorage)
         function updateProgress() {
+            const totalTopics = examCategories.filter(e => !e.comingSoon).reduce((sum, e) => sum + e.topics.length, 0);
+            const totalTests = totalTopics * 20;
+            document.getElementById('total-tests-count').textContent = totalTests;
+            document.getElementById('topics-covered').textContent = `0/${totalTopics}`;
+
             const completed = parseInt(localStorage.getItem('completedTests') || 0);
-            const total = 500;
-            const percent = Math.round((completed / total) * 100);
+            const percent = totalTests ? Math.round((completed / totalTests) * 100) : 0;
 
             document.getElementById('completed-tests').textContent = completed;
             document.getElementById('progress-percent').textContent = percent + '%';
@@ -1331,7 +2111,6 @@
 
         // Handle Scroll Events
         window.addEventListener('scroll', () => {
-            // Back to top button visibility
             const backToTop = document.getElementById('back-to-top');
             if (window.scrollY > 500) {
                 backToTop.classList.add('visible');
@@ -1339,7 +2118,6 @@
                 backToTop.classList.remove('visible');
             }
 
-            // Navbar background
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 50) {
                 navbar.classList.add('bg-darker/90');
@@ -1352,9 +2130,11 @@
         window.onclick = function(event) {
             const testModal = document.getElementById('test-modal');
             const searchModal = document.getElementById('search-modal');
+            const premiumModal = document.getElementById('premium-modal');
             
             if (event.target === testModal) closeModal();
             if (event.target === searchModal) closeSearchModal();
+            if (event.target === premiumModal) closePremiumModal();
         }
 
         // Keyboard shortcuts
@@ -1362,6 +2142,7 @@
             if (e.key === 'Escape') {
                 closeModal();
                 closeSearchModal();
+                closePremiumModal();
                 const mobileMenu = document.getElementById('mobile-menu');
                 if (mobileMenu.classList.contains('active')) {
                     toggleMobileMenu();
@@ -1376,11 +2157,12 @@
         // Initialize
         window.onload = function() {
             renderNotices();
-            renderTopics('wbjee');
+            renderExamCards();
             renderTestimonials();
             updateProgress();
+            updatePremiumUI();
+            setModalPlan('monthly');
             
-            // Animate counters when in viewport
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
